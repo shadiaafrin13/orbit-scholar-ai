@@ -289,7 +289,7 @@ function ModulePage() {
               <CheckCircle2 className="h-5 w-5 text-primary" /> Core features
             </h2>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-              {mod.features.map((f) => (
+              {mod.features.map((f: string) => (
                 <li key={f} className="flex gap-2">
                   <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" /> {f}
                 </li>
