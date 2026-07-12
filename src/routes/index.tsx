@@ -141,9 +141,11 @@ function Landing() {
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {modules.map((m) => (
-              <article
+              <Link
                 key={m.n}
-                className="group relative overflow-hidden rounded-2xl border border-border glass p-6 transition hover:border-primary/50"
+                to="/modules/$moduleId"
+                params={{ moduleId: String(m.n) }}
+                className="group relative block overflow-hidden rounded-2xl border border-border glass p-6 transition hover:border-primary/50 hover:shadow-[var(--shadow-glow)]"
               >
                 <div className="mb-4 flex items-center justify-between">
                   <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-primary">
@@ -154,8 +156,9 @@ function Landing() {
                 <h3 className="text-base font-semibold">{m.title}</h3>
                 <p className="mt-1.5 text-sm text-muted-foreground">{m.desc}</p>
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px opacity-0 transition group-hover:opacity-100 bg-nebula" />
-              </article>
+              </Link>
             ))}
+
           </div>
         </div>
       </section>
