@@ -12,7 +12,7 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-type Module = { n: number; slug: string; title: string; desc: string; icon: ComponentType<{ className?: string }> };
+type Module = { n: number; title: string; desc: string; icon: ComponentType<{ className?: string }> };
 
 const modules: Module[] = [
   { n: 1, title: "Authentication & Roles", desc: "Students, parents, counselors, professors, universities — one identity.", icon: Shield },
