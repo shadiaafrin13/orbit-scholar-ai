@@ -253,7 +253,7 @@ export const Route = createFileRoute("/modules/$moduleId")({
 });
 
 function ModulePage() {
-  const { mod } = Route.useLoaderData();
+  const { mod } = Route.useLoaderData() as { mod: ModuleDetail };
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-40 border-b border-border/50 glass">
