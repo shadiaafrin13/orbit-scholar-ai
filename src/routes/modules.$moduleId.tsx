@@ -225,7 +225,7 @@ const MODULES: ModuleDetail[] = [
 ];
 
 export const Route = createFileRoute("/modules/$moduleId")({
-  loader: ({ params }) => {
+  loader: ({ params }): { mod: ModuleDetail } => {
     const mod = MODULES.find((m) => m.slug === params.moduleId || String(m.n) === params.moduleId);
     if (!mod) throw notFound();
     return { mod };
