@@ -301,7 +301,7 @@ function ModulePage() {
               <Sparkles className="h-5 w-5 text-accent" /> AI capabilities
             </h2>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-              {mod.aiCapabilities.map((f) => (
+              {mod.aiCapabilities.map((f: string) => (
                 <li key={f} className="flex gap-2">
                   <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" /> {f}
                 </li>
