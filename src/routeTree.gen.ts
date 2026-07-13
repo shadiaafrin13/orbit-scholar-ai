@@ -14,6 +14,8 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedPathRouteImport } from './routes/_authenticated/path'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -40,6 +42,16 @@ const ModulesModuleIdRoute = ModulesModuleIdRouteImport.update({
   path: '/modules/$moduleId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPathRoute = AuthenticatedPathRouteImport.update({
+  id: '/path',
+  path: '/path',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -51,6 +63,8 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/path': typeof AuthenticatedPathRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
 }
 export interface FileRoutesByTo {
@@ -58,6 +72,8 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/path': typeof AuthenticatedPathRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
 }
 export interface FileRoutesById {
@@ -67,6 +83,8 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/path': typeof AuthenticatedPathRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
 }
 export interface FileRouteTypes {
@@ -76,9 +94,18 @@ export interface FileRouteTypes {
     | '/auth'
     | '/sitemap.xml'
     | '/dashboard'
+    | '/path'
+    | '/profile'
     | '/modules/$moduleId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/sitemap.xml' | '/dashboard' | '/modules/$moduleId'
+  to:
+    | '/'
+    | '/auth'
+    | '/sitemap.xml'
+    | '/dashboard'
+    | '/path'
+    | '/profile'
+    | '/modules/$moduleId'
   id:
     | '__root__'
     | '/'
@@ -86,6 +113,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/sitemap.xml'
     | '/_authenticated/dashboard'
+    | '/_authenticated/path'
+    | '/_authenticated/profile'
     | '/modules/$moduleId'
   fileRoutesById: FileRoutesById
 }
@@ -134,6 +163,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesModuleIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/path': {
+      id: '/_authenticated/path'
+      path: '/path'
+      fullPath: '/path'
+      preLoaderRoute: typeof AuthenticatedPathRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -146,10 +189,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedPathRoute: typeof AuthenticatedPathRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedPathRoute: AuthenticatedPathRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
