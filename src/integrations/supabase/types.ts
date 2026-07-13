@@ -14,7 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          activities: string | null
+          country: string | null
+          created_at: string
+          current_level: string | null
+          field_of_study: string | null
+          full_name: string | null
+          gmat: number | null
+          gpa: number | null
+          gre: number | null
+          id: string
+          ielts: number | null
+          interests: string | null
+          path_budget: string | null
+          path_completed: boolean
+          path_goal: string | null
+          path_timeline: string | null
+          path_type: string | null
+          sat: number | null
+          target_countries: string[] | null
+          toefl: number | null
+          updated_at: string
+        }
+        Insert: {
+          activities?: string | null
+          country?: string | null
+          created_at?: string
+          current_level?: string | null
+          field_of_study?: string | null
+          full_name?: string | null
+          gmat?: number | null
+          gpa?: number | null
+          gre?: number | null
+          id: string
+          ielts?: number | null
+          interests?: string | null
+          path_budget?: string | null
+          path_completed?: boolean
+          path_goal?: string | null
+          path_timeline?: string | null
+          path_type?: string | null
+          sat?: number | null
+          target_countries?: string[] | null
+          toefl?: number | null
+          updated_at?: string
+        }
+        Update: {
+          activities?: string | null
+          country?: string | null
+          created_at?: string
+          current_level?: string | null
+          field_of_study?: string | null
+          full_name?: string | null
+          gmat?: number | null
+          gpa?: number | null
+          gre?: number | null
+          id?: string
+          ielts?: number | null
+          interests?: string | null
+          path_budget?: string | null
+          path_completed?: boolean
+          path_goal?: string | null
+          path_timeline?: string | null
+          path_type?: string | null
+          sat?: number | null
+          target_countries?: string[] | null
+          toefl?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
