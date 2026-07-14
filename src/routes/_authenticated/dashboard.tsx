@@ -2,7 +2,10 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Compass, LogOut, Sparkles, UserRound, Rocket, Lock } from "lucide-react";
+import {
+  Award, BarChart3, Bookmark, Compass, FlaskConical, Globe, GraduationCap,
+  BookOpen, LogOut, Map, Rocket, Sparkles, UserRound,
+} from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -15,21 +18,47 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
 });
 
+type Status = {
+  name: string | null;
+  avatar: string | null;
+  hasProfile: boolean;
+  pathDone: boolean;
+  targetLevel: string | null;
+  targets: number;
+  taskTotal: number;
+  taskDone: number;
+  nextTask: { title: string; due_date: string | null } | null;
+  saved: number;
+};
+
 function Dashboard() {
   const { user } = Route.useRouteContext();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [status, setStatus] = useState<{ name: string | null; path: boolean; hasProfile: boolean }>({ name: null, path: false, hasProfile: false });
+  const [s, setS] = useState<Status | null>(null);
 
   useEffect(() => {
-    supabase.from("profiles").select("full_name,country,field_of_study,path_completed")
-      .eq("id", user.id).maybeSingle().then(({ data }) => {
-        if (data) setStatus({
-          name: data.full_name,
-          path: !!data.path_completed,
-          hasProfile: !!(data.country || data.field_of_study),
-        });
+    (async () => {
+      const [{ data: prof }, { data: tasks }, { data: saved }] = await Promise.all([
+        supabase.from("profiles").select("full_name,avatar_url,country,field_of_study,path_completed,target_level,target_countries").eq("id", user.id).maybeSingle(),
+        supabase.from("tasks").select("title,due_date,completed").eq("user_id", user.id).order("due_date", { ascending: true, nullsFirst: false }),
+        supabase.from("saved_items").select("id").eq("user_id", user.id),
+      ]);
+      const total = tasks?.length ?? 0;
+      const done = tasks?.filter((t) => t.completed).length ?? 0;
+      const next = tasks?.find((t) => !t.completed) ?? null;
+      setS({
+        name: prof?.full_name ?? null,
+        avatar: prof?.avatar_url ?? null,
+        hasProfile: !!(prof?.country || prof?.field_of_study),
+        pathDone: !!prof?.path_completed,
+        targetLevel: prof?.target_level ?? null,
+        targets: prof?.target_countries?.length ?? 0,
+        taskTotal: total, taskDone: done,
+        nextTask: next ? { title: next.title, due_date: next.due_date } : null,
+        saved: saved?.length ?? 0,
       });
+    })();
   }, [user.id]);
 
   async function signOut() {
@@ -40,15 +69,17 @@ function Dashboard() {
     navigate({ to: "/auth", search: { mode: "login" }, replace: true });
   }
 
-  const active = [
-    { to: "/profile" as const, icon: UserRound, title: "AI Student Profile", desc: "Academics, tests, interests — powers every module.", status: status.hasProfile ? "In progress" : "Start here", n: "M02" },
-    { to: "/path" as const, icon: Compass, title: "Path Selection", desc: "Personalized academic roadmap in 4 steps.", status: status.path ? "Completed" : "4 questions", n: "M03" },
-  ];
+  const initials = (s?.name || user.email || "?").split(" ").map((x: string) => x[0]).slice(0, 2).join("").toUpperCase();
 
-  const upcoming = [
-    { t: "Global Universities", n: "M09" }, { t: "Scholarship Hub", n: "M10" },
-    { t: "AI Mentor", n: "M26" }, { t: "SOP & Essay AI", n: "M13" },
-    { t: "CV Builder", n: "M14" }, { t: "Admission Predictor", n: "M28" },
+  const modules = [
+    { to: "/profile" as const, icon: UserRound, n: "M02", title: "Student Profile", desc: "Identity, academics, tests, targets, achievements.", meta: s?.hasProfile ? "In progress" : "Start here" },
+    { to: "/path" as const, icon: Compass, n: "M03", title: "Path Selection", desc: "UG · Masters · PhD · Exchange — personalized roadmap.", meta: s?.pathDone ? "Completed" : "4 questions" },
+    { to: "/roadmap" as const, icon: Map, n: "M05", title: "Academic Roadmap", desc: "Tasks, deadlines, and progress in one plan.", meta: s ? `${s.taskDone}/${s.taskTotal} done` : "" },
+    { to: "/undergrad" as const, icon: GraduationCap, n: "M06", title: "Undergraduate", desc: "SAT, IELTS, Common App — the UG toolkit.", meta: "Open" },
+    { to: "/masters" as const, icon: BookOpen, n: "M07", title: "Master's Admission", desc: "Programs, SOP, funding, professor outreach.", meta: "Open" },
+    { to: "/phd" as const, icon: FlaskConical, n: "M08", title: "PhD Admission", desc: "Proposals, advisors, fellowships, interviews.", meta: "Open" },
+    { to: "/universities" as const, icon: Globe, n: "M09", title: "Global Universities", desc: "Search, filter, and save universities.", meta: s ? `${s.saved} saved` : "" },
+    { to: "/scholarships" as const, icon: Award, n: "M10", title: "Scholarship Hub", desc: "Fulbright, Chevening, DAAD, MEXT & more.", meta: "Live" },
   ];
 
   return (
@@ -62,7 +93,14 @@ function Dashboard() {
             <span className="text-lg font-semibold">Atlas</span>
           </Link>
           <div className="flex items-center gap-3 text-sm">
-            <span className="hidden text-muted-foreground sm:inline">{user.email}</span>
+            <Link to="/profile" className="hidden items-center gap-2 rounded-full border border-border px-3 py-1.5 hover:bg-secondary sm:inline-flex">
+              {s?.avatar ? (
+                <img src={s.avatar} alt="" className="h-6 w-6 rounded-full object-cover" />
+              ) : (
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-nebula text-[10px] font-semibold text-primary-foreground">{initials}</span>
+              )}
+              <span className="text-xs text-muted-foreground">{user.email}</span>
+            </Link>
             <button onClick={signOut}
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm hover:bg-secondary">
               <LogOut className="h-3.5 w-3.5" /> Sign out
@@ -71,21 +109,41 @@ function Dashboard() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 py-16">
+      <main className="mx-auto max-w-6xl px-6 py-12">
         <div className="inline-flex items-center gap-2 rounded-full border border-border glass px-4 py-1.5 text-xs">
           <Sparkles className="h-3.5 w-3.5 text-accent" />
-          <span className="text-muted-foreground">Welcome back{status.name ? `, ${status.name.split(" ")[0]}` : ""}</span>
+          <span className="text-muted-foreground">Welcome back{s?.name ? `, ${s.name.split(" ")[0]}` : ""}</span>
         </div>
-        <h1 className="mt-6 text-4xl font-bold sm:text-5xl">
-          Your <span className="text-gradient">Atlas</span>.
-        </h1>
-        <p className="mt-4 max-w-2xl text-muted-foreground">
-          Modules 1–3 are live. Start with your profile, then let the wizard map your path.
-        </p>
+        <h1 className="mt-6 text-4xl font-bold sm:text-5xl">Your <span className="text-gradient">Atlas</span>.</h1>
+        <p className="mt-3 max-w-2xl text-muted-foreground">Modules 1–10 are live. Everything reads from your profile.</p>
+
+        {/* Snapshot */}
+        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <Stat icon={UserRound} label="Profile" value={s?.hasProfile ? "Complete" : "Draft"} to="/profile" />
+          <Stat icon={Compass} label="Path" value={s?.targetLevel || (s?.pathDone ? "Set" : "Not set")} to="/path" />
+          <Stat icon={Map} label="Tasks" value={s ? `${s.taskDone}/${s.taskTotal}` : "—"} to="/roadmap" />
+          <Stat icon={Bookmark} label="Saved" value={String(s?.saved ?? 0)} to="/universities" />
+        </div>
+
+        {s?.nextTask && (
+          <div className="mt-6 flex items-center justify-between gap-4 glass rounded-2xl p-4">
+            <div className="flex items-center gap-3">
+              <BarChart3 className="h-5 w-5 text-primary" />
+              <div>
+                <p className="text-xs text-muted-foreground">Next up</p>
+                <p className="text-sm font-medium">{s.nextTask.title}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              {s.nextTask.due_date && <span>Due {new Date(s.nextTask.due_date).toLocaleDateString()}</span>}
+              <Link to="/roadmap" className="rounded-full bg-nebula px-3 py-1.5 font-medium text-primary-foreground glow">Open roadmap</Link>
+            </div>
+          </div>
+        )}
 
         <h2 className="mt-12 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Active modules</h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {active.map((c) => (
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {modules.map((c) => (
             <Link key={c.to} to={c.to}
               className="glass group relative overflow-hidden rounded-2xl p-6 transition hover:border-primary/50 border border-border">
               <div className="flex items-start justify-between">
@@ -96,28 +154,27 @@ function Dashboard() {
               </div>
               <h3 className="mt-4 text-lg font-semibold">{c.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
-              <div className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-primary">
-                {c.status} <Rocket className="h-3.5 w-3.5" />
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        <h2 className="mt-12 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Coming next</h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {upcoming.map((c) => (
-            <div key={c.n} className="glass rounded-2xl p-5 opacity-70">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm font-semibold">
-                  <Lock className="h-3.5 w-3.5 text-muted-foreground" /> {c.t}
+              {c.meta && (
+                <div className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-primary">
+                  {c.meta} <Rocket className="h-3.5 w-3.5" />
                 </div>
-                <span className="font-mono text-xs text-muted-foreground">{c.n}</span>
-              </div>
-              <span className="mt-2 inline-block text-xs text-muted-foreground">Coming soon</span>
-            </div>
+              )}
+            </Link>
           ))}
         </div>
       </main>
     </div>
+  );
+}
+
+function Stat({ icon: Icon, label, value, to }: { icon: React.ComponentType<{ className?: string }>; label: string; value: string; to: "/profile" | "/path" | "/roadmap" | "/universities" }) {
+  return (
+    <Link to={to} className="glass rounded-2xl p-4 transition hover:border-primary/50 border border-border block">
+      <div className="flex items-center justify-between">
+        <Icon className="h-4 w-4 text-primary" />
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</span>
+      </div>
+      <p className="mt-3 text-xl font-semibold">{value}</p>
+    </Link>
   );
 }

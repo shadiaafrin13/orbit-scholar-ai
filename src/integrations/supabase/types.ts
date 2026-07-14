@@ -17,72 +17,285 @@ export type Database = {
       profiles: {
         Row: {
           activities: string | null
+          avatar_url: string | null
+          bio: string | null
+          city: string | null
           country: string | null
           created_at: string
           current_level: string | null
+          date_of_birth: string | null
           field_of_study: string | null
           full_name: string | null
+          gender: string | null
+          github_url: string | null
           gmat: number | null
           gpa: number | null
+          graduation_year: number | null
           gre: number | null
+          honors: string | null
           id: string
           ielts: number | null
+          intake_year: number | null
           interests: string | null
+          languages: string[] | null
+          linkedin_url: string | null
+          orcid: string | null
           path_budget: string | null
           path_completed: boolean
           path_goal: string | null
           path_timeline: string | null
           path_type: string | null
+          phone: string | null
+          publications: string | null
           sat: number | null
+          school_name: string | null
           target_countries: string[] | null
+          target_level: string | null
           toefl: number | null
           updated_at: string
+          website_url: string | null
+          work_experience: string | null
         }
         Insert: {
           activities?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          city?: string | null
           country?: string | null
           created_at?: string
           current_level?: string | null
+          date_of_birth?: string | null
           field_of_study?: string | null
           full_name?: string | null
+          gender?: string | null
+          github_url?: string | null
           gmat?: number | null
           gpa?: number | null
+          graduation_year?: number | null
           gre?: number | null
+          honors?: string | null
           id: string
           ielts?: number | null
+          intake_year?: number | null
           interests?: string | null
+          languages?: string[] | null
+          linkedin_url?: string | null
+          orcid?: string | null
           path_budget?: string | null
           path_completed?: boolean
           path_goal?: string | null
           path_timeline?: string | null
           path_type?: string | null
+          phone?: string | null
+          publications?: string | null
           sat?: number | null
+          school_name?: string | null
           target_countries?: string[] | null
+          target_level?: string | null
           toefl?: number | null
           updated_at?: string
+          website_url?: string | null
+          work_experience?: string | null
         }
         Update: {
           activities?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          city?: string | null
           country?: string | null
           created_at?: string
           current_level?: string | null
+          date_of_birth?: string | null
           field_of_study?: string | null
           full_name?: string | null
+          gender?: string | null
+          github_url?: string | null
           gmat?: number | null
           gpa?: number | null
+          graduation_year?: number | null
           gre?: number | null
+          honors?: string | null
           id?: string
           ielts?: number | null
+          intake_year?: number | null
           interests?: string | null
+          languages?: string[] | null
+          linkedin_url?: string | null
+          orcid?: string | null
           path_budget?: string | null
           path_completed?: boolean
           path_goal?: string | null
           path_timeline?: string | null
           path_type?: string | null
+          phone?: string | null
+          publications?: string | null
           sat?: number | null
+          school_name?: string | null
           target_countries?: string[] | null
+          target_level?: string | null
           toefl?: number | null
           updated_at?: string
+          website_url?: string | null
+          work_experience?: string | null
+        }
+        Relationships: []
+      }
+      saved_items: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          item_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          item_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          item_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      scholarships: {
+        Row: {
+          amount: string | null
+          country: string | null
+          created_at: string
+          deadline: string | null
+          description: string | null
+          eligibility: string | null
+          fields: string[] | null
+          fully_funded: boolean
+          id: string
+          level: string | null
+          link: string | null
+          name: string
+          provider: string | null
+        }
+        Insert: {
+          amount?: string | null
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          eligibility?: string | null
+          fields?: string[] | null
+          fully_funded?: boolean
+          id?: string
+          level?: string | null
+          link?: string | null
+          name: string
+          provider?: string | null
+        }
+        Update: {
+          amount?: string | null
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          eligibility?: string | null
+          fields?: string[] | null
+          fully_funded?: boolean
+          id?: string
+          level?: string | null
+          link?: string | null
+          name?: string
+          provider?: string | null
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          category: string | null
+          completed: boolean
+          created_at: string
+          due_date: string | null
+          id: string
+          notes: string | null
+          priority: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          completed?: boolean
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          priority?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          completed?: boolean
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          priority?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      universities: {
+        Row: {
+          acceptance_rate: number | null
+          city: string | null
+          country: string
+          created_at: string
+          description: string | null
+          id: string
+          language: string | null
+          levels: string[] | null
+          name: string
+          programs: string[] | null
+          tuition_usd: number | null
+          website: string | null
+          world_rank: number | null
+        }
+        Insert: {
+          acceptance_rate?: number | null
+          city?: string | null
+          country: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          language?: string | null
+          levels?: string[] | null
+          name: string
+          programs?: string[] | null
+          tuition_usd?: number | null
+          website?: string | null
+          world_rank?: number | null
+        }
+        Update: {
+          acceptance_rate?: number | null
+          city?: string | null
+          country?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          language?: string | null
+          levels?: string[] | null
+          name?: string
+          programs?: string[] | null
+          tuition_usd?: number | null
+          website?: string | null
+          world_rank?: number | null
         }
         Relationships: []
       }
