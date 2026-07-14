@@ -69,7 +69,7 @@ function Dashboard() {
     navigate({ to: "/auth", search: { mode: "login" }, replace: true });
   }
 
-  const initials = (s?.name || user.email || "?").split(" ").map((x) => x[0]).slice(0, 2).join("").toUpperCase();
+  const initials = (s?.name || user.email || "?").split(" ").map((x: string) => x[0]).slice(0, 2).join("").toUpperCase();
 
   const modules = [
     { to: "/profile" as const, icon: UserRound, n: "M02", title: "Student Profile", desc: "Identity, academics, tests, targets, achievements.", meta: s?.hasProfile ? "In progress" : "Start here" },

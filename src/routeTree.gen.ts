@@ -10,17 +10,29 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
+import { Route as AuthenticatedUniversitiesRouteImport } from './routes/_authenticated/universities'
+import { Route as AuthenticatedUndergradRouteImport } from './routes/_authenticated/undergrad'
+import { Route as AuthenticatedScholarshipsRouteImport } from './routes/_authenticated/scholarships'
+import { Route as AuthenticatedRoadmapRouteImport } from './routes/_authenticated/roadmap'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedPhdRouteImport } from './routes/_authenticated/phd'
 import { Route as AuthenticatedPathRouteImport } from './routes/_authenticated/path'
+import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -42,14 +54,46 @@ const ModulesModuleIdRoute = ModulesModuleIdRouteImport.update({
   path: '/modules/$moduleId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedUniversitiesRoute =
+  AuthenticatedUniversitiesRouteImport.update({
+    id: '/universities',
+    path: '/universities',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedUndergradRoute = AuthenticatedUndergradRouteImport.update({
+  id: '/undergrad',
+  path: '/undergrad',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedScholarshipsRoute =
+  AuthenticatedScholarshipsRouteImport.update({
+    id: '/scholarships',
+    path: '/scholarships',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedRoadmapRoute = AuthenticatedRoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPhdRoute = AuthenticatedPhdRouteImport.update({
+  id: '/phd',
+  path: '/phd',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPathRoute = AuthenticatedPathRouteImport.update({
   id: '/path',
   path: '/path',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMastersRoute = AuthenticatedMastersRouteImport.update({
+  id: '/masters',
+  path: '/masters',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -61,19 +105,33 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/masters': typeof AuthenticatedMastersRoute
   '/path': typeof AuthenticatedPathRoute
+  '/phd': typeof AuthenticatedPhdRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/roadmap': typeof AuthenticatedRoadmapRoute
+  '/scholarships': typeof AuthenticatedScholarshipsRoute
+  '/undergrad': typeof AuthenticatedUndergradRoute
+  '/universities': typeof AuthenticatedUniversitiesRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/masters': typeof AuthenticatedMastersRoute
   '/path': typeof AuthenticatedPathRoute
+  '/phd': typeof AuthenticatedPhdRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/roadmap': typeof AuthenticatedRoadmapRoute
+  '/scholarships': typeof AuthenticatedScholarshipsRoute
+  '/undergrad': typeof AuthenticatedUndergradRoute
+  '/universities': typeof AuthenticatedUniversitiesRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
 }
 export interface FileRoutesById {
@@ -81,10 +139,17 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/masters': typeof AuthenticatedMastersRoute
   '/_authenticated/path': typeof AuthenticatedPathRoute
+  '/_authenticated/phd': typeof AuthenticatedPhdRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/roadmap': typeof AuthenticatedRoadmapRoute
+  '/_authenticated/scholarships': typeof AuthenticatedScholarshipsRoute
+  '/_authenticated/undergrad': typeof AuthenticatedUndergradRoute
+  '/_authenticated/universities': typeof AuthenticatedUniversitiesRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
 }
 export interface FileRouteTypes {
@@ -92,29 +157,50 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/dashboard'
+    | '/masters'
     | '/path'
+    | '/phd'
     | '/profile'
+    | '/roadmap'
+    | '/scholarships'
+    | '/undergrad'
+    | '/universities'
     | '/modules/$moduleId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/dashboard'
+    | '/masters'
     | '/path'
+    | '/phd'
     | '/profile'
+    | '/roadmap'
+    | '/scholarships'
+    | '/undergrad'
+    | '/universities'
     | '/modules/$moduleId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/_authenticated/dashboard'
+    | '/_authenticated/masters'
     | '/_authenticated/path'
+    | '/_authenticated/phd'
     | '/_authenticated/profile'
+    | '/_authenticated/roadmap'
+    | '/_authenticated/scholarships'
+    | '/_authenticated/undergrad'
+    | '/_authenticated/universities'
     | '/modules/$moduleId'
   fileRoutesById: FileRoutesById
 }
@@ -122,6 +208,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ModulesModuleIdRoute: typeof ModulesModuleIdRoute
 }
@@ -133,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -163,6 +257,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesModuleIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/universities': {
+      id: '/_authenticated/universities'
+      path: '/universities'
+      fullPath: '/universities'
+      preLoaderRoute: typeof AuthenticatedUniversitiesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/undergrad': {
+      id: '/_authenticated/undergrad'
+      path: '/undergrad'
+      fullPath: '/undergrad'
+      preLoaderRoute: typeof AuthenticatedUndergradRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/scholarships': {
+      id: '/_authenticated/scholarships'
+      path: '/scholarships'
+      fullPath: '/scholarships'
+      preLoaderRoute: typeof AuthenticatedScholarshipsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/roadmap': {
+      id: '/_authenticated/roadmap'
+      path: '/roadmap'
+      fullPath: '/roadmap'
+      preLoaderRoute: typeof AuthenticatedRoadmapRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/profile': {
       id: '/_authenticated/profile'
       path: '/profile'
@@ -170,11 +292,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/phd': {
+      id: '/_authenticated/phd'
+      path: '/phd'
+      fullPath: '/phd'
+      preLoaderRoute: typeof AuthenticatedPhdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/path': {
       id: '/_authenticated/path'
       path: '/path'
       fullPath: '/path'
       preLoaderRoute: typeof AuthenticatedPathRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/masters': {
+      id: '/_authenticated/masters'
+      path: '/masters'
+      fullPath: '/masters'
+      preLoaderRoute: typeof AuthenticatedMastersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -189,14 +325,26 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedMastersRoute: typeof AuthenticatedMastersRoute
   AuthenticatedPathRoute: typeof AuthenticatedPathRoute
+  AuthenticatedPhdRoute: typeof AuthenticatedPhdRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedRoadmapRoute: typeof AuthenticatedRoadmapRoute
+  AuthenticatedScholarshipsRoute: typeof AuthenticatedScholarshipsRoute
+  AuthenticatedUndergradRoute: typeof AuthenticatedUndergradRoute
+  AuthenticatedUniversitiesRoute: typeof AuthenticatedUniversitiesRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedMastersRoute: AuthenticatedMastersRoute,
   AuthenticatedPathRoute: AuthenticatedPathRoute,
+  AuthenticatedPhdRoute: AuthenticatedPhdRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedRoadmapRoute: AuthenticatedRoadmapRoute,
+  AuthenticatedScholarshipsRoute: AuthenticatedScholarshipsRoute,
+  AuthenticatedUndergradRoute: AuthenticatedUndergradRoute,
+  AuthenticatedUniversitiesRoute: AuthenticatedUniversitiesRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -206,6 +354,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ModulesModuleIdRoute: ModulesModuleIdRoute,
 }

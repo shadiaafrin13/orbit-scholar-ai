@@ -63,7 +63,7 @@ function ProfilePage() {
 
   const completeness = useMemo(() => calcCompleteness(p), [p]);
   const num = (v: string) => (v === "" ? null : Number(v));
-  const initials = (p.full_name || user.email || "?").split(" ").map((s) => s[0]).slice(0, 2).join("").toUpperCase();
+  const initials = (p.full_name || user.email || "?").split(" ").map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
 
   if (loading) return <div className="flex min-h-screen items-center justify-center"><Loader2 className="h-6 w-6 animate-spin" /></div>;
 
