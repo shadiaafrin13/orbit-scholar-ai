@@ -17,13 +17,19 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
 import { Route as AuthenticatedUniversitiesRouteImport } from './routes/_authenticated/universities'
 import { Route as AuthenticatedUndergradRouteImport } from './routes/_authenticated/undergrad'
+import { Route as AuthenticatedSopRouteImport } from './routes/_authenticated/sop'
 import { Route as AuthenticatedScholarshipsRouteImport } from './routes/_authenticated/scholarships'
 import { Route as AuthenticatedRoadmapRouteImport } from './routes/_authenticated/roadmap'
+import { Route as AuthenticatedResearchRouteImport } from './routes/_authenticated/research'
+import { Route as AuthenticatedRecommendationsRouteImport } from './routes/_authenticated/recommendations'
+import { Route as AuthenticatedPublicationsRouteImport } from './routes/_authenticated/publications'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedPhdRouteImport } from './routes/_authenticated/phd'
 import { Route as AuthenticatedPathRouteImport } from './routes/_authenticated/path'
 import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
+import { Route as AuthenticatedEcaRouteImport } from './routes/_authenticated/eca'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCvRouteImport } from './routes/_authenticated/cv'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -65,6 +71,11 @@ const AuthenticatedUndergradRoute = AuthenticatedUndergradRouteImport.update({
   path: '/undergrad',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSopRoute = AuthenticatedSopRouteImport.update({
+  id: '/sop',
+  path: '/sop',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedScholarshipsRoute =
   AuthenticatedScholarshipsRouteImport.update({
     id: '/scholarships',
@@ -76,6 +87,23 @@ const AuthenticatedRoadmapRoute = AuthenticatedRoadmapRouteImport.update({
   path: '/roadmap',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedResearchRoute = AuthenticatedResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRecommendationsRoute =
+  AuthenticatedRecommendationsRouteImport.update({
+    id: '/recommendations',
+    path: '/recommendations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPublicationsRoute =
+  AuthenticatedPublicationsRouteImport.update({
+    id: '/publications',
+    path: '/publications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -96,9 +124,19 @@ const AuthenticatedMastersRoute = AuthenticatedMastersRouteImport.update({
   path: '/masters',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEcaRoute = AuthenticatedEcaRouteImport.update({
+  id: '/eca',
+  path: '/eca',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCvRoute = AuthenticatedCvRouteImport.update({
+  id: '/cv',
+  path: '/cv',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
@@ -107,13 +145,19 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/cv': typeof AuthenticatedCvRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/eca': typeof AuthenticatedEcaRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/path': typeof AuthenticatedPathRoute
   '/phd': typeof AuthenticatedPhdRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/publications': typeof AuthenticatedPublicationsRoute
+  '/recommendations': typeof AuthenticatedRecommendationsRoute
+  '/research': typeof AuthenticatedResearchRoute
   '/roadmap': typeof AuthenticatedRoadmapRoute
   '/scholarships': typeof AuthenticatedScholarshipsRoute
+  '/sop': typeof AuthenticatedSopRoute
   '/undergrad': typeof AuthenticatedUndergradRoute
   '/universities': typeof AuthenticatedUniversitiesRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
@@ -123,13 +167,19 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/cv': typeof AuthenticatedCvRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/eca': typeof AuthenticatedEcaRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/path': typeof AuthenticatedPathRoute
   '/phd': typeof AuthenticatedPhdRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/publications': typeof AuthenticatedPublicationsRoute
+  '/recommendations': typeof AuthenticatedRecommendationsRoute
+  '/research': typeof AuthenticatedResearchRoute
   '/roadmap': typeof AuthenticatedRoadmapRoute
   '/scholarships': typeof AuthenticatedScholarshipsRoute
+  '/sop': typeof AuthenticatedSopRoute
   '/undergrad': typeof AuthenticatedUndergradRoute
   '/universities': typeof AuthenticatedUniversitiesRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
@@ -141,13 +191,19 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/cv': typeof AuthenticatedCvRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/eca': typeof AuthenticatedEcaRoute
   '/_authenticated/masters': typeof AuthenticatedMastersRoute
   '/_authenticated/path': typeof AuthenticatedPathRoute
   '/_authenticated/phd': typeof AuthenticatedPhdRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/publications': typeof AuthenticatedPublicationsRoute
+  '/_authenticated/recommendations': typeof AuthenticatedRecommendationsRoute
+  '/_authenticated/research': typeof AuthenticatedResearchRoute
   '/_authenticated/roadmap': typeof AuthenticatedRoadmapRoute
   '/_authenticated/scholarships': typeof AuthenticatedScholarshipsRoute
+  '/_authenticated/sop': typeof AuthenticatedSopRoute
   '/_authenticated/undergrad': typeof AuthenticatedUndergradRoute
   '/_authenticated/universities': typeof AuthenticatedUniversitiesRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
@@ -159,13 +215,19 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/sitemap.xml'
+    | '/cv'
     | '/dashboard'
+    | '/eca'
     | '/masters'
     | '/path'
     | '/phd'
     | '/profile'
+    | '/publications'
+    | '/recommendations'
+    | '/research'
     | '/roadmap'
     | '/scholarships'
+    | '/sop'
     | '/undergrad'
     | '/universities'
     | '/modules/$moduleId'
@@ -175,13 +237,19 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/sitemap.xml'
+    | '/cv'
     | '/dashboard'
+    | '/eca'
     | '/masters'
     | '/path'
     | '/phd'
     | '/profile'
+    | '/publications'
+    | '/recommendations'
+    | '/research'
     | '/roadmap'
     | '/scholarships'
+    | '/sop'
     | '/undergrad'
     | '/universities'
     | '/modules/$moduleId'
@@ -192,13 +260,19 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/sitemap.xml'
+    | '/_authenticated/cv'
     | '/_authenticated/dashboard'
+    | '/_authenticated/eca'
     | '/_authenticated/masters'
     | '/_authenticated/path'
     | '/_authenticated/phd'
     | '/_authenticated/profile'
+    | '/_authenticated/publications'
+    | '/_authenticated/recommendations'
+    | '/_authenticated/research'
     | '/_authenticated/roadmap'
     | '/_authenticated/scholarships'
+    | '/_authenticated/sop'
     | '/_authenticated/undergrad'
     | '/_authenticated/universities'
     | '/modules/$moduleId'
@@ -271,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUndergradRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/sop': {
+      id: '/_authenticated/sop'
+      path: '/sop'
+      fullPath: '/sop'
+      preLoaderRoute: typeof AuthenticatedSopRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/scholarships': {
       id: '/_authenticated/scholarships'
       path: '/scholarships'
@@ -283,6 +364,27 @@ declare module '@tanstack/react-router' {
       path: '/roadmap'
       fullPath: '/roadmap'
       preLoaderRoute: typeof AuthenticatedRoadmapRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/research': {
+      id: '/_authenticated/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof AuthenticatedResearchRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/recommendations': {
+      id: '/_authenticated/recommendations'
+      path: '/recommendations'
+      fullPath: '/recommendations'
+      preLoaderRoute: typeof AuthenticatedRecommendationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/publications': {
+      id: '/_authenticated/publications'
+      path: '/publications'
+      fullPath: '/publications'
+      preLoaderRoute: typeof AuthenticatedPublicationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/profile': {
@@ -313,6 +415,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMastersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/eca': {
+      id: '/_authenticated/eca'
+      path: '/eca'
+      fullPath: '/eca'
+      preLoaderRoute: typeof AuthenticatedEcaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -320,29 +429,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/cv': {
+      id: '/_authenticated/cv'
+      path: '/cv'
+      fullPath: '/cv'
+      preLoaderRoute: typeof AuthenticatedCvRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCvRoute: typeof AuthenticatedCvRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEcaRoute: typeof AuthenticatedEcaRoute
   AuthenticatedMastersRoute: typeof AuthenticatedMastersRoute
   AuthenticatedPathRoute: typeof AuthenticatedPathRoute
   AuthenticatedPhdRoute: typeof AuthenticatedPhdRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedPublicationsRoute: typeof AuthenticatedPublicationsRoute
+  AuthenticatedRecommendationsRoute: typeof AuthenticatedRecommendationsRoute
+  AuthenticatedResearchRoute: typeof AuthenticatedResearchRoute
   AuthenticatedRoadmapRoute: typeof AuthenticatedRoadmapRoute
   AuthenticatedScholarshipsRoute: typeof AuthenticatedScholarshipsRoute
+  AuthenticatedSopRoute: typeof AuthenticatedSopRoute
   AuthenticatedUndergradRoute: typeof AuthenticatedUndergradRoute
   AuthenticatedUniversitiesRoute: typeof AuthenticatedUniversitiesRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCvRoute: AuthenticatedCvRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEcaRoute: AuthenticatedEcaRoute,
   AuthenticatedMastersRoute: AuthenticatedMastersRoute,
   AuthenticatedPathRoute: AuthenticatedPathRoute,
   AuthenticatedPhdRoute: AuthenticatedPhdRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedPublicationsRoute: AuthenticatedPublicationsRoute,
+  AuthenticatedRecommendationsRoute: AuthenticatedRecommendationsRoute,
+  AuthenticatedResearchRoute: AuthenticatedResearchRoute,
   AuthenticatedRoadmapRoute: AuthenticatedRoadmapRoute,
   AuthenticatedScholarshipsRoute: AuthenticatedScholarshipsRoute,
+  AuthenticatedSopRoute: AuthenticatedSopRoute,
   AuthenticatedUndergradRoute: AuthenticatedUndergradRoute,
   AuthenticatedUniversitiesRoute: AuthenticatedUniversitiesRoute,
 }
