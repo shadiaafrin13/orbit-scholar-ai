@@ -14,6 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
+      activities: {
+        Row: {
+          category: string | null
+          created_at: string
+          end_date: string | null
+          evidence_url: string | null
+          hours_per_week: number | null
+          id: string
+          impact: string | null
+          organization: string | null
+          role: string | null
+          start_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          end_date?: string | null
+          evidence_url?: string | null
+          hours_per_week?: number | null
+          id?: string
+          impact?: string | null
+          organization?: string | null
+          role?: string | null
+          start_date?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          end_date?: string | null
+          evidence_url?: string | null
+          hours_per_week?: number | null
+          id?: string
+          impact?: string | null
+          organization?: string | null
+          role?: string | null
+          start_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      cvs: {
+        Row: {
+          ats_score: number | null
+          content: Json | null
+          created_at: string
+          headline: string | null
+          id: string
+          summary: string | null
+          template: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ats_score?: number | null
+          content?: Json | null
+          created_at?: string
+          headline?: string | null
+          id?: string
+          summary?: string | null
+          template?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ats_score?: number | null
+          content?: Json | null
+          created_at?: string
+          headline?: string | null
+          id?: string
+          summary?: string | null
+          template?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           activities: string | null
@@ -140,6 +224,138 @@ export type Database = {
         }
         Relationships: []
       }
+      publications: {
+        Row: {
+          citations: number | null
+          coauthors: string | null
+          created_at: string
+          doi: string | null
+          id: string
+          link: string | null
+          title: string
+          type: string | null
+          updated_at: string
+          user_id: string
+          venue: string | null
+          year: number | null
+        }
+        Insert: {
+          citations?: number | null
+          coauthors?: string | null
+          created_at?: string
+          doi?: string | null
+          id?: string
+          link?: string | null
+          title: string
+          type?: string | null
+          updated_at?: string
+          user_id: string
+          venue?: string | null
+          year?: number | null
+        }
+        Update: {
+          citations?: number | null
+          coauthors?: string | null
+          created_at?: string
+          doi?: string | null
+          id?: string
+          link?: string | null
+          title?: string
+          type?: string | null
+          updated_at?: string
+          user_id?: string
+          venue?: string | null
+          year?: number | null
+        }
+        Relationships: []
+      }
+      recommenders: {
+        Row: {
+          affiliation: string | null
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          relationship: string | null
+          requested_at: string | null
+          status: string | null
+          submitted_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          affiliation?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          relationship?: string | null
+          requested_at?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          affiliation?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          relationship?: string | null
+          requested_at?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      research_opportunities: {
+        Row: {
+          country: string | null
+          created_at: string
+          deadline: string | null
+          description: string | null
+          field: string | null
+          host: string | null
+          id: string
+          link: string | null
+          stipend: string | null
+          title: string
+          type: string | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          field?: string | null
+          host?: string | null
+          id?: string
+          link?: string | null
+          stipend?: string | null
+          title: string
+          type?: string | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          field?: string | null
+          host?: string | null
+          id?: string
+          link?: string | null
+          stipend?: string | null
+          title?: string
+          type?: string | null
+        }
+        Relationships: []
+      }
       saved_items: {
         Row: {
           created_at: string
@@ -209,6 +425,45 @@ export type Database = {
           link?: string | null
           name?: string
           provider?: string | null
+        }
+        Relationships: []
+      }
+      sops: {
+        Row: {
+          ai_feedback: string | null
+          ai_score: number | null
+          content: string | null
+          created_at: string
+          id: string
+          program: string | null
+          prompt: string | null
+          updated_at: string
+          user_id: string
+          version: number | null
+        }
+        Insert: {
+          ai_feedback?: string | null
+          ai_score?: number | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          program?: string | null
+          prompt?: string | null
+          updated_at?: string
+          user_id: string
+          version?: number | null
+        }
+        Update: {
+          ai_feedback?: string | null
+          ai_score?: number | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          program?: string | null
+          prompt?: string | null
+          updated_at?: string
+          user_id?: string
+          version?: number | null
         }
         Relationships: []
       }

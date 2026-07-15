@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  Award, BarChart3, Bookmark, Compass, FlaskConical, Globe, GraduationCap,
-  BookOpen, LogOut, Map, Rocket, Sparkles, UserRound,
+  Award, BarChart3, Bookmark, BookMarked, ClipboardList, Compass, FileText, FlaskConical, Globe, GraduationCap,
+  BookOpen, LogOut, Map, Rocket, Sparkles, Trophy, UserRound, Users,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -78,8 +78,14 @@ function Dashboard() {
     { to: "/undergrad" as const, icon: GraduationCap, n: "M06", title: "Undergraduate", desc: "SAT, IELTS, Common App — the UG toolkit.", meta: "Open" },
     { to: "/masters" as const, icon: BookOpen, n: "M07", title: "Master's Admission", desc: "Programs, SOP, funding, professor outreach.", meta: "Open" },
     { to: "/phd" as const, icon: FlaskConical, n: "M08", title: "PhD Admission", desc: "Proposals, advisors, fellowships, interviews.", meta: "Open" },
-    { to: "/universities" as const, icon: Globe, n: "M09", title: "Global Universities", desc: "Search, filter, and save universities.", meta: s ? `${s.saved} saved` : "" },
-    { to: "/scholarships" as const, icon: Award, n: "M10", title: "Scholarship Hub", desc: "Fulbright, Chevening, DAAD, MEXT & more.", meta: "Live" },
+    { to: "/universities" as const, icon: Globe, n: "M09", title: "Global Universities", desc: "35+ world universities to search and save.", meta: s ? `${s.saved} saved` : "" },
+    { to: "/scholarships" as const, icon: Award, n: "M10", title: "Scholarship Hub", desc: "30+ funded scholarships with deadlines & links.", meta: "Live" },
+    { to: "/research" as const, icon: FlaskConical, n: "M11", title: "Research & Innovation", desc: "Fellowships, RA/PhD programs, summer research.", meta: "New" },
+    { to: "/publications" as const, icon: BookMarked, n: "M12", title: "Publication Hub", desc: "Papers, DOIs, citations, co-authors.", meta: "Track" },
+    { to: "/sop" as const, icon: FileText, n: "M13", title: "SOP & Essay AI", desc: "Draft, save, and score every statement.", meta: "AI" },
+    { to: "/cv" as const, icon: ClipboardList, n: "M14", title: "CV & Resume Builder", desc: "Academic, Europass, ATS — with live scoring.", meta: "AI" },
+    { to: "/recommendations" as const, icon: Users, n: "M15", title: "Recommendation Letters", desc: "Manage recommenders, drafts, and reminders.", meta: "Manage" },
+    { to: "/eca" as const, icon: Trophy, n: "M16", title: "ECA Hub", desc: "Olympiads, MUN, hackathons, sports — scored.", meta: "New" },
   ];
 
   return (
@@ -115,7 +121,7 @@ function Dashboard() {
           <span className="text-muted-foreground">Welcome back{s?.name ? `, ${s.name.split(" ")[0]}` : ""}</span>
         </div>
         <h1 className="mt-6 text-4xl font-bold sm:text-5xl">Your <span className="text-gradient">Atlas</span>.</h1>
-        <p className="mt-3 max-w-2xl text-muted-foreground">Modules 1–10 are live. Everything reads from your profile.</p>
+        <p className="mt-3 max-w-2xl text-muted-foreground">Modules 1–16 are live. Everything reads from your profile.</p>
 
         {/* Snapshot */}
         <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
