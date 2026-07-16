@@ -10,9 +10,9 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/universities/$id")({
-  head: ({ loaderData }) => ({
+  head: ({ loaderData }: { loaderData?: { name?: string } }) => ({
     meta: [
-      { title: loaderData ? `${loaderData.name} — Atlas` : "University — Atlas" },
+      { title: loaderData?.name ? `${loaderData.name} — Atlas` : "University — Atlas" },
       { name: "robots", content: "noindex" },
     ],
   }),

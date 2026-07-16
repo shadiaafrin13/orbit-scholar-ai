@@ -30,6 +30,7 @@ import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedEcaRouteImport } from './routes/_authenticated/eca'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCvRouteImport } from './routes/_authenticated/cv'
+import { Route as AuthenticatedUniversitiesIdRouteImport } from './routes/_authenticated/universities.$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -139,6 +140,12 @@ const AuthenticatedCvRoute = AuthenticatedCvRouteImport.update({
   path: '/cv',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedUniversitiesIdRoute =
+  AuthenticatedUniversitiesIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedUniversitiesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -159,8 +166,9 @@ export interface FileRoutesByFullPath {
   '/scholarships': typeof AuthenticatedScholarshipsRoute
   '/sop': typeof AuthenticatedSopRoute
   '/undergrad': typeof AuthenticatedUndergradRoute
-  '/universities': typeof AuthenticatedUniversitiesRoute
+  '/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/universities/$id': typeof AuthenticatedUniversitiesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -181,8 +189,9 @@ export interface FileRoutesByTo {
   '/scholarships': typeof AuthenticatedScholarshipsRoute
   '/sop': typeof AuthenticatedSopRoute
   '/undergrad': typeof AuthenticatedUndergradRoute
-  '/universities': typeof AuthenticatedUniversitiesRoute
+  '/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/universities/$id': typeof AuthenticatedUniversitiesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -205,8 +214,9 @@ export interface FileRoutesById {
   '/_authenticated/scholarships': typeof AuthenticatedScholarshipsRoute
   '/_authenticated/sop': typeof AuthenticatedSopRoute
   '/_authenticated/undergrad': typeof AuthenticatedUndergradRoute
-  '/_authenticated/universities': typeof AuthenticatedUniversitiesRoute
+  '/_authenticated/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/_authenticated/universities/$id': typeof AuthenticatedUniversitiesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -231,6 +241,7 @@ export interface FileRouteTypes {
     | '/undergrad'
     | '/universities'
     | '/modules/$moduleId'
+    | '/universities/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -253,6 +264,7 @@ export interface FileRouteTypes {
     | '/undergrad'
     | '/universities'
     | '/modules/$moduleId'
+    | '/universities/$id'
   id:
     | '__root__'
     | '/'
@@ -276,6 +288,7 @@ export interface FileRouteTypes {
     | '/_authenticated/undergrad'
     | '/_authenticated/universities'
     | '/modules/$moduleId'
+    | '/_authenticated/universities/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -436,8 +449,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCvRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/universities/$id': {
+      id: '/_authenticated/universities/$id'
+      path: '/$id'
+      fullPath: '/universities/$id'
+      preLoaderRoute: typeof AuthenticatedUniversitiesIdRouteImport
+      parentRoute: typeof AuthenticatedUniversitiesRoute
+    }
   }
 }
+
+interface AuthenticatedUniversitiesRouteChildren {
+  AuthenticatedUniversitiesIdRoute: typeof AuthenticatedUniversitiesIdRoute
+}
+
+const AuthenticatedUniversitiesRouteChildren: AuthenticatedUniversitiesRouteChildren =
+  {
+    AuthenticatedUniversitiesIdRoute: AuthenticatedUniversitiesIdRoute,
+  }
+
+const AuthenticatedUniversitiesRouteWithChildren =
+  AuthenticatedUniversitiesRoute._addFileChildren(
+    AuthenticatedUniversitiesRouteChildren,
+  )
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCvRoute: typeof AuthenticatedCvRoute
@@ -454,7 +488,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedScholarshipsRoute: typeof AuthenticatedScholarshipsRoute
   AuthenticatedSopRoute: typeof AuthenticatedSopRoute
   AuthenticatedUndergradRoute: typeof AuthenticatedUndergradRoute
-  AuthenticatedUniversitiesRoute: typeof AuthenticatedUniversitiesRoute
+  AuthenticatedUniversitiesRoute: typeof AuthenticatedUniversitiesRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -472,7 +506,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedScholarshipsRoute: AuthenticatedScholarshipsRoute,
   AuthenticatedSopRoute: AuthenticatedSopRoute,
   AuthenticatedUndergradRoute: AuthenticatedUndergradRoute,
-  AuthenticatedUniversitiesRoute: AuthenticatedUniversitiesRoute,
+  AuthenticatedUniversitiesRoute: AuthenticatedUniversitiesRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
