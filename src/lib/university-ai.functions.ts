@@ -34,7 +34,7 @@ Return STRICT JSON: {"picks":[{"id":"<uuid>","name":"<name>","reason":"<1-2 sent
 Student profile: ${JSON.stringify({
   level: profile.target_level, countries: profile.target_countries, field: profile.field_of_study,
   gpa: profile.gpa, ielts: profile.ielts, toefl: profile.toefl, sat: profile.sat, gre: profile.gre,
-  budget: profile.budget_usd, interests: profile.interests,
+  budget: profile.path_budget, interests: profile.interests,
 })}
 Universities (choose ONLY from this list): ${JSON.stringify(unis)}`;
     const raw = await callAI([
