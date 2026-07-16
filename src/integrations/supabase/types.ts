@@ -509,47 +509,155 @@ export type Database = {
       universities: {
         Row: {
           acceptance_rate: number | null
+          admission_notes: string | null
+          application_deadline: string | null
+          arwu_rank: number | null
+          avg_gpa: number | null
+          campus_type: string | null
           city: string | null
+          continent: string | null
           country: string
           created_at: string
+          currency: string | null
           description: string | null
+          det_min: number | null
+          employability_rank: number | null
+          established_year: number | null
+          exchange_partners: string | null
+          faculties: string[] | null
+          gmat_required: boolean | null
+          gre_required: boolean | null
+          housing_cost_usd: number | null
           id: string
+          ielts_min: number | null
+          image_url: string | null
+          intl_ratio: number | null
           language: string | null
+          latitude: number | null
           levels: string[] | null
+          living_cost_usd: number | null
+          longitude: number | null
           name: string
+          notable_alumni: string[] | null
+          post_study_work: string | null
+          pr_pathway: string | null
           programs: string[] | null
+          qs_rank: number | null
+          region: string | null
+          required_documents: string[] | null
+          research_areas: string[] | null
+          scholarships_info: string | null
+          student_count: number | null
+          the_rank: number | null
+          toefl_min: number | null
+          tuition_max_usd: number | null
+          tuition_min_usd: number | null
           tuition_usd: number | null
+          visa_info: string | null
           website: string | null
+          work_during_study: string | null
           world_rank: number | null
         }
         Insert: {
           acceptance_rate?: number | null
+          admission_notes?: string | null
+          application_deadline?: string | null
+          arwu_rank?: number | null
+          avg_gpa?: number | null
+          campus_type?: string | null
           city?: string | null
+          continent?: string | null
           country: string
           created_at?: string
+          currency?: string | null
           description?: string | null
+          det_min?: number | null
+          employability_rank?: number | null
+          established_year?: number | null
+          exchange_partners?: string | null
+          faculties?: string[] | null
+          gmat_required?: boolean | null
+          gre_required?: boolean | null
+          housing_cost_usd?: number | null
           id?: string
+          ielts_min?: number | null
+          image_url?: string | null
+          intl_ratio?: number | null
           language?: string | null
+          latitude?: number | null
           levels?: string[] | null
+          living_cost_usd?: number | null
+          longitude?: number | null
           name: string
+          notable_alumni?: string[] | null
+          post_study_work?: string | null
+          pr_pathway?: string | null
           programs?: string[] | null
+          qs_rank?: number | null
+          region?: string | null
+          required_documents?: string[] | null
+          research_areas?: string[] | null
+          scholarships_info?: string | null
+          student_count?: number | null
+          the_rank?: number | null
+          toefl_min?: number | null
+          tuition_max_usd?: number | null
+          tuition_min_usd?: number | null
           tuition_usd?: number | null
+          visa_info?: string | null
           website?: string | null
+          work_during_study?: string | null
           world_rank?: number | null
         }
         Update: {
           acceptance_rate?: number | null
+          admission_notes?: string | null
+          application_deadline?: string | null
+          arwu_rank?: number | null
+          avg_gpa?: number | null
+          campus_type?: string | null
           city?: string | null
+          continent?: string | null
           country?: string
           created_at?: string
+          currency?: string | null
           description?: string | null
+          det_min?: number | null
+          employability_rank?: number | null
+          established_year?: number | null
+          exchange_partners?: string | null
+          faculties?: string[] | null
+          gmat_required?: boolean | null
+          gre_required?: boolean | null
+          housing_cost_usd?: number | null
           id?: string
+          ielts_min?: number | null
+          image_url?: string | null
+          intl_ratio?: number | null
           language?: string | null
+          latitude?: number | null
           levels?: string[] | null
+          living_cost_usd?: number | null
+          longitude?: number | null
           name?: string
+          notable_alumni?: string[] | null
+          post_study_work?: string | null
+          pr_pathway?: string | null
           programs?: string[] | null
+          qs_rank?: number | null
+          region?: string | null
+          required_documents?: string[] | null
+          research_areas?: string[] | null
+          scholarships_info?: string | null
+          student_count?: number | null
+          the_rank?: number | null
+          toefl_min?: number | null
+          tuition_max_usd?: number | null
+          tuition_min_usd?: number | null
           tuition_usd?: number | null
+          visa_info?: string | null
           website?: string | null
+          work_during_study?: string | null
           world_rank?: number | null
         }
         Relationships: []
