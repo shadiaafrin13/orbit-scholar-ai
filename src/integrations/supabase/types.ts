@@ -62,6 +62,77 @@ export type Database = {
         }
         Relationships: []
       }
+      applications: {
+        Row: {
+          aid_status: string | null
+          created_at: string
+          deadline: string | null
+          decision: string | null
+          id: string
+          interview_date: string | null
+          level: string | null
+          missing_documents: string[] | null
+          notes: string | null
+          platform: string | null
+          program: string | null
+          round: string | null
+          status: string
+          university_id: string | null
+          university_name: string
+          updated_at: string
+          user_id: string
+          visa_status: string | null
+        }
+        Insert: {
+          aid_status?: string | null
+          created_at?: string
+          deadline?: string | null
+          decision?: string | null
+          id?: string
+          interview_date?: string | null
+          level?: string | null
+          missing_documents?: string[] | null
+          notes?: string | null
+          platform?: string | null
+          program?: string | null
+          round?: string | null
+          status?: string
+          university_id?: string | null
+          university_name: string
+          updated_at?: string
+          user_id: string
+          visa_status?: string | null
+        }
+        Update: {
+          aid_status?: string | null
+          created_at?: string
+          deadline?: string | null
+          decision?: string | null
+          id?: string
+          interview_date?: string | null
+          level?: string | null
+          missing_documents?: string[] | null
+          notes?: string | null
+          platform?: string | null
+          program?: string | null
+          round?: string | null
+          status?: string
+          university_id?: string | null
+          university_name?: string
+          updated_at?: string
+          user_id?: string
+          visa_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "applications_university_id_fkey"
+            columns: ["university_id"]
+            isOneToOne: false
+            referencedRelation: "universities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cvs: {
         Row: {
           ats_score: number | null
@@ -136,6 +207,7 @@ export type Database = {
           target_countries: string[] | null
           target_level: string | null
           toefl: number | null
+          ug_pathway: string | null
           updated_at: string
           website_url: string | null
           work_experience: string | null
@@ -177,6 +249,7 @@ export type Database = {
           target_countries?: string[] | null
           target_level?: string | null
           toefl?: number | null
+          ug_pathway?: string | null
           updated_at?: string
           website_url?: string | null
           work_experience?: string | null
@@ -218,6 +291,7 @@ export type Database = {
           target_countries?: string[] | null
           target_level?: string | null
           toefl?: number | null
+          ug_pathway?: string | null
           updated_at?: string
           website_url?: string | null
           work_experience?: string | null
