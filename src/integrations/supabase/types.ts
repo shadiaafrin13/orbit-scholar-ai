@@ -169,6 +169,60 @@ export type Database = {
         }
         Relationships: []
       }
+      professor_contacts: {
+        Row: {
+          compatibility: number | null
+          contacted_at: string | null
+          created_at: string
+          department: string | null
+          email: string | null
+          id: string
+          lab: string | null
+          name: string
+          notes: string | null
+          replied_at: string | null
+          research_area: string | null
+          status: string
+          university: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          compatibility?: number | null
+          contacted_at?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string | null
+          id?: string
+          lab?: string | null
+          name: string
+          notes?: string | null
+          replied_at?: string | null
+          research_area?: string | null
+          status?: string
+          university?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          compatibility?: number | null
+          contacted_at?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string | null
+          id?: string
+          lab?: string | null
+          name?: string
+          notes?: string | null
+          replied_at?: string | null
+          research_area?: string | null
+          status?: string
+          university?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           activities: string | null
@@ -194,6 +248,7 @@ export type Database = {
           interests: string | null
           languages: string[] | null
           linkedin_url: string | null
+          masters_pathway: string | null
           orcid: string | null
           path_budget: string | null
           path_completed: boolean
@@ -236,6 +291,7 @@ export type Database = {
           interests?: string | null
           languages?: string[] | null
           linkedin_url?: string | null
+          masters_pathway?: string | null
           orcid?: string | null
           path_budget?: string | null
           path_completed?: boolean
@@ -278,6 +334,7 @@ export type Database = {
           interests?: string | null
           languages?: string[] | null
           linkedin_url?: string | null
+          masters_pathway?: string | null
           orcid?: string | null
           path_budget?: string | null
           path_completed?: boolean
