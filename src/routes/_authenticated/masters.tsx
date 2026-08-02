@@ -718,7 +718,7 @@ function ProfessorsTab({ userId, profs, setProfs }: { userId: string; profs: Pro
           <div className="flex gap-2">
             <input value={area} onChange={(e) => setArea(e.target.value)} placeholder="Research area"
               className="rounded-xl border border-input bg-background/40 px-3 py-2 text-xs outline-none focus:border-primary" />
-            <button onClick={async () => { setBusy(true); try { const r = await match({ data: { mode: "match", area } }); setMatches(r.matches ?? []); } catch (e: any) { toast.error(e.message); } setBusy(false); }}
+            <button onClick={async () => { setBusy(true); try { const r: any = await match({ data: { mode: "match", area } }); setMatches(r.matches ?? []); } catch (e: any) { toast.error(e.message); } setBusy(false); }}
               disabled={busy} className="inline-flex items-center gap-2 rounded-full bg-nebula px-5 py-2 text-xs font-semibold text-primary-foreground glow disabled:opacity-60">
               {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand2 className="h-3.5 w-3.5" />} Find professors
             </button>
@@ -829,7 +829,7 @@ function InterviewTab() {
           <select value={type} onChange={(e) => setType(e.target.value)} className="rounded-xl border border-input bg-background/40 px-4 py-2.5 text-sm outline-none focus:border-primary">
             {INTERVIEW_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
-          <button onClick={async () => { setBusy(true); try { const r = await run({ data: { mode: "questions", interviewType: type } }); setQuestions(r.questions ?? []); setCurrent(r.questions?.[0] ?? ""); } catch (e: any) { toast.error(e.message); } setBusy(false); }}
+          <button onClick={async () => { setBusy(true); try { const r: any = await run({ data: { mode: "questions", interviewType: type } }); setQuestions(r.questions ?? []); setCurrent(r.questions?.[0] ?? ""); } catch (e: any) { toast.error(e.message); } setBusy(false); }}
             disabled={busy} className="inline-flex items-center gap-2 rounded-full bg-nebula px-5 py-2 text-sm font-semibold text-primary-foreground glow disabled:opacity-60">
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />} Generate questions
           </button>
