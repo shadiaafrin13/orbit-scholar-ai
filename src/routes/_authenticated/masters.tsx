@@ -682,11 +682,11 @@ function ProfessorsTab({ userId, profs, setProfs }: { userId: string; profs: Pro
     const row = {
       user_id: userId,
       name: seed?.name ?? form.name,
-      university: seed?.university ?? form.university || null,
-      department: seed?.department ?? form.department || null,
-      research_area: seed?.research_area ?? form.research_area || null,
-      email: seed?.email ?? form.email || null,
-      lab: seed?.lab ?? form.lab || null,
+      university: seed?.university ?? (form.university || null),
+      department: seed?.department ?? (form.department || null),
+      research_area: seed?.research_area ?? (form.research_area || null),
+      email: seed?.email ?? (form.email || null),
+      lab: seed?.lab ?? (form.lab || null),
       compatibility: seed?.compatibility ?? null,
       status: "identified",
     };
