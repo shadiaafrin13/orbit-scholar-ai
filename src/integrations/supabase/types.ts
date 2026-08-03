@@ -169,6 +169,99 @@ export type Database = {
         }
         Relationships: []
       }
+      phd_positions: {
+        Row: {
+          country: string | null
+          created_at: string
+          deadline: string | null
+          degree_type: string | null
+          department: string | null
+          description: string | null
+          duration_years: number | null
+          fully_funded: boolean
+          funding_type: string | null
+          health_insurance: boolean | null
+          id: string
+          industry_sponsored: boolean
+          interview_process: string | null
+          keywords: string[] | null
+          language_requirement: string | null
+          link: string | null
+          required_documents: string[] | null
+          required_gpa: number | null
+          research_area: string | null
+          research_budget: string | null
+          research_experience: string | null
+          research_group: string | null
+          stipend_monthly: string | null
+          supervisor: string | null
+          supervisor_profile: string | null
+          title: string
+          tuition_covered: boolean | null
+          university: string
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          degree_type?: string | null
+          department?: string | null
+          description?: string | null
+          duration_years?: number | null
+          fully_funded?: boolean
+          funding_type?: string | null
+          health_insurance?: boolean | null
+          id?: string
+          industry_sponsored?: boolean
+          interview_process?: string | null
+          keywords?: string[] | null
+          language_requirement?: string | null
+          link?: string | null
+          required_documents?: string[] | null
+          required_gpa?: number | null
+          research_area?: string | null
+          research_budget?: string | null
+          research_experience?: string | null
+          research_group?: string | null
+          stipend_monthly?: string | null
+          supervisor?: string | null
+          supervisor_profile?: string | null
+          title: string
+          tuition_covered?: boolean | null
+          university: string
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          degree_type?: string | null
+          department?: string | null
+          description?: string | null
+          duration_years?: number | null
+          fully_funded?: boolean
+          funding_type?: string | null
+          health_insurance?: boolean | null
+          id?: string
+          industry_sponsored?: boolean
+          interview_process?: string | null
+          keywords?: string[] | null
+          language_requirement?: string | null
+          link?: string | null
+          required_documents?: string[] | null
+          required_gpa?: number | null
+          research_area?: string | null
+          research_budget?: string | null
+          research_experience?: string | null
+          research_group?: string | null
+          stipend_monthly?: string | null
+          supervisor?: string | null
+          supervisor_profile?: string | null
+          title?: string
+          tuition_covered?: boolean | null
+          university?: string
+        }
+        Relationships: []
+      }
       professor_contacts: {
         Row: {
           compatibility: number | null
@@ -255,6 +348,7 @@ export type Database = {
           path_goal: string | null
           path_timeline: string | null
           path_type: string | null
+          phd_pathway: string | null
           phone: string | null
           publications: string | null
           sat: number | null
@@ -298,6 +392,7 @@ export type Database = {
           path_goal?: string | null
           path_timeline?: string | null
           path_type?: string | null
+          phd_pathway?: string | null
           phone?: string | null
           publications?: string | null
           sat?: number | null
@@ -341,6 +436,7 @@ export type Database = {
           path_goal?: string | null
           path_timeline?: string | null
           path_type?: string | null
+          phd_pathway?: string | null
           phone?: string | null
           publications?: string | null
           sat?: number | null
