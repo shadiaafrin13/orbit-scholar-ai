@@ -133,6 +133,69 @@ export type Database = {
           },
         ]
       }
+      conferences: {
+        Row: {
+          acceptance_rate: number | null
+          awards: string | null
+          country: string | null
+          created_at: string
+          field: string | null
+          format: string | null
+          id: string
+          link: string | null
+          location: string | null
+          name: string
+          organizer: string | null
+          paper_deadline: string | null
+          proceedings: string | null
+          registration_fee: string | null
+          start_date: string | null
+          student_discount: boolean | null
+          topics: string[] | null
+          travel_grants: boolean | null
+        }
+        Insert: {
+          acceptance_rate?: number | null
+          awards?: string | null
+          country?: string | null
+          created_at?: string
+          field?: string | null
+          format?: string | null
+          id?: string
+          link?: string | null
+          location?: string | null
+          name: string
+          organizer?: string | null
+          paper_deadline?: string | null
+          proceedings?: string | null
+          registration_fee?: string | null
+          start_date?: string | null
+          student_discount?: boolean | null
+          topics?: string[] | null
+          travel_grants?: boolean | null
+        }
+        Update: {
+          acceptance_rate?: number | null
+          awards?: string | null
+          country?: string | null
+          created_at?: string
+          field?: string | null
+          format?: string | null
+          id?: string
+          link?: string | null
+          location?: string | null
+          name?: string
+          organizer?: string | null
+          paper_deadline?: string | null
+          proceedings?: string | null
+          registration_fee?: string | null
+          start_date?: string | null
+          student_discount?: boolean | null
+          topics?: string[] | null
+          travel_grants?: boolean | null
+        }
+        Relationships: []
+      }
       cvs: {
         Row: {
           ats_score: number | null
@@ -166,6 +229,117 @@ export type Database = {
           template?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      journals: {
+        Row: {
+          acceptance_rate: number | null
+          apc_usd: number | null
+          citescore: number | null
+          created_at: string
+          field: string | null
+          guidelines_url: string | null
+          id: string
+          impact_factor: number | null
+          indexing: string[] | null
+          link: string | null
+          name: string
+          open_access: string | null
+          publication_weeks: number | null
+          publisher: string | null
+          quartile: string | null
+          review_weeks: number | null
+          scope: string | null
+        }
+        Insert: {
+          acceptance_rate?: number | null
+          apc_usd?: number | null
+          citescore?: number | null
+          created_at?: string
+          field?: string | null
+          guidelines_url?: string | null
+          id?: string
+          impact_factor?: number | null
+          indexing?: string[] | null
+          link?: string | null
+          name: string
+          open_access?: string | null
+          publication_weeks?: number | null
+          publisher?: string | null
+          quartile?: string | null
+          review_weeks?: number | null
+          scope?: string | null
+        }
+        Update: {
+          acceptance_rate?: number | null
+          apc_usd?: number | null
+          citescore?: number | null
+          created_at?: string
+          field?: string | null
+          guidelines_url?: string | null
+          id?: string
+          impact_factor?: number | null
+          indexing?: string[] | null
+          link?: string | null
+          name?: string
+          open_access?: string | null
+          publication_weeks?: number | null
+          publisher?: string | null
+          quartile?: string | null
+          review_weeks?: number | null
+          scope?: string | null
+        }
+        Relationships: []
+      }
+      manuscripts: {
+        Row: {
+          created_at: string
+          decision_at: string | null
+          doi: string | null
+          id: string
+          notes: string | null
+          reviewer_notes: string | null
+          revision_round: number | null
+          stage: string
+          submitted_at: string | null
+          target_venue: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          venue_type: string | null
+        }
+        Insert: {
+          created_at?: string
+          decision_at?: string | null
+          doi?: string | null
+          id?: string
+          notes?: string | null
+          reviewer_notes?: string | null
+          revision_round?: number | null
+          stage?: string
+          submitted_at?: string | null
+          target_venue?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          venue_type?: string | null
+        }
+        Update: {
+          created_at?: string
+          decision_at?: string | null
+          doi?: string | null
+          id?: string
+          notes?: string | null
+          reviewer_notes?: string | null
+          revision_round?: number | null
+          stage?: string
+          submitted_at?: string | null
+          target_venue?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          venue_type?: string | null
         }
         Relationships: []
       }
@@ -316,6 +490,81 @@ export type Database = {
         }
         Relationships: []
       }
+      professors: {
+        Row: {
+          accepting_students: boolean | null
+          bio: string | null
+          citations: number | null
+          collaboration_open: boolean | null
+          country: string | null
+          created_at: string
+          current_projects: string | null
+          department: string | null
+          email: string | null
+          grants: string | null
+          h_index: number | null
+          id: string
+          keywords: string[] | null
+          lab_name: string | null
+          name: string
+          open_positions: boolean | null
+          orcid: string | null
+          research_areas: string[] | null
+          scholar_url: string | null
+          title: string | null
+          university: string | null
+          website: string | null
+        }
+        Insert: {
+          accepting_students?: boolean | null
+          bio?: string | null
+          citations?: number | null
+          collaboration_open?: boolean | null
+          country?: string | null
+          created_at?: string
+          current_projects?: string | null
+          department?: string | null
+          email?: string | null
+          grants?: string | null
+          h_index?: number | null
+          id?: string
+          keywords?: string[] | null
+          lab_name?: string | null
+          name: string
+          open_positions?: boolean | null
+          orcid?: string | null
+          research_areas?: string[] | null
+          scholar_url?: string | null
+          title?: string | null
+          university?: string | null
+          website?: string | null
+        }
+        Update: {
+          accepting_students?: boolean | null
+          bio?: string | null
+          citations?: number | null
+          collaboration_open?: boolean | null
+          country?: string | null
+          created_at?: string
+          current_projects?: string | null
+          department?: string | null
+          email?: string | null
+          grants?: string | null
+          h_index?: number | null
+          id?: string
+          keywords?: string[] | null
+          lab_name?: string | null
+          name?: string
+          open_positions?: boolean | null
+          orcid?: string | null
+          research_areas?: string[] | null
+          scholar_url?: string | null
+          title?: string | null
+          university?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           activities: string | null
@@ -351,7 +600,9 @@ export type Database = {
           phd_pathway: string | null
           phone: string | null
           publications: string | null
+          researchgate_url: string | null
           sat: number | null
+          scholar_url: string | null
           school_name: string | null
           target_countries: string[] | null
           target_level: string | null
@@ -395,7 +646,9 @@ export type Database = {
           phd_pathway?: string | null
           phone?: string | null
           publications?: string | null
+          researchgate_url?: string | null
           sat?: number | null
+          scholar_url?: string | null
           school_name?: string | null
           target_countries?: string[] | null
           target_level?: string | null
@@ -439,7 +692,9 @@ export type Database = {
           phd_pathway?: string | null
           phone?: string | null
           publications?: string | null
+          researchgate_url?: string | null
           sat?: number | null
+          scholar_url?: string | null
           school_name?: string | null
           target_countries?: string[] | null
           target_level?: string | null
@@ -541,42 +796,108 @@ export type Database = {
         }
         Relationships: []
       }
-      research_opportunities: {
+      research_grants: {
         Row: {
+          amount: string | null
           country: string | null
           created_at: string
           deadline: string | null
           description: string | null
-          field: string | null
-          host: string | null
+          duration: string | null
+          eligibility: string | null
+          fields: string[] | null
+          funder: string | null
           id: string
           link: string | null
+          name: string
+          type: string | null
+        }
+        Insert: {
+          amount?: string | null
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          duration?: string | null
+          eligibility?: string | null
+          fields?: string[] | null
+          funder?: string | null
+          id?: string
+          link?: string | null
+          name: string
+          type?: string | null
+        }
+        Update: {
+          amount?: string | null
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          duration?: string | null
+          eligibility?: string | null
+          fields?: string[] | null
+          funder?: string | null
+          id?: string
+          link?: string | null
+          name?: string
+          type?: string | null
+        }
+        Relationships: []
+      }
+      research_opportunities: {
+        Row: {
+          category: string | null
+          country: string | null
+          created_at: string
+          deadline: string | null
+          description: string | null
+          duration: string | null
+          eligibility: string | null
+          field: string | null
+          funded: boolean
+          host: string | null
+          id: string
+          level: string | null
+          link: string | null
+          mode: string | null
           stipend: string | null
           title: string
           type: string | null
         }
         Insert: {
+          category?: string | null
           country?: string | null
           created_at?: string
           deadline?: string | null
           description?: string | null
+          duration?: string | null
+          eligibility?: string | null
           field?: string | null
+          funded?: boolean
           host?: string | null
           id?: string
+          level?: string | null
           link?: string | null
+          mode?: string | null
           stipend?: string | null
           title: string
           type?: string | null
         }
         Update: {
+          category?: string | null
           country?: string | null
           created_at?: string
           deadline?: string | null
           description?: string | null
+          duration?: string | null
+          eligibility?: string | null
           field?: string | null
+          funded?: boolean
           host?: string | null
           id?: string
+          level?: string | null
           link?: string | null
+          mode?: string | null
           stipend?: string | null
           title?: string
           type?: string | null
