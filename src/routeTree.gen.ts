@@ -17,6 +17,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
 import { Route as AuthenticatedUniversitiesRouteImport } from './routes/_authenticated/universities'
 import { Route as AuthenticatedUndergradRouteImport } from './routes/_authenticated/undergrad'
+import { Route as AuthenticatedTestsRouteImport } from './routes/_authenticated/tests'
 import { Route as AuthenticatedSopRouteImport } from './routes/_authenticated/sop'
 import { Route as AuthenticatedScholarshipsRouteImport } from './routes/_authenticated/scholarships'
 import { Route as AuthenticatedRoadmapRouteImport } from './routes/_authenticated/roadmap'
@@ -70,6 +71,11 @@ const AuthenticatedUniversitiesRoute =
 const AuthenticatedUndergradRoute = AuthenticatedUndergradRouteImport.update({
   id: '/undergrad',
   path: '/undergrad',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTestsRoute = AuthenticatedTestsRouteImport.update({
+  id: '/tests',
+  path: '/tests',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSopRoute = AuthenticatedSopRouteImport.update({
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/roadmap': typeof AuthenticatedRoadmapRoute
   '/scholarships': typeof AuthenticatedScholarshipsRoute
   '/sop': typeof AuthenticatedSopRoute
+  '/tests': typeof AuthenticatedTestsRoute
   '/undergrad': typeof AuthenticatedUndergradRoute
   '/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
@@ -188,6 +195,7 @@ export interface FileRoutesByTo {
   '/roadmap': typeof AuthenticatedRoadmapRoute
   '/scholarships': typeof AuthenticatedScholarshipsRoute
   '/sop': typeof AuthenticatedSopRoute
+  '/tests': typeof AuthenticatedTestsRoute
   '/undergrad': typeof AuthenticatedUndergradRoute
   '/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
@@ -213,6 +221,7 @@ export interface FileRoutesById {
   '/_authenticated/roadmap': typeof AuthenticatedRoadmapRoute
   '/_authenticated/scholarships': typeof AuthenticatedScholarshipsRoute
   '/_authenticated/sop': typeof AuthenticatedSopRoute
+  '/_authenticated/tests': typeof AuthenticatedTestsRoute
   '/_authenticated/undergrad': typeof AuthenticatedUndergradRoute
   '/_authenticated/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
@@ -238,6 +247,7 @@ export interface FileRouteTypes {
     | '/roadmap'
     | '/scholarships'
     | '/sop'
+    | '/tests'
     | '/undergrad'
     | '/universities'
     | '/modules/$moduleId'
@@ -261,6 +271,7 @@ export interface FileRouteTypes {
     | '/roadmap'
     | '/scholarships'
     | '/sop'
+    | '/tests'
     | '/undergrad'
     | '/universities'
     | '/modules/$moduleId'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/_authenticated/roadmap'
     | '/_authenticated/scholarships'
     | '/_authenticated/sop'
+    | '/_authenticated/tests'
     | '/_authenticated/undergrad'
     | '/_authenticated/universities'
     | '/modules/$moduleId'
@@ -356,6 +368,13 @@ declare module '@tanstack/react-router' {
       path: '/undergrad'
       fullPath: '/undergrad'
       preLoaderRoute: typeof AuthenticatedUndergradRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tests': {
+      id: '/_authenticated/tests'
+      path: '/tests'
+      fullPath: '/tests'
+      preLoaderRoute: typeof AuthenticatedTestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/sop': {
@@ -487,6 +506,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRoadmapRoute: typeof AuthenticatedRoadmapRoute
   AuthenticatedScholarshipsRoute: typeof AuthenticatedScholarshipsRoute
   AuthenticatedSopRoute: typeof AuthenticatedSopRoute
+  AuthenticatedTestsRoute: typeof AuthenticatedTestsRoute
   AuthenticatedUndergradRoute: typeof AuthenticatedUndergradRoute
   AuthenticatedUniversitiesRoute: typeof AuthenticatedUniversitiesRouteWithChildren
 }
@@ -505,6 +525,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRoadmapRoute: AuthenticatedRoadmapRoute,
   AuthenticatedScholarshipsRoute: AuthenticatedScholarshipsRoute,
   AuthenticatedSopRoute: AuthenticatedSopRoute,
+  AuthenticatedTestsRoute: AuthenticatedTestsRoute,
   AuthenticatedUndergradRoute: AuthenticatedUndergradRoute,
   AuthenticatedUniversitiesRoute: AuthenticatedUniversitiesRouteWithChildren,
 }

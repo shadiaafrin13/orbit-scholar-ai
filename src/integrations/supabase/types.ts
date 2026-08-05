@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      achievements: {
+        Row: {
+          awarded_on: string | null
+          created_at: string
+          description: string | null
+          evidence_url: string | null
+          hours: number | null
+          id: string
+          issuer: string | null
+          kind: string | null
+          level: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          awarded_on?: string | null
+          created_at?: string
+          description?: string | null
+          evidence_url?: string | null
+          hours?: number | null
+          id?: string
+          issuer?: string | null
+          kind?: string | null
+          level?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          awarded_on?: string | null
+          created_at?: string
+          description?: string | null
+          evidence_url?: string | null
+          hours?: number | null
+          id?: string
+          issuer?: string | null
+          kind?: string | null
+          level?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       activities: {
         Row: {
           category: string | null
@@ -196,6 +241,60 @@ export type Database = {
         }
         Relationships: []
       }
+      courses: {
+        Row: {
+          attendance_pct: number | null
+          code: string | null
+          created_at: string
+          credits: number | null
+          grade: string | null
+          grade_points: number | null
+          id: string
+          name: string
+          notes: string | null
+          status: string
+          target_grade_points: number | null
+          term: string | null
+          updated_at: string
+          user_id: string
+          year: number | null
+        }
+        Insert: {
+          attendance_pct?: number | null
+          code?: string | null
+          created_at?: string
+          credits?: number | null
+          grade?: string | null
+          grade_points?: number | null
+          id?: string
+          name: string
+          notes?: string | null
+          status?: string
+          target_grade_points?: number | null
+          term?: string | null
+          updated_at?: string
+          user_id: string
+          year?: number | null
+        }
+        Update: {
+          attendance_pct?: number | null
+          code?: string | null
+          created_at?: string
+          credits?: number | null
+          grade?: string | null
+          grade_points?: number | null
+          id?: string
+          name?: string
+          notes?: string | null
+          status?: string
+          target_grade_points?: number | null
+          term?: string | null
+          updated_at?: string
+          user_id?: string
+          year?: number | null
+        }
+        Relationships: []
+      }
       cvs: {
         Row: {
           ats_score: number | null
@@ -227,6 +326,129 @@ export type Database = {
           id?: string
           summary?: string | null
           template?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      eca_opportunities: {
+        Row: {
+          age_range: string | null
+          category: string | null
+          country: string | null
+          created_at: string
+          deadline: string | null
+          description: string | null
+          event_date: string | null
+          fee: string | null
+          funding: string | null
+          id: string
+          level: string | null
+          link: string | null
+          mode: string | null
+          name: string
+          organizer: string | null
+          type: string | null
+        }
+        Insert: {
+          age_range?: string | null
+          category?: string | null
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          event_date?: string | null
+          fee?: string | null
+          funding?: string | null
+          id?: string
+          level?: string | null
+          link?: string | null
+          mode?: string | null
+          name: string
+          organizer?: string | null
+          type?: string | null
+        }
+        Update: {
+          age_range?: string | null
+          category?: string | null
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          event_date?: string | null
+          fee?: string | null
+          funding?: string | null
+          id?: string
+          level?: string | null
+          link?: string | null
+          mode?: string | null
+          name?: string
+          organizer?: string | null
+          type?: string | null
+        }
+        Relationships: []
+      }
+      exam_events: {
+        Row: {
+          country: string | null
+          created_at: string
+          event_date: string | null
+          event_type: string
+          exam: string
+          id: string
+          link: string | null
+          note: string | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          event_date?: string | null
+          event_type: string
+          exam: string
+          id?: string
+          link?: string | null
+          note?: string | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          event_date?: string | null
+          event_type?: string
+          exam?: string
+          id?: string
+          link?: string | null
+          note?: string | null
+        }
+        Relationships: []
+      }
+      habits: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          log: Json
+          name: string
+          target_per_week: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          log?: Json
+          name: string
+          target_per_week?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          log?: Json
+          name?: string
+          target_per_week?: number
           updated_at?: string
           user_id?: string
         }
@@ -433,6 +655,45 @@ export type Database = {
           title?: string
           tuition_covered?: boolean | null
           university?: string
+        }
+        Relationships: []
+      }
+      practice_attempts: {
+        Row: {
+          created_at: string
+          exam: string
+          id: string
+          max_score: number | null
+          minutes: number | null
+          notes: string | null
+          score: number | null
+          section: string | null
+          taken_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          exam: string
+          id?: string
+          max_score?: number | null
+          minutes?: number | null
+          notes?: string | null
+          score?: number | null
+          section?: string | null
+          taken_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          exam?: string
+          id?: string
+          max_score?: number | null
+          minutes?: number | null
+          notes?: string | null
+          score?: number | null
+          section?: string | null
+          taken_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -976,42 +1237,137 @@ export type Database = {
         }
         Relationships: []
       }
-      sops: {
+      sop_versions: {
         Row: {
-          ai_feedback: string | null
           ai_score: number | null
           content: string | null
           created_at: string
           id: string
+          label: string | null
+          sop_id: string
+          user_id: string
+          version: number
+        }
+        Insert: {
+          ai_score?: number | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          label?: string | null
+          sop_id: string
+          user_id: string
+          version?: number
+        }
+        Update: {
+          ai_score?: number | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          label?: string | null
+          sop_id?: string
+          user_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sop_versions_sop_id_fkey"
+            columns: ["sop_id"]
+            isOneToOne: false
+            referencedRelation: "sops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sops: {
+        Row: {
+          ai_feedback: string | null
+          ai_score: number | null
+          authenticity_score: number | null
+          content: string | null
+          country: string | null
+          created_at: string
+          doc_type: string | null
+          id: string
+          outline: Json | null
           program: string | null
           prompt: string | null
+          university: string | null
           updated_at: string
           user_id: string
           version: number | null
+          word_limit: number | null
         }
         Insert: {
           ai_feedback?: string | null
           ai_score?: number | null
+          authenticity_score?: number | null
           content?: string | null
+          country?: string | null
           created_at?: string
+          doc_type?: string | null
           id?: string
+          outline?: Json | null
           program?: string | null
           prompt?: string | null
+          university?: string | null
           updated_at?: string
           user_id: string
           version?: number | null
+          word_limit?: number | null
         }
         Update: {
           ai_feedback?: string | null
           ai_score?: number | null
+          authenticity_score?: number | null
           content?: string | null
+          country?: string | null
           created_at?: string
+          doc_type?: string | null
           id?: string
+          outline?: Json | null
           program?: string | null
           prompt?: string | null
+          university?: string | null
           updated_at?: string
           user_id?: string
           version?: number | null
+          word_limit?: number | null
+        }
+        Relationships: []
+      }
+      study_sessions: {
+        Row: {
+          created_at: string
+          focus_score: number | null
+          id: string
+          kind: string
+          minutes: number
+          notes: string | null
+          occurred_at: string
+          subject: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          focus_score?: number | null
+          id?: string
+          kind?: string
+          minutes?: number
+          notes?: string | null
+          occurred_at?: string
+          subject?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          focus_score?: number | null
+          id?: string
+          kind?: string
+          minutes?: number
+          notes?: string | null
+          occurred_at?: string
+          subject?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -1049,6 +1405,48 @@ export type Database = {
           notes?: string | null
           priority?: string
           title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      test_targets: {
+        Row: {
+          center: string | null
+          created_at: string
+          current_score: number | null
+          exam: string
+          id: string
+          notes: string | null
+          registered: boolean
+          target_score: number | null
+          test_date: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          center?: string | null
+          created_at?: string
+          current_score?: number | null
+          exam: string
+          id?: string
+          notes?: string | null
+          registered?: boolean
+          target_score?: number | null
+          test_date?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          center?: string | null
+          created_at?: string
+          current_score?: number | null
+          exam?: string
+          id?: string
+          notes?: string | null
+          registered?: boolean
+          target_score?: number | null
+          test_date?: string | null
           updated_at?: string
           user_id?: string
         }
