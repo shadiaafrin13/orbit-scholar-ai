@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
-  AlertTriangle, ArrowLeft, CalendarDays, Check, Gauge, Loader2, Map, Plus, Rocket, Sparkles, Trash2, Wand2,
+  AlertTriangle, ArrowLeft, CalendarDays, Check, Gauge, Loader2, Map as MapIcon, Plus, Rocket, Sparkles, Trash2, Wand2,
 } from "lucide-react";
 import {
   commitRoadmapTasks, generateRoadmap, nextBestAction, planCalendar, prioritizeTasks, readinessReport, scenarioSimulate,
@@ -141,7 +141,7 @@ function RoadmapPage() {
       <main className="mx-auto max-w-5xl px-6 py-12">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-nebula glow">
-            <Map className="h-5 w-5 text-primary-foreground" />
+            <MapIcon className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
             <h1 className="text-3xl font-bold"><span className="text-gradient">AI Roadmap & Success Planner</span></h1>
