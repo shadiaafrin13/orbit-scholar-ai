@@ -246,19 +246,19 @@ export const planCalendar = createServerFn({ method: "GET" })
     type Ev = { id: string; date: string; kind: string; title: string; meta: string | null };
     const out: Ev[] = [];
     for (const t of tasks.data ?? [])
-      out.push({ id: `t${t.id}`, date: t.due_date, kind: t.completed ? "Done" : "Task", title: t.title, meta: t.category });
+      out.push({ id: `t${t.id}`, date: t.due_date!, kind: t.completed ? "Done" : "Task", title: t.title, meta: t.category });
     for (const a of apps.data ?? []) {
       if (a.deadline) out.push({ id: `a${a.id}`, date: a.deadline, kind: "Application", title: `${a.university_name} deadline`, meta: a.program ?? a.status });
       if (a.interview_date) out.push({ id: `i${a.id}`, date: a.interview_date, kind: "Interview", title: `${a.university_name} interview`, meta: a.program });
     }
     for (const t of tests.data ?? [])
-      out.push({ id: `x${t.id}`, date: t.test_date, kind: "Test", title: `${t.exam} test date`, meta: t.registered ? "Registered" : "Not registered" });
+      out.push({ id: `x${t.id}`, date: t.test_date!, kind: "Test", title: `${t.exam} test date`, meta: t.registered ? "Registered" : "Not registered" });
     for (const r of recs.data ?? []) {
       if (r.requested_at && !r.submitted_at)
         out.push({ id: `r${r.id}`, date: r.requested_at, kind: "Recommendation", title: `${r.name} — letter pending`, meta: r.status });
     }
     for (const e of exams.data ?? [])
-      out.push({ id: `e${e.id}`, date: e.event_date, kind: "Exam calendar", title: `${e.exam} — ${e.event_type}`, meta: e.country });
+      out.push({ id: `e${e.id}`, date: e.event_date!, kind: "Exam calendar", title: `${e.exam} — ${e.event_type}`, meta: e.country });
     out.sort((a, b) => a.date.localeCompare(b.date));
     return out;
   });
