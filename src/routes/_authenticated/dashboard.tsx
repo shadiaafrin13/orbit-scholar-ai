@@ -74,7 +74,7 @@ function Dashboard() {
   const modules = [
     { to: "/profile" as const, icon: UserRound, n: "M02", title: "Student Profile", desc: "Identity, academics, tests, targets, achievements.", meta: s?.hasProfile ? "In progress" : "Start here" },
     { to: "/path" as const, icon: Compass, n: "M03", title: "Path Selection", desc: "UG · Masters · PhD · Exchange — personalized roadmap.", meta: s?.pathDone ? "Completed" : "4 questions" },
-    { to: "/roadmap" as const, icon: Map, n: "M05", title: "Academic Roadmap", desc: "Tasks, deadlines, and progress in one plan.", meta: s ? `${s.taskDone}/${s.taskTotal} done` : "" },
+    { to: "/roadmap" as const, icon: Map, n: "M04", title: "AI Roadmap & Planner", desc: "Readiness report, priority engine, calendar, scenarios.", meta: s ? `${s.taskDone}/${s.taskTotal} done` : "" },
     { to: "/undergrad" as const, icon: GraduationCap, n: "M06", title: "Undergraduate", desc: "SAT, IELTS, Common App — the UG toolkit.", meta: "Open" },
     { to: "/masters" as const, icon: BookOpen, n: "M07", title: "Master's Admission", desc: "Programs, SOP, funding, professor outreach.", meta: "Open" },
     { to: "/phd" as const, icon: FlaskConical, n: "M08", title: "PhD Admission", desc: "Proposals, advisors, fellowships, interviews.", meta: "Open" },
