@@ -107,19 +107,78 @@ export type Database = {
         }
         Relationships: []
       }
+      application_documents: {
+        Row: {
+          application_id: string
+          created_at: string
+          document_id: string | null
+          id: string
+          requirement: string
+          requirement_level: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          application_id: string
+          created_at?: string
+          document_id?: string | null
+          id?: string
+          requirement: string
+          requirement_level?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          application_id?: string
+          created_at?: string
+          document_id?: string | null
+          id?: string
+          requirement?: string
+          requirement_level?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "application_documents_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "application_documents_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       applications: {
         Row: {
           aid_status: string | null
+          application_fee: number | null
+          band: string | null
           created_at: string
           deadline: string | null
           decision: string | null
+          fee_paid: boolean
+          health_score: number | null
           id: string
+          intake: string | null
           interview_date: string | null
           level: string | null
           missing_documents: string[] | null
           notes: string | null
           platform: string | null
+          portal: string | null
+          priority: number | null
           program: string | null
+          readiness_notes: string | null
           round: string | null
           status: string
           university_id: string | null
@@ -130,16 +189,24 @@ export type Database = {
         }
         Insert: {
           aid_status?: string | null
+          application_fee?: number | null
+          band?: string | null
           created_at?: string
           deadline?: string | null
           decision?: string | null
+          fee_paid?: boolean
+          health_score?: number | null
           id?: string
+          intake?: string | null
           interview_date?: string | null
           level?: string | null
           missing_documents?: string[] | null
           notes?: string | null
           platform?: string | null
+          portal?: string | null
+          priority?: number | null
           program?: string | null
+          readiness_notes?: string | null
           round?: string | null
           status?: string
           university_id?: string | null
@@ -150,16 +217,24 @@ export type Database = {
         }
         Update: {
           aid_status?: string | null
+          application_fee?: number | null
+          band?: string | null
           created_at?: string
           deadline?: string | null
           decision?: string | null
+          fee_paid?: boolean
+          health_score?: number | null
           id?: string
+          intake?: string | null
           interview_date?: string | null
           level?: string | null
           missing_documents?: string[] | null
           notes?: string | null
           platform?: string | null
+          portal?: string | null
+          priority?: number | null
           program?: string | null
+          readiness_notes?: string | null
           round?: string | null
           status?: string
           university_id?: string | null
@@ -174,6 +249,68 @@ export type Database = {
             columns: ["university_id"]
             isOneToOne: false
             referencedRelation: "universities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      communications: {
+        Row: {
+          application_id: string | null
+          body: string | null
+          channel: string
+          contact_name: string
+          contact_type: string
+          created_at: string
+          follow_up_date: string | null
+          id: string
+          notes: string | null
+          organization: string | null
+          response_status: string
+          sent_at: string | null
+          subject: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          application_id?: string | null
+          body?: string | null
+          channel?: string
+          contact_name: string
+          contact_type?: string
+          created_at?: string
+          follow_up_date?: string | null
+          id?: string
+          notes?: string | null
+          organization?: string | null
+          response_status?: string
+          sent_at?: string | null
+          subject?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          application_id?: string | null
+          body?: string | null
+          channel?: string
+          contact_name?: string
+          contact_type?: string
+          created_at?: string
+          follow_up_date?: string | null
+          id?: string
+          notes?: string | null
+          organization?: string | null
+          response_status?: string
+          sent_at?: string | null
+          subject?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communications_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
             referencedColumns: ["id"]
           },
         ]
@@ -328,6 +465,69 @@ export type Database = {
           template?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      documents: {
+        Row: {
+          ai_flags: Json | null
+          category: string
+          created_at: string
+          doc_type: string
+          expiry_date: string | null
+          file_name: string | null
+          file_path: string | null
+          file_size: number | null
+          id: string
+          issue_date: string | null
+          mime_type: string | null
+          notes: string | null
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+          version: number
+        }
+        Insert: {
+          ai_flags?: Json | null
+          category?: string
+          created_at?: string
+          doc_type: string
+          expiry_date?: string | null
+          file_name?: string | null
+          file_path?: string | null
+          file_size?: number | null
+          id?: string
+          issue_date?: string | null
+          mime_type?: string | null
+          notes?: string | null
+          status?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+          version?: number
+        }
+        Update: {
+          ai_flags?: Json | null
+          category?: string
+          created_at?: string
+          doc_type?: string
+          expiry_date?: string | null
+          file_name?: string | null
+          file_path?: string | null
+          file_size?: number | null
+          id?: string
+          issue_date?: string | null
+          mime_type?: string | null
+          notes?: string | null
+          status?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          version?: number
         }
         Relationships: []
       }
@@ -564,6 +764,77 @@ export type Database = {
           venue_type?: string | null
         }
         Relationships: []
+      }
+      offers: {
+        Row: {
+          application_id: string | null
+          conditions: string | null
+          country: string | null
+          created_at: string
+          decision: string
+          deposit_usd: number | null
+          id: string
+          living_cost_usd: number | null
+          notes: string | null
+          program: string | null
+          ranking: number | null
+          reply_deadline: string | null
+          scholarship_usd: number | null
+          tuition_usd: number | null
+          university_name: string
+          updated_at: string
+          user_id: string
+          work_rights: string | null
+        }
+        Insert: {
+          application_id?: string | null
+          conditions?: string | null
+          country?: string | null
+          created_at?: string
+          decision?: string
+          deposit_usd?: number | null
+          id?: string
+          living_cost_usd?: number | null
+          notes?: string | null
+          program?: string | null
+          ranking?: number | null
+          reply_deadline?: string | null
+          scholarship_usd?: number | null
+          tuition_usd?: number | null
+          university_name: string
+          updated_at?: string
+          user_id: string
+          work_rights?: string | null
+        }
+        Update: {
+          application_id?: string | null
+          conditions?: string | null
+          country?: string | null
+          created_at?: string
+          decision?: string
+          deposit_usd?: number | null
+          id?: string
+          living_cost_usd?: number | null
+          notes?: string | null
+          program?: string | null
+          ranking?: number | null
+          reply_deadline?: string | null
+          scholarship_usd?: number | null
+          tuition_usd?: number | null
+          university_name?: string
+          updated_at?: string
+          user_id?: string
+          work_rights?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       phd_positions: {
         Row: {
@@ -1632,12 +1903,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1661,11 +1932,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1686,11 +1957,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1711,11 +1982,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1728,11 +1999,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
