@@ -19,7 +19,7 @@ export const Route = createFileRoute("/_authenticated/documents")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: DocumentCenter;
+  component: DocumentCenter,
 });
 
 const CATEGORIES = ["Academic", "Testing", "Identity", "Financial", "Recommendation", "Experience", "Application", "Visa", "Other"] as const;
@@ -135,7 +135,7 @@ function DocumentCenter() {
   async function runAnalysis() {
     setAnalyzing(true);
     try {
-      setAnalysis(await analyze({ data: {} }));
+      setAnalysis(await analyze());
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "AI check failed");
     } finally {
