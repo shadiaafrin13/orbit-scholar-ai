@@ -29,6 +29,7 @@ import { Route as AuthenticatedPhdRouteImport } from './routes/_authenticated/ph
 import { Route as AuthenticatedPathRouteImport } from './routes/_authenticated/path'
 import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
 import { Route as AuthenticatedEcaRouteImport } from './routes/_authenticated/eca'
+import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCvRouteImport } from './routes/_authenticated/cv'
 import { Route as AuthenticatedUniversitiesIdRouteImport } from './routes/_authenticated/universities.$id'
@@ -136,6 +137,11 @@ const AuthenticatedEcaRoute = AuthenticatedEcaRouteImport.update({
   path: '/eca',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDocumentsRoute = AuthenticatedDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -160,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/cv': typeof AuthenticatedCvRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/documents': typeof AuthenticatedDocumentsRoute
   '/eca': typeof AuthenticatedEcaRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/path': typeof AuthenticatedPathRoute
@@ -184,6 +191,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/cv': typeof AuthenticatedCvRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/documents': typeof AuthenticatedDocumentsRoute
   '/eca': typeof AuthenticatedEcaRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/path': typeof AuthenticatedPathRoute
@@ -210,6 +218,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/cv': typeof AuthenticatedCvRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
   '/_authenticated/eca': typeof AuthenticatedEcaRoute
   '/_authenticated/masters': typeof AuthenticatedMastersRoute
   '/_authenticated/path': typeof AuthenticatedPathRoute
@@ -236,6 +245,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/cv'
     | '/dashboard'
+    | '/documents'
     | '/eca'
     | '/masters'
     | '/path'
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/cv'
     | '/dashboard'
+    | '/documents'
     | '/eca'
     | '/masters'
     | '/path'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/_authenticated/cv'
     | '/_authenticated/dashboard'
+    | '/_authenticated/documents'
     | '/_authenticated/eca'
     | '/_authenticated/masters'
     | '/_authenticated/path'
@@ -454,6 +466,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEcaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/documents': {
+      id: '/_authenticated/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof AuthenticatedDocumentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -495,6 +514,7 @@ const AuthenticatedUniversitiesRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCvRoute: typeof AuthenticatedCvRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
   AuthenticatedEcaRoute: typeof AuthenticatedEcaRoute
   AuthenticatedMastersRoute: typeof AuthenticatedMastersRoute
   AuthenticatedPathRoute: typeof AuthenticatedPathRoute
@@ -514,6 +534,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCvRoute: AuthenticatedCvRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
   AuthenticatedEcaRoute: AuthenticatedEcaRoute,
   AuthenticatedMastersRoute: AuthenticatedMastersRoute,
   AuthenticatedPathRoute: AuthenticatedPathRoute,
