@@ -9,7 +9,7 @@ async function callAI(messages: ChatMsg[]): Promise<string> {
   const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
-    body: JSON.stringify({ model: "openai/gpt-5.6-sol", reasoning_effort: "none", messages }),
+    body: JSON.stringify({ model: "openai/gpt-6-astra", reasoning_effort: "low", messages }),
   });
   if (res.status === 429) throw new Error("AI is busy right now — please retry in a moment.");
   if (res.status === 402) throw new Error("AI credits exhausted — add credits to continue.");
@@ -167,4 +167,153 @@ Scholarships (choose only from these): ${JSON.stringify(schs ?? [])}`,
       },
     ]);
     return parseJson(raw, { spike: "", tiers: [], gaps: [], boosters: [], scholarships: [], aidEstimate: null });
+  });
+
+/** M07 — Eligibility engine: compares the student profile to one program's requirements. */
+export const ugEligibility = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { universityId?: string; universityName?: string; program?: string }) => ({
+    universityId: d.universityId ?? "",
+    universityName: d.universityName ?? "",
+    program: d.program ?? "",
+  }))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const { profile } = await loadContext(supabase, userId);
+    let uni: any = null;
+    if (data.universityId) {
+      const { data: u } = await supabase.from("universities").select("*").eq("id", data.universityId).maybeSingle();
+      uni = u;
+    }
+    const raw = await callAI([
+      { role: "system", content: "You check undergraduate eligibility. Never guarantee admission. Clearly separate official data from your own interpretation. Reply only with strict JSON." },
+      {
+        role: "user",
+        content: `Compare the student profile with the program requirements.
+Return STRICT JSON: {"overall":"appears eligible|information required|potential gaps","checks":[{"requirement":"GPA|Subjects|English|SAT/ACT|Curriculum|Activities|Documents","programValue":"what the program asks (say 'not in Atlas data' if unknown)","studentValue":"what the student has","status":"satisfied|info_required|gap|not_completed","source":"atlas_data|ai_interpretation","note":"short"}],"gapActions":["..."],"verifyOfficially":["what the student must confirm on the official website"]}
+Student: ${JSON.stringify({ gpa: profile?.gpa, sat: profile?.sat, act: (profile as any)?.act, ielts: profile?.ielts, toefl: profile?.toefl, curriculum: (profile as any)?.curriculum, subjects: (profile as any)?.subjects, field: profile?.field_of_study, activities: profile?.activities })}
+Program: ${JSON.stringify({ university: uni?.name ?? data.universityName, program: data.program, requirements: uni })}`,
+      },
+    ]);
+    return parseJson(raw, { overall: "information required", checks: [], gapActions: [], verifyOfficially: [] });
+  });
+
+/** M07 — Undergraduate fit analyzer (academic, requirement, financial, career, ECA). */
+export const ugFit = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { universityId?: string; program?: string }) => ({ universityId: d.universityId ?? "", program: d.program ?? "" }))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const ctx = await loadContext(supabase, userId);
+    let uni: any = null;
+    if (data.universityId) {
+      const { data: u } = await supabase.from("universities").select("*").eq("id", data.universityId).maybeSingle();
+      uni = u;
+    }
+    const raw = await callAI([
+      { role: "system", content: "You analyze undergraduate fit. Fit is a planning estimate, never an admission probability. Reply only with strict JSON." },
+      {
+        role: "user",
+        content: `Return STRICT JSON: {"bands":[{"name":"Academic fit|Requirement fit|Financial fit|Career alignment|Program alignment|ECA alignment","rating":"Strong|Moderate|Needs improvement","note":"short"}],"gaps":["..."],"actions":["..."],"summary":"2 sentences"}
+Student: ${JSON.stringify(ctx)}
+Target: ${JSON.stringify({ program: data.program, university: uni })}`,
+      },
+    ]);
+    return parseJson(raw, { bands: [], gaps: [], actions: [], summary: "" });
+  });
+
+/** M07 — Application copilot: per-application requirement checklist + quality check. */
+export const ugCopilot = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { applicationId: string; mode: "checklist" | "quality" }) => d)
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const [{ profile, activities }, { data: app }, { data: docs }] = await Promise.all([
+      loadContext(supabase, userId),
+      supabase.from("applications").select("*").eq("id", data.applicationId).eq("user_id", userId).maybeSingle(),
+      supabase.from("documents").select("title,category,doc_type,status,expiry_date").eq("user_id", userId).limit(60),
+    ]);
+    if (!app) throw new Error("Application not found");
+    if (data.mode === "checklist") {
+      const raw = await callAI([
+        { role: "system", content: "You build undergraduate application checklists. Mark items you inferred as ai_interpretation. Reply only with strict JSON." },
+        {
+          role: "user",
+          content: `Return STRICT JSON: {"items":[{"item":"...","category":"Academic|Testing|Essays|Recommendations|Documents|Financial|Portfolio|Admin","required":"required|recommended|optional|not_required","have":true,"source":"atlas_data|ai_interpretation","action":"short next step"}],"missing":["..."],"note":"1-2 sentences"}
+Application: ${JSON.stringify(app)}
+Student: ${JSON.stringify({ profile, activities })}
+Documents on file: ${JSON.stringify(docs ?? [])}`,
+        },
+      ]);
+      return parseJson(raw, { items: [], missing: [], note: "" });
+    }
+    const raw = await callAI([
+      { role: "system", content: "You run undergraduate application quality checks. Reply only with strict JSON." },
+      {
+        role: "user",
+        content: `Return STRICT JSON: {"verdict":"READY|NEEDS ATTENTION|HIGH RISK","score":0-100,"issues":[{"area":"...","severity":"low|medium|high","issue":"...","fix":"..."}],"strengths":["..."],"beforeSubmitting":["..."]}
+Application: ${JSON.stringify(app)}
+Student: ${JSON.stringify({ profile, activities })}
+Documents on file: ${JSON.stringify(docs ?? [])}`,
+      },
+    ]);
+    return parseJson(raw, { verdict: "NEEDS ATTENTION", score: 0, issues: [], strengths: [], beforeSubmitting: [] });
+  });
+
+/** M07 — Decision center + visa & pre-departure planning. */
+export const ugDecision = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { mode: "decision" | "visa"; country?: string }) => ({ mode: d.mode, country: d.country ?? "" }))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const [{ profile, apps }, { data: offers }] = await Promise.all([
+      loadContext(supabase, userId),
+      supabase.from("offers").select("*").eq("user_id", userId).limit(30),
+    ]);
+    if (data.mode === "decision") {
+      const raw = await callAI([
+        { role: "system", content: "You help compare undergraduate offers. The student always keeps the final decision. Reply only with strict JSON." },
+        {
+          role: "user",
+          content: `Return STRICT JSON: {"comparison":[{"offer":"university","netCostNote":"...","funding":"...","conditions":"...","deadlineNote":"...","pros":["..."],"cons":["..."]}],"considerations":["..."],"summary":"2-3 sentences, no instruction to pick one"}
+Offers: ${JSON.stringify(offers ?? [])}
+Student: ${JSON.stringify({ budget: profile?.path_budget, countries: profile?.target_countries, career: (profile as any)?.career_goal })}`,
+        },
+      ]);
+      return parseJson(raw, { comparison: [], considerations: [], summary: "" });
+    }
+    const raw = await callAI([
+      { role: "system", content: "You prepare student visa and pre-departure plans. Immigration rules change — always tell the student to verify with the official authority. Reply only with strict JSON." },
+      {
+        role: "user",
+        content: `Return STRICT JSON: {"country":"...","visaSteps":[{"step":"...","documents":["..."],"timing":"...","note":"short"}],"financialProof":["..."],"preDeparture":["..."],"arrivalFirstWeek":["..."],"verifyOfficially":["..."],"disclaimer":"one sentence"}
+Destination: ${data.country || (profile?.target_countries ?? [])[0] || "unspecified"}
+Nationality: ${profile?.country ?? "unspecified"}
+Applications: ${JSON.stringify(apps)}`,
+      },
+    ]);
+    return parseJson(raw, { country: data.country, visaSteps: [], financialProof: [], preDeparture: [], arrivalFirstWeek: [], verifyOfficially: [], disclaimer: "" });
+  });
+
+/** M07 — Undergraduate AI dashboard: next best action + roadmap. */
+export const ugDashboard = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const [ctx, { data: docs }, { data: tasks }] = await Promise.all([
+      loadContext(supabase, userId),
+      supabase.from("documents").select("title,category,status,expiry_date").eq("user_id", userId).limit(60),
+      supabase.from("tasks").select("title,due_date,completed").eq("user_id", userId).limit(80),
+    ]);
+    const raw = await callAI([
+      { role: "system", content: "You are an undergraduate admissions planner. Reply only with strict JSON." },
+      {
+        role: "user",
+        content: `Return STRICT JSON: {"nextBestAction":{"action":"...","why":"...","effort":"short|medium|long"},"alerts":[{"kind":"deadline|missing document|test|essay|funding","text":"...","urgency":"low|medium|high"}],"plan12Months":[{"window":"months 1-3|4-6|7-9|10-12","focus":"...","actions":["..."]}],"next30Days":["..."],"weeklyTasks":["..."]}
+Student: ${JSON.stringify(ctx)}
+Documents: ${JSON.stringify(docs ?? [])}
+Tasks: ${JSON.stringify(tasks ?? [])}`,
+      },
+    ]);
+    return parseJson(raw, { nextBestAction: null, alerts: [], plan12Months: [], next30Days: [], weeklyTasks: [] });
   });
