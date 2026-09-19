@@ -52,7 +52,7 @@ function days(d: string) {
 }
 
 function ApplicationCenter() {
-  const { user } = Route.useRouteContext();
+  const { user } = Route.useRouteContext() as { user: { id: string } };
   const [tab, setTab] = useState<(typeof TABS)[number]>("Applications");
   const [apps, setApps] = useState<App[]>([]);
   const [reqs, setReqs] = useState<ReqRow[]>([]);
@@ -90,7 +90,12 @@ function ApplicationCenter() {
     void load();
   }, [load]);
 
-  async function guard(key: string, fn: () => Promise<void>) {
+  async function put(key: string, promise: Promise<unknown>) {
+    const value = await promise;
+    setOut((o) => ({ ...o, [key]: value }));
+  }
+
+  async function guard(key: string, fn: () => Promise<unknown>) {
     setLoading(key);
     try {
       await fn();
@@ -356,9 +361,9 @@ function ApplicationCenter() {
       {tab === "AI Readiness" && (
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           {[
-            { key: "rd", title: "Application readiness report", icon: ShieldCheck, run: async () => setOut((o) => ({ ...o, rd: await runReadiness({ data: { applicationId: selected } }) })), result: out.rd },
-            { key: "qc", title: "Pre-submission quality check", icon: BadgeCheck, run: async () => setOut((o) => ({ ...o, qc: await runQuality({ data: { applicationId: selected } }) })), result: out.qc },
-            { key: "cc", title: "CV · SOP · application consistency", icon: Sparkles, run: async () => setOut((o) => ({ ...o, cc: await runConsistency() })), result: out.cc },
+            { key: "rd", title: "Application readiness report", icon: ShieldCheck, run: async () => put("rd", runReadiness({ data: { applicationId: selected } })), result: out.rd },
+            { key: "qc", title: "Pre-submission quality check", icon: BadgeCheck, run: async () => put("qc", runQuality({ data: { applicationId: selected } })), result: out.qc },
+            { key: "cc", title: "CV · SOP · application consistency", icon: Sparkles, run: async () => put("cc", runConsistency()), result: out.cc },
           ].map((c) => (
             <section key={c.key} className="glass rounded-2xl p-6">
               <div className="flex items-center justify-between">
@@ -379,7 +384,7 @@ function ApplicationCenter() {
         <section className="mt-6 glass rounded-2xl p-6">
           <div className="flex items-center justify-between">
             <h2 className="flex items-center gap-2 text-lg font-semibold"><Target className="h-4 w-4 text-primary" /> Smart submission strategy</h2>
-            <button onClick={() => guard("st", async () => setOut((o) => ({ ...o, st: await runStrategy() })))} disabled={loading === "st"}
+            <button onClick={() => guard("st", async () => put("st", runStrategy()))} disabled={loading === "st"}
               className="inline-flex items-center gap-2 rounded-full bg-nebula px-4 py-1.5 text-xs font-semibold text-primary-foreground glow disabled:opacity-60">
               {loading === "st" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />} Build strategy
             </button>
@@ -397,7 +402,7 @@ function ApplicationCenter() {
             <div className="mt-4 grid gap-3 text-sm">
               <input value={iv.kind} onChange={(e) => setIv({ ...iv, kind: e.target.value })} placeholder="Interview type" className="rounded-xl border border-border bg-background/60 px-3 py-2" />
               <input value={iv.target} onChange={(e) => setIv({ ...iv, target: e.target.value })} placeholder="University / program" className="rounded-xl border border-border bg-background/60 px-3 py-2" />
-              <button onClick={() => guard("iq", async () => setOut((o) => ({ ...o, iq: await runInterview({ data: { mode: "questions", kind: iv.kind, target: iv.target } }) })))}
+              <button onClick={() => guard("iq", async () => put("iq", runInterview({ data: { mode: "questions", kind: iv.kind, target: iv.target } })))}
                 disabled={loading === "iq"}
                 className="rounded-full bg-nebula px-4 py-2 text-sm font-semibold text-primary-foreground glow disabled:opacity-60">
                 {loading === "iq" ? "Generating…" : "Generate questions"}
@@ -410,7 +415,7 @@ function ApplicationCenter() {
             <div className="mt-4 grid gap-3 text-sm">
               <input value={iv.question} onChange={(e) => setIv({ ...iv, question: e.target.value })} placeholder="The question you were asked" className="rounded-xl border border-border bg-background/60 px-3 py-2" />
               <textarea value={iv.answer} onChange={(e) => setIv({ ...iv, answer: e.target.value })} rows={6} placeholder="Your answer" className="rounded-xl border border-border bg-background/60 px-3 py-2" />
-              <button onClick={() => guard("ie", async () => setOut((o) => ({ ...o, ie: await runInterview({ data: { mode: "evaluate", kind: iv.kind, target: iv.target, question: iv.question, answer: iv.answer } }) })))}
+              <button onClick={() => guard("ie", async () => put("ie", runInterview({ data: { mode: "evaluate", kind: iv.kind, target: iv.target, question: iv.question, answer: iv.answer } })))}
                 disabled={loading === "ie"}
                 className="rounded-full bg-nebula px-4 py-2 text-sm font-semibold text-primary-foreground glow disabled:opacity-60">
                 {loading === "ie" ? "Reviewing…" : "Evaluate my answer"}
@@ -445,7 +450,7 @@ function ApplicationCenter() {
           <section className="glass rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">Offer comparison</h2>
-              <button onClick={() => guard("od", async () => setOut((o) => ({ ...o, od: await runOfferDecision({ data: { priorities } }) })))} disabled={loading === "od"}
+              <button onClick={() => guard("od", async () => put("od", runOfferDecision({ data: { priorities } })))} disabled={loading === "od"}
                 className="inline-flex items-center gap-2 rounded-full bg-nebula px-4 py-1.5 text-xs font-semibold text-primary-foreground glow disabled:opacity-60">
                 {loading === "od" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />} Help me decide
               </button>
@@ -482,7 +487,7 @@ function ApplicationCenter() {
               <input value={oform.contact} onChange={(e) => setOform({ ...oform, contact: e.target.value })} placeholder="Recipient name" className="rounded-xl border border-border bg-background/60 px-3 py-2" />
               <input value={oform.organization} onChange={(e) => setOform({ ...oform, organization: e.target.value })} placeholder="University / organization" className="rounded-xl border border-border bg-background/60 px-3 py-2" />
               <textarea value={oform.context} onChange={(e) => setOform({ ...oform, context: e.target.value })} rows={4} placeholder="Anything specific to mention" className="rounded-xl border border-border bg-background/60 px-3 py-2" />
-              <button onClick={() => guard("or", async () => setOut((o) => ({ ...o, or: await runOutreach({ data: oform }) })))} disabled={loading === "or"}
+              <button onClick={() => guard("or", async () => put("or", runOutreach({ data: oform })))} disabled={loading === "or"}
                 className="rounded-full bg-nebula px-4 py-2 text-sm font-semibold text-primary-foreground glow disabled:opacity-60">
                 {loading === "or" ? "Writing…" : "Draft email"}
               </button>
@@ -523,7 +528,7 @@ function ApplicationCenter() {
           <div className="mt-4 flex flex-col gap-3 sm:flex-row">
             <input value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="What should I finish this week before the Delft deadline?"
               className="flex-1 rounded-xl border border-border bg-background/60 px-3 py-2 text-sm" />
-            <button onClick={() => guard("cp", async () => setOut((o) => ({ ...o, cp: await runCopilot({ data: { question } }) })))} disabled={loading === "cp" || !question.trim()}
+            <button onClick={() => guard("cp", async () => put("cp", runCopilot({ data: { question } })))} disabled={loading === "cp" || !question.trim()}
               className="rounded-full bg-nebula px-5 py-2 text-sm font-semibold text-primary-foreground glow disabled:opacity-60">
               {loading === "cp" ? "Thinking…" : "Ask"}
             </button>
