@@ -86,6 +86,9 @@ function Dashboard() {
     { to: "/cv" as const, icon: ClipboardList, n: "M14", title: "CV & Resume Builder", desc: "Academic, Europass, ATS — with live scoring.", meta: "AI" },
     { to: "/recommendations" as const, icon: Users, n: "M15", title: "Recommendation Letters", desc: "Manage recommenders, drafts, and reminders.", meta: "Manage" },
     { to: "/eca" as const, icon: Trophy, n: "M16", title: "ECA Hub", desc: "Olympiads, MUN, hackathons, sports — scored.", meta: "New" },
+    { to: "/tests" as const, icon: ClipboardList, n: "M17", title: "Test Prep Hub", desc: "IELTS, TOEFL, SAT, GRE — targets & mock scoring.", meta: "AI" },
+    { to: "/documents" as const, icon: FileText, n: "M18", title: "Document Center", desc: "Private vault for transcripts, passports, certificates.", meta: "Secure" },
+    { to: "/applications" as const, icon: ClipboardList, n: "M19", title: "Application Command Center", desc: "Pipeline, checklists, quality checks, offers.", meta: "Live" },
   ];
 
   return (
