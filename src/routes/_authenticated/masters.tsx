@@ -4,13 +4,17 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
-  ArrowLeft, Award, BookOpen, CheckCircle2, ClipboardList, FileText, FlaskConical,
-  Loader2, Mail, Mic, Plus, Route as RouteIcon, Search, Sparkles, Trash2, Users, Wand2,
+  ArrowLeft, Award, BookOpen, CalendarClock, CheckCircle2, ClipboardList, FileText, FlaskConical,
+  Gauge, Layers, ListChecks, Loader2, Mail, Mic, Plus, Route as RouteIcon, Scale, Search, Sparkles,
+  Trash2, Users, Wand2,
 } from "lucide-react";
 import {
-  mastersAdmissionPredictor, mastersDocReview, mastersFundingOptimizer, mastersInterview,
-  mastersProfessorAI, mastersProgramMatcher, mastersReadiness,
+  mastersAdmissionPredictor, mastersDecisionAdvisor, mastersDocReview, mastersFitAnalyzer,
+  mastersFundingOptimizer, mastersInterview, mastersProfessorAI, mastersProgramMatcher,
+  mastersQualityCheck, mastersReadiness, mastersRequirements, mastersRoadmap,
+  mastersSpecializationMatcher,
 } from "@/lib/masters-ai.functions";
+import { AIResult } from "@/components/ai-result";
 
 export const Route = createFileRoute("/_authenticated/masters")({
   head: () => ({
