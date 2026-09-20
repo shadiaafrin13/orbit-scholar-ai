@@ -62,7 +62,9 @@ const PROF_STATUSES = ["identified", "emailed", "replied", "call scheduled", "po
 const DOC_LIST = ["Transcript", "Statement of purpose", "Academic CV", "Recommendation letters", "GRE/GMAT scores", "English test", "Portfolio", "Research proposal", "Financial documents", "Passport copy"];
 const INTAKES = ["Fall", "Spring", "Summer", "Winter"];
 
-type Tab = "pathway" | "explorer" | "research" | "funding" | "toolkit" | "professors" | "interview" | "tracker";
+type Tab =
+  | "pathway" | "explorer" | "requirements" | "fit" | "specializations" | "research" | "funding"
+  | "toolkit" | "professors" | "interview" | "tracker" | "quality" | "decision" | "roadmap";
 type App = {
   id: string; university_name: string; program: string | null; level: string | null; platform: string | null;
   round: string | null; status: string; deadline: string | null; missing_documents: string[] | null;
