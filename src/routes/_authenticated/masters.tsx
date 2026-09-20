@@ -185,6 +185,12 @@ function MastersHub() {
             {tab === "professors" && <ProfessorsTab userId={user.id} profs={profs} setProfs={setProfs} />}
             {tab === "interview" && <InterviewTab />}
             {tab === "tracker" && <TrackerTab userId={user.id} apps={apps} setApps={setApps} profs={profs} />}
+            {tab === "requirements" && <RequirementsTab unis={unis} apps={apps} />}
+            {tab === "fit" && <FitTab unis={unis} apps={apps} />}
+            {tab === "specializations" && <SpecializationTab />}
+            {tab === "quality" && <QualityTab apps={apps} />}
+            {tab === "decision" && <DecisionTab apps={apps} />}
+            {tab === "roadmap" && <RoadmapTab />}
           </div>
         )}
       </main>
