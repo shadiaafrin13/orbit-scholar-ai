@@ -119,6 +119,12 @@ function MastersHub() {
     { id: "professors", label: "Professors", icon: Users },
     { id: "interview", label: "Interview prep", icon: Mic },
     { id: "tracker", label: "Tracker", icon: ClipboardList },
+    { id: "requirements", label: "Requirements & prerequisites", icon: ListChecks },
+    { id: "fit", label: "Fit analyzer", icon: Gauge },
+    { id: "specializations", label: "Specializations", icon: Layers },
+    { id: "quality", label: "Quality check", icon: CheckCircle2 },
+    { id: "decision", label: "Decision center", icon: Scale },
+    { id: "roadmap", label: "AI roadmap", icon: CalendarClock },
   ];
 
   async function addApp(u: Uni, program?: string) {
