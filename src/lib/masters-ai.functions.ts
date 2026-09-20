@@ -9,7 +9,7 @@ async function callAI(messages: ChatMsg[]): Promise<string> {
   const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
-    body: JSON.stringify({ model: "openai/gpt-5.6-sol", reasoning_effort: "none", messages }),
+    body: JSON.stringify({ model: "openai/gpt-6-astra", reasoning_effort: "low", messages }),
   });
   if (res.status === 429) throw new Error("AI is busy right now — please retry in a moment.");
   if (res.status === 402) throw new Error("AI credits exhausted — add credits to continue.");
