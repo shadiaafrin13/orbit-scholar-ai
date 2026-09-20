@@ -997,3 +997,190 @@ function TrackerTab({ userId, apps, setApps, profs }: { userId: string; apps: Ap
     </div>
   );
 }
+
+/* ---------- Shared shell for the new AI tabs ---------- */
+function AIPanel({
+  title, note, icon: Icon, children, onRun, canRun = true, res, runLabel = "Run analysis",
+}: {
+  title: string; note: string; icon: React.ComponentType<{ className?: string }>;
+  children?: React.ReactNode; onRun: () => Promise<unknown>; canRun?: boolean; res: unknown; runLabel?: string;
+}) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <section className="glass rounded-2xl p-6">
+      <h2 className="flex items-center gap-2 text-lg font-semibold"><Icon className="h-4 w-4 text-primary" /> {title}</h2>
+      <p className="mt-1 text-xs text-muted-foreground">{note}</p>
+      {children && <div className="mt-4 grid gap-3 sm:grid-cols-3">{children}</div>}
+      <button
+        onClick={async () => { setBusy(true); try { await onRun(); } catch (e: any) { toast.error(e.message); } setBusy(false); }}
+        disabled={busy || !canRun}
+        className="mt-4 inline-flex items-center gap-2 rounded-full bg-nebula px-5 py-2 text-xs font-semibold text-primary-foreground glow disabled:opacity-60">
+        {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand2 className="h-3.5 w-3.5" />} {runLabel}
+      </button>
+      {res ? <div className="mt-5 rounded-2xl border border-border bg-background/40 p-5"><AIResult data={res} /></div> : null}
+    </section>
+  );
+}
+
+const fieldCls = "rounded-xl border border-input bg-background/40 px-4 py-2.5 text-sm outline-none focus:border-primary";
+
+function UniSelect({ unis, apps, value, onChange }: { unis: Uni[]; apps: App[]; value: string; onChange: (v: string) => void }) {
+  const names = useMemo(() => {
+    const set = new Set<string>([...apps.map((a) => a.university_name), ...unis.map((u) => u.name)]);
+    return [...set];
+  }, [unis, apps]);
+  return (
+    <select value={value} onChange={(e) => onChange(e.target.value)} className={fieldCls}>
+      <option value="">Select university</option>
+      {names.map((n) => <option key={n} value={n}>{n}</option>)}
+    </select>
+  );
+}
+
+/* ---------- 04 + 05 + 13 — Requirements, prerequisites, package ---------- */
+function RequirementsTab({ unis, apps }: { unis: Uni[]; apps: App[] }) {
+  const run = useServerFn(mastersRequirements);
+  const [uni, setUni] = useState("");
+  const [program, setProgram] = useState("");
+  const [coursework, setCoursework] = useState("");
+  const [res, setRes] = useState<unknown>(null);
+  return (
+    <div className="grid gap-6">
+      <AIPanel
+        title="Admission requirements & prerequisite analyzer"
+        note="Every requirement is classified REQUIRED / RECOMMENDED / OPTIONAL / NOT REQUIRED, then your coursework is compared against it. Always confirm against the official program page."
+        icon={ListChecks}
+        canRun={!!uni}
+        res={res}
+        runLabel="Analyze requirements"
+        onRun={async () => setRes(await run({ data: { university: uni, program, coursework } }))}
+      >
+        <UniSelect unis={unis} apps={apps} value={uni} onChange={setUni} />
+        <input value={program} onChange={(e) => setProgram(e.target.value)} placeholder="Program (e.g. MSc Artificial Intelligence)" className={fieldCls} />
+        <input value={coursework} onChange={(e) => setCoursework(e.target.value)} placeholder="Your bachelor's courses, comma separated" className={fieldCls} />
+      </AIPanel>
+      <section className="glass rounded-2xl p-6">
+        <h3 className="text-sm font-semibold">Standard application package</h3>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {["Application form", ...DOC_LIST, "Degree certificate"].map((d) => (
+            <span key={d} className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">{d}</span>
+          ))}
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Store and track these in the <Link to="/documents" className="text-primary hover:underline">Document Center</Link>.
+        </p>
+      </section>
+    </div>
+  );
+}
+
+/* ---------- 06 — Fit analyzer ---------- */
+function FitTab({ unis, apps }: { unis: Uni[]; apps: App[] }) {
+  const run = useServerFn(mastersFitAnalyzer);
+  const [uni, setUni] = useState("");
+  const [program, setProgram] = useState("");
+  const [spec, setSpec] = useState("");
+  const [res, setRes] = useState<unknown>(null);
+  return (
+    <AIPanel
+      title="Master's fit analyzer"
+      note="Academic, program, research, career and financial fit. Fit is an estimate — it is not an admission probability or guarantee."
+      icon={Gauge}
+      canRun={!!uni}
+      res={res}
+      runLabel="Analyze fit"
+      onRun={async () => setRes(await run({ data: { university: uni, program, specialization: spec } }))}
+    >
+      <UniSelect unis={unis} apps={apps} value={uni} onChange={setUni} />
+      <input value={program} onChange={(e) => setProgram(e.target.value)} placeholder="Program" className={fieldCls} />
+      <input value={spec} onChange={(e) => setSpec(e.target.value)} placeholder="Specialization (optional)" className={fieldCls} />
+    </AIPanel>
+  );
+}
+
+/* ---------- 07 — Specialization matcher ---------- */
+function SpecializationTab() {
+  const run = useServerFn(mastersSpecializationMatcher);
+  const [res, setRes] = useState<unknown>(null);
+  return (
+    <AIPanel
+      title="Specialization matcher"
+      note="Suggests specializations from your background, skills, research interests, projects, work experience and career goals."
+      icon={Layers}
+      res={res}
+      runLabel="Suggest specializations"
+      onRun={async () => setRes(await run({ data: {} } as any))}
+    />
+  );
+}
+
+/* ---------- 15 — Quality check ---------- */
+function QualityTab({ apps }: { apps: App[] }) {
+  const run = useServerFn(mastersQualityCheck);
+  const [id, setId] = useState("");
+  const [res, setRes] = useState<unknown>(null);
+  const app = apps.find((a) => a.id === id);
+  return (
+    <AIPanel
+      title="Pre-submission quality check"
+      note="Returns READY, NEEDS ATTENTION or HIGH RISK across requirements, tests, documents, funding and deadlines."
+      icon={CheckCircle2}
+      canRun={!!app}
+      res={res}
+      runLabel="Run quality check"
+      onRun={async () => setRes(await run({ data: { applicationId: app!.id, university: app!.university_name, program: app!.program ?? "" } }))}
+    >
+      <select value={id} onChange={(e) => setId(e.target.value)} className={`${fieldCls} sm:col-span-3`}>
+        <option value="">Select an application from your tracker</option>
+        {apps.map((a) => <option key={a.id} value={a.id}>{a.university_name}{a.program ? ` — ${a.program}` : ""}</option>)}
+      </select>
+    </AIPanel>
+  );
+}
+
+/* ---------- 17 — Decision center ---------- */
+function DecisionTab({ apps }: { apps: App[] }) {
+  const run = useServerFn(mastersDecisionAdvisor);
+  const [offers, setOffers] = useState("");
+  const [res, setRes] = useState<unknown>(null);
+  useEffect(() => {
+    const withOffer = apps.filter((a) => a.decision || a.status === "offer");
+    if (withOffer.length && !offers) {
+      setOffers(withOffer.map((a) => `${a.university_name} — ${a.program ?? "program"} | decision: ${a.decision ?? "offer"} | funding: ${a.aid_status ?? "unknown"} | tuition: ? | deposit: ? | response deadline: ?`).join("\n"));
+    }
+  }, [apps]);
+  return (
+    <AIPanel
+      title="Decision center"
+      note="Compare offers on tuition, funding, conditions, deposit and response deadline. The final decision is always yours."
+      icon={Scale}
+      canRun={!!offers.trim()}
+      res={res}
+      runLabel="Compare offers"
+      onRun={async () => setRes(await run({ data: { offers } }))}
+    >
+      <textarea value={offers} onChange={(e) => setOffers(e.target.value)} rows={6}
+        placeholder="One offer per line: university — program | tuition | funding | scholarship | conditions | deposit | response deadline"
+        className={`${fieldCls} sm:col-span-3`} />
+    </AIPanel>
+  );
+}
+
+/* ---------- 18 — AI roadmap ---------- */
+function RoadmapTab() {
+  const run = useServerFn(mastersRoadmap);
+  const [intake, setIntake] = useState("");
+  const [res, setRes] = useState<unknown>(null);
+  return (
+    <AIPanel
+      title="Master's AI roadmap"
+      note="12-month, 6-month, 90-day and 30-day plans plus weekly tasks and daily priorities. Re-run it whenever your profile, tests, documents or deadlines change."
+      icon={CalendarClock}
+      res={res}
+      runLabel="Build roadmap"
+      onRun={async () => setRes(await run({ data: { intake } }))}
+    >
+      <input value={intake} onChange={(e) => setIntake(e.target.value)} placeholder="Target intake (e.g. Fall 2027)" className={fieldCls} />
+    </AIPanel>
+  );
+}
