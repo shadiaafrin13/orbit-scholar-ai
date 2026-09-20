@@ -9,7 +9,7 @@ async function callAI(messages: ChatMsg[]): Promise<string> {
   const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
-    body: JSON.stringify({ model: "openai/gpt-5.6-sol", reasoning_effort: "none", messages }),
+    body: JSON.stringify({ model: "openai/gpt-6-astra", reasoning_effort: "low", messages }),
   });
   if (res.status === 429) throw new Error("AI is busy right now — please retry in a moment.");
   if (res.status === 402) throw new Error("AI credits exhausted — add credits to continue.");
@@ -221,4 +221,129 @@ Data: ${JSON.stringify(ctx)}`,
       },
     ]);
     return parseJson(raw, { score: 0, summary: "Could not parse AI response.", pillars: [], nextSteps: [], timeline: [], careers: [] });
+  });
+
+/** M08 — Admission requirements classifier + course/prerequisite analyzer for one program. */
+export const mastersRequirements = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { university: string; program?: string; coursework?: string }) => {
+    if (!d.university?.trim()) throw new Error("Pick a university first.");
+    return {
+      university: d.university.slice(0, 200),
+      program: (d.program ?? "").slice(0, 200),
+      coursework: (d.coursework ?? "").slice(0, 4000),
+    };
+  })
+  .handler(async ({ context, data }) => {
+    const ctx = await loadContext(context.supabase, context.userId);
+    const raw = await callAI([
+      { role: "system", content: "You map Master's admission requirements and academic prerequisites. Never invent official policy — mark anything uncertain. Reply only with strict JSON." },
+      {
+        role: "user",
+        content: `Analyse typical admission requirements for ${data.university}${data.program ? ` — ${data.program}` : ""} and compare them with the applicant's coursework.
+Return STRICT JSON: {"note":"1 sentence reminder to verify on the official program page","academic":[{"item":"...","status":"REQUIRED|RECOMMENDED|OPTIONAL|NOT REQUIRED","detail":"short"}],"testing":[{"item":"...","status":"REQUIRED|RECOMMENDED|OPTIONAL|NOT REQUIRED","detail":"short"}],"materials":[{"item":"CV|SOP|Recommendation letters|Writing sample|Portfolio|Research proposal|Interview","status":"REQUIRED|RECOMMENDED|OPTIONAL|NOT REQUIRED","detail":"short"}],"prerequisites":{"expected":["..."],"covered":["..."],"missing":["..."],"strongAreas":["..."],"preparation":[{"gap":"...","how":"course|certification|self-study|project","suggestion":"..."}]},"packageMissing":["application components the applicant has not evidenced yet"]}
+Applicant coursework (free text): """${data.coursework}"""
+Applicant: ${JSON.stringify(ctx)}`,
+      },
+    ]);
+    return parseJson(raw, { note: "", academic: [], testing: [], materials: [], prerequisites: {}, packageMissing: [] });
+  });
+
+/** M08 — Five-dimension fit analyzer (estimate only, not an admission probability). */
+export const mastersFitAnalyzer = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { university: string; program?: string; specialization?: string }) => {
+    if (!d.university?.trim()) throw new Error("Pick a university first.");
+    return { university: d.university.slice(0, 200), program: (d.program ?? "").slice(0, 200), specialization: (d.specialization ?? "").slice(0, 200) };
+  })
+  .handler(async ({ context, data }) => {
+    const ctx = await loadContext(context.supabase, context.userId);
+    const raw = await callAI([
+      { role: "system", content: "You analyse Master's programme fit. Fit is an estimate, never an admission probability or guarantee. Reply only with strict JSON." },
+      {
+        role: "user",
+        content: `Analyse fit for ${data.university}${data.program ? ` — ${data.program}` : ""}${data.specialization ? ` (${data.specialization})` : ""}.
+Return STRICT JSON: {"summary":"2 sentences","fit":[{"name":"Academic fit|Program fit|Research fit|Career fit|Financial fit","score":0-100,"note":"1 sentence"}],"missingRequirements":["..."],"preparationPriorities":[{"priority":"high|medium|low","action":"..."}],"disclaimer":"Fit is an estimate, not an admission probability."}
+Applicant: ${JSON.stringify(ctx)}`,
+      },
+    ]);
+    return parseJson(raw, { summary: "", fit: [], missingRequirements: [], preparationPriorities: [], disclaimer: "" });
+  });
+
+/** M08 — Specialization matcher. */
+export const mastersSpecializationMatcher = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const ctx = await loadContext(context.supabase, context.userId);
+    const raw = await callAI([
+      { role: "system", content: "You recommend Master's specializations. Reply only with strict JSON." },
+      {
+        role: "user",
+        content: `Recommend 6 specializations based on academic background, skills, research interests, career goals, projects, work experience and industry demand.
+Return STRICT JSON: {"summary":"2 sentences","specializations":[{"name":"...","match":0-100,"why":"1 sentence","buildsOn":["..."],"skillsToAdd":["..."],"careers":["..."],"demand":"low|moderate|high"}],"researchVsProfessional":"which track suits this applicant and why (2 sentences)"}
+Applicant: ${JSON.stringify(ctx)}`,
+      },
+    ]);
+    return parseJson(raw, { summary: "", specializations: [], researchVsProfessional: "" });
+  });
+
+/** M08 — Pre-submission application quality check (READY / NEEDS ATTENTION / HIGH RISK). */
+export const mastersQualityCheck = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { applicationId?: string; university: string; program?: string }) => {
+    if (!d.university?.trim()) throw new Error("Pick an application first.");
+    return { university: d.university.slice(0, 200), program: (d.program ?? "").slice(0, 200) };
+  })
+  .handler(async ({ context, data }) => {
+    const ctx = await loadContext(context.supabase, context.userId);
+    const raw = await callAI([
+      { role: "system", content: "You run a strict pre-submission Master's application quality check. Reply only with strict JSON." },
+      {
+        role: "user",
+        content: `Quality-check the application to ${data.university}${data.program ? ` — ${data.program}` : ""}.
+Return STRICT JSON: {"verdict":"READY|NEEDS ATTENTION|HIGH RISK","score":0-100,"summary":"2 sentences","checks":[{"area":"Program requirements|Academic|Coursework|Tests|SOP|CV|Recommendations|Writing sample|Portfolio|Financial|Deadline|Document completeness","status":"ok|attention|risk","note":"short"}],"blockers":["..."],"fixBeforeSubmitting":["..."]}
+Applicant data: ${JSON.stringify(ctx)}`,
+      },
+    ]);
+    return parseJson(raw, { verdict: "NEEDS ATTENTION", score: 0, summary: "", checks: [], blockers: [], fixBeforeSubmitting: [] });
+  });
+
+/** M08 — Decision center: compare offers, cost vs funding (student keeps final authority). */
+export const mastersDecisionAdvisor = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { offers: string }) => {
+    if (!d.offers?.trim()) throw new Error("Add at least one offer first.");
+    return { offers: d.offers.slice(0, 6000) };
+  })
+  .handler(async ({ context, data }) => {
+    const ctx = await loadContext(context.supabase, context.userId);
+    const raw = await callAI([
+      { role: "system", content: "You compare Master's offers objectively. The student retains final decision authority — advise, never decide. Reply only with strict JSON." },
+      {
+        role: "user",
+        content: `Compare these offers and highlight cost vs funding, conditions, deposits and response deadlines.
+Return STRICT JSON: {"summary":"2-3 sentences","comparison":[{"university":"...","program":"...","netCost":"...","fundingStrength":"low|medium|high","conditions":"...","deposit":"...","responseDeadline":"...","pros":["..."],"cons":["..."],"overall":0-100}],"questionsToAsk":["..."],"deadlineActions":["..."],"disclaimer":"The final decision is yours."}
+Offers (free text from the student): """${data.offers}"""
+Applicant: ${JSON.stringify(ctx)}`,
+      },
+    ]);
+    return parseJson(raw, { summary: "", comparison: [], questionsToAsk: [], deadlineActions: [], disclaimer: "" });
+  });
+
+/** M08 — AI roadmap: 12-month / 6-month / 90-day / 30-day plans + weekly and daily focus. */
+export const mastersRoadmap = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { intake?: string }) => ({ intake: (d?.intake ?? "").slice(0, 60) }))
+  .handler(async ({ context, data }) => {
+    const ctx = await loadContext(context.supabase, context.userId);
+    const raw = await callAI([
+      { role: "system", content: "You build Master's application roadmaps. Reply only with strict JSON." },
+      {
+        role: "user",
+        content: `Build a Master's application roadmap${data.intake ? ` for a ${data.intake} intake` : ""}. Today is ${new Date().toISOString().slice(0, 10)}.
+Return STRICT JSON: {"nextBestAction":{"action":"...","why":"1 sentence","doBy":"date or timeframe"},"twelveMonth":[{"window":"e.g. Months 1-3","focus":"...","actions":["..."]}],"sixMonth":[{"window":"...","focus":"...","actions":["..."]}],"ninetyDay":[{"window":"e.g. Weeks 1-4","actions":["..."]}],"thirtyDay":[{"window":"e.g. Week 1","actions":["..."]}],"weeklyTasks":["..."],"dailyPriorities":["..."]}
+Applicant data: ${JSON.stringify(ctx)}`,
+      },
+    ]);
+    return parseJson(raw, { nextBestAction: null, twelveMonth: [], sixMonth: [], ninetyDay: [], thirtyDay: [], weeklyTasks: [], dailyPriorities: [] });
   });
