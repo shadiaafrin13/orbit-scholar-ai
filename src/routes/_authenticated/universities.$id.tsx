@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/universities/$id")({
     if (!data) throw notFound();
     return data;
   },
-  errorComponent: ({ error }) => <div className="p-10 text-sm text-red-500">Failed to load: {error.message}</div>,
+  errorComponent: ({ error }) => <div className="p-10 text-sm text-red-500">Failed to load: {error instanceof Error ? error.message : String(error)}</div>,
   notFoundComponent: () => <div className="p-10 text-sm text-muted-foreground">University not found.</div>,
   component: UniDetail,
 });
