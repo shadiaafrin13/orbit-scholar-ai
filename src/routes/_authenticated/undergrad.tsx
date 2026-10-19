@@ -7,7 +7,8 @@ import {
   ArrowLeft, Award, CalendarClock, CheckCircle2, ClipboardList, FileText, GraduationCap,
   Loader2, Mic, Plus, Route as RouteIcon, Search, Sparkles, Target, Trash2, Wand2,
 } from "lucide-react";
-import { ugCollegeList, ugEssayReview, ugInterview, ugProfileAnalyzer, ugReadiness } from "@/lib/ug-ai.functions";
+import { ugCollegeList, ugCopilot, ugDashboard, ugDecision, ugEligibility, ugEssayReview, ugFit, ugInterview, ugProfileAnalyzer, ugReadiness } from "@/lib/ug-ai.functions";
+import { AIResult } from "@/components/ai-result";
 
 export const Route = createFileRoute("/_authenticated/undergrad")({
   head: () => ({
@@ -40,7 +41,7 @@ const REQUIREMENTS = [
   "Portfolio", "Interview", "Essays", "Recommendation letters", "Required documents", "Deadlines",
 ];
 
-type Tab = "pathway" | "explorer" | "profile" | "funding" | "toolkit" | "interview" | "tracker";
+type Tab = "pathway" | "explorer" | "profile" | "funding" | "toolkit" | "interview" | "tracker" | "eligibility" | "fit" | "copilot" | "decision" | "plan";
 type App = {
   id: string; university_name: string; program: string | null; platform: string | null; round: string | null;
   status: string; deadline: string | null; missing_documents: string[] | null; interview_date: string | null;
@@ -87,6 +88,11 @@ function UndergradHub() {
     { id: "toolkit", label: "Essays & toolkit", icon: FileText },
     { id: "interview", label: "Interview prep", icon: Mic },
     { id: "tracker", label: "Tracker", icon: ClipboardList },
+    { id: "eligibility", label: "Eligibility", icon: CheckCircle2 },
+    { id: "fit", label: "Fit analyzer", icon: Target },
+    { id: "copilot", label: "App copilot", icon: Sparkles },
+    { id: "decision", label: "Decision & visa", icon: GraduationCap },
+    { id: "plan", label: "AI plan", icon: CalendarClock },
   ];
 
   return (
@@ -135,6 +141,11 @@ function UndergradHub() {
             {tab === "toolkit" && <ToolkitTab />}
             {tab === "interview" && <InterviewTab />}
             {tab === "tracker" && <TrackerTab userId={user.id} apps={apps} setApps={setApps} />}
+            {tab === "eligibility" && <UgEligibilityTab unis={unis} />}
+            {tab === "fit" && <UgFitTab unis={unis} />}
+            {tab === "copilot" && <UgCopilotTab apps={apps} />}
+            {tab === "decision" && <UgDecisionTab />}
+            {tab === "plan" && <UgPlanTab />}
           </div>
         )}
       </main>
@@ -787,4 +798,115 @@ function TrackerTab({ userId, apps, setApps }: { userId: string; apps: App[]; se
 }
 function Cell({ label, children }: { label: string; children: React.ReactNode }) {
   return <div><p className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>{children}</div>;
+}
+
+
+/* ---------- New AI tools ---------- */
+
+const inputCls = "w-full rounded-xl border border-border bg-background/60 px-3 py-2 text-sm";
+
+function AiPanel({ title, note, children, onRun, busy, res, label = "Run analysis" }: {
+  title: string; note: string; children?: React.ReactNode; onRun: () => void; busy: boolean; res: unknown; label?: string;
+}) {
+  return (
+    <div className="glass rounded-2xl p-5">
+      <h2 className="text-sm font-semibold">{title}</h2>
+      <p className="text-xs text-muted-foreground">{note}</p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">{children}</div>
+      <button onClick={onRun} disabled={busy}
+        className="mt-4 inline-flex items-center gap-2 rounded-full bg-nebula px-5 py-2 text-xs font-semibold text-primary-foreground glow disabled:opacity-60">
+        {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand2 className="h-3.5 w-3.5" />} {label}
+      </button>
+      {res != null && <div className="mt-5 border-t border-border pt-5"><AIResult data={res} /></div>}
+      <p className="mt-4 text-[11px] text-muted-foreground">AI estimate only — always confirm official requirements with the university.</p>
+    </div>
+  );
+}
+
+function useAi(fn: any) {
+  const run = useServerFn(fn);
+  const [busy, setBusy] = useState(false);
+  const [res, setRes] = useState<unknown>(null);
+  const go = async (data: unknown) => {
+    setBusy(true);
+    try { setRes(await (run as any)({ data })); } catch (e: any) { toast.error(e.message); }
+    setBusy(false);
+  };
+  return { busy, res, go };
+}
+
+function UniSelect({ unis, value, onChange }: { unis: Uni[]; value: string; onChange: (v: string) => void }) {
+  return (
+    <select className={inputCls} value={value} onChange={(e) => onChange(e.target.value)}>
+      <option value="">Choose a university…</option>
+      {unis.map((u) => <option key={u.id} value={u.id}>{u.name}{u.country ? ` (${u.country})` : ""}</option>)}
+    </select>
+  );
+}
+
+function UgEligibilityTab({ unis }: { unis: Uni[] }) {
+  const { busy, res, go } = useAi(ugEligibility);
+  const [uni, setUni] = useState(""); const [name, setName] = useState(""); const [program, setProgram] = useState("");
+  return (
+    <AiPanel title="Eligibility check" note="Compares a program's requirements with your profile." busy={busy} res={res}
+      onRun={() => (uni || name ? go({ universityId: uni, universityName: name, program }) : toast.error("Pick or type a university"))}>
+      <UniSelect unis={unis} value={uni} onChange={setUni} />
+      <input className={inputCls} placeholder="…or type a university name" value={name} onChange={(e) => setName(e.target.value)} />
+      <input className={inputCls} placeholder="Program (e.g. Computer Science)" value={program} onChange={(e) => setProgram(e.target.value)} />
+    </AiPanel>
+  );
+}
+
+function UgFitTab({ unis }: { unis: Uni[] }) {
+  const { busy, res, go } = useAi(ugFit);
+  const [uni, setUni] = useState(""); const [program, setProgram] = useState("");
+  return (
+    <AiPanel title="Fit analyzer" note="Academic, program, financial, location and career fit. Fit is not your chance of admission." busy={busy} res={res}
+      onRun={() => (uni ? go({ universityId: uni, program }) : toast.error("Pick a university"))}>
+      <UniSelect unis={unis} value={uni} onChange={setUni} />
+      <input className={inputCls} placeholder="Program (optional)" value={program} onChange={(e) => setProgram(e.target.value)} />
+    </AiPanel>
+  );
+}
+
+function UgCopilotTab({ apps }: { apps: App[] }) {
+  const { busy, res, go } = useAi(ugCopilot);
+  const [app, setApp] = useState(""); const [mode, setMode] = useState<"checklist" | "quality">("checklist");
+  if (!apps.length) return <div className="glass rounded-2xl p-5 text-sm text-muted-foreground">Add an application in the Tracker or Explorer first.</div>;
+  return (
+    <AiPanel title="Application copilot" note="A checklist for one application, or a quality check before you submit." busy={busy} res={res}
+      onRun={() => (app ? go({ applicationId: app, mode }) : toast.error("Pick an application"))}>
+      <select className={inputCls} value={app} onChange={(e) => setApp(e.target.value)}>
+        <option value="">Choose an application…</option>
+        {apps.map((a) => <option key={a.id} value={a.id}>{a.university_name}{a.program ? ` — ${a.program}` : ""}</option>)}
+      </select>
+      <select className={inputCls} value={mode} onChange={(e) => setMode(e.target.value as any)}>
+        <option value="checklist">Build checklist</option>
+        <option value="quality">Quality check</option>
+      </select>
+    </AiPanel>
+  );
+}
+
+function UgDecisionTab() {
+  const { busy, res, go } = useAi(ugDecision);
+  const [mode, setMode] = useState<"decision" | "visa">("decision"); const [country, setCountry] = useState("");
+  return (
+    <AiPanel title="Decision & visa center" note="Compare your offers, or plan visa and pre-departure steps. The final choice is always yours." busy={busy} res={res}
+      onRun={() => go({ mode, country })}>
+      <select className={inputCls} value={mode} onChange={(e) => setMode(e.target.value as any)}>
+        <option value="decision">Compare my offers</option>
+        <option value="visa">Visa & pre-departure plan</option>
+      </select>
+      <input className={inputCls} placeholder="Destination country (for visa)" value={country} onChange={(e) => setCountry(e.target.value)} />
+    </AiPanel>
+  );
+}
+
+function UgPlanTab() {
+  const { busy, res, go } = useAi(ugDashboard);
+  return (
+    <AiPanel title="Your next best action & 12-month plan" note="Built from your profile, activities, tests and applications." busy={busy} res={res}
+      label="Generate plan" onRun={() => go({})} />
+  );
 }

@@ -9,40 +9,39 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
-import { Route as AuthenticatedUniversitiesRouteImport } from './routes/_authenticated/universities'
-import { Route as AuthenticatedUndergradRouteImport } from './routes/_authenticated/undergrad'
-import { Route as AuthenticatedTestsRouteImport } from './routes/_authenticated/tests'
-import { Route as AuthenticatedSopRouteImport } from './routes/_authenticated/sop'
-import { Route as AuthenticatedScholarshipsRouteImport } from './routes/_authenticated/scholarships'
-import { Route as AuthenticatedRoadmapRouteImport } from './routes/_authenticated/roadmap'
-import { Route as AuthenticatedResearchRouteImport } from './routes/_authenticated/research'
-import { Route as AuthenticatedRecommendationsRouteImport } from './routes/_authenticated/recommendations'
-import { Route as AuthenticatedPublicationsRouteImport } from './routes/_authenticated/publications'
-import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
-import { Route as AuthenticatedPhdRouteImport } from './routes/_authenticated/phd'
-import { Route as AuthenticatedPathRouteImport } from './routes/_authenticated/path'
-import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
-import { Route as AuthenticatedEcaRouteImport } from './routes/_authenticated/eca'
-import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedCvRouteImport } from './routes/_authenticated/cv'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedApplicationsRouteImport } from './routes/_authenticated/applications'
+import { Route as AuthenticatedCvRouteImport } from './routes/_authenticated/cv'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
+import { Route as AuthenticatedEcaRouteImport } from './routes/_authenticated/eca'
+import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
+import { Route as AuthenticatedPathRouteImport } from './routes/_authenticated/path'
+import { Route as AuthenticatedPhdRouteImport } from './routes/_authenticated/phd'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedPublicationsRouteImport } from './routes/_authenticated/publications'
+import { Route as AuthenticatedRecommendationsRouteImport } from './routes/_authenticated/recommendations'
+import { Route as AuthenticatedResearchRouteImport } from './routes/_authenticated/research'
+import { Route as AuthenticatedRoadmapRouteImport } from './routes/_authenticated/roadmap'
+import { Route as AuthenticatedScholarshipsRouteImport } from './routes/_authenticated/scholarships'
+import { Route as AuthenticatedSopRouteImport } from './routes/_authenticated/sop'
+import { Route as AuthenticatedTestsRouteImport } from './routes/_authenticated/tests'
+import { Route as AuthenticatedUndergradRouteImport } from './routes/_authenticated/undergrad'
+import { Route as AuthenticatedUniversitiesRouteImport } from './routes/_authenticated/universities'
+import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
 import { Route as AuthenticatedUniversitiesIdRouteImport } from './routes/_authenticated/universities.$id'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -50,39 +49,82 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ModulesModuleIdRoute = ModulesModuleIdRouteImport.update({
-  id: '/modules/$moduleId',
-  path: '/modules/$moduleId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedUniversitiesRoute =
-  AuthenticatedUniversitiesRouteImport.update({
-    id: '/universities',
-    path: '/universities',
+const AuthenticatedApplicationsRoute =
+  AuthenticatedApplicationsRouteImport.update({
+    id: '/applications',
+    path: '/applications',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedUndergradRoute = AuthenticatedUndergradRouteImport.update({
-  id: '/undergrad',
-  path: '/undergrad',
+const AuthenticatedCvRoute = AuthenticatedCvRouteImport.update({
+  id: '/cv',
+  path: '/cv',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedTestsRoute = AuthenticatedTestsRouteImport.update({
-  id: '/tests',
-  path: '/tests',
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedSopRoute = AuthenticatedSopRouteImport.update({
-  id: '/sop',
-  path: '/sop',
+const AuthenticatedDocumentsRoute = AuthenticatedDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEcaRoute = AuthenticatedEcaRouteImport.update({
+  id: '/eca',
+  path: '/eca',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMastersRoute = AuthenticatedMastersRouteImport.update({
+  id: '/masters',
+  path: '/masters',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPathRoute = AuthenticatedPathRouteImport.update({
+  id: '/path',
+  path: '/path',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPhdRoute = AuthenticatedPhdRouteImport.update({
+  id: '/phd',
+  path: '/phd',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPublicationsRoute =
+  AuthenticatedPublicationsRouteImport.update({
+    id: '/publications',
+    path: '/publications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedRecommendationsRoute =
+  AuthenticatedRecommendationsRouteImport.update({
+    id: '/recommendations',
+    path: '/recommendations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedResearchRoute = AuthenticatedResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRoadmapRoute = AuthenticatedRoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedScholarshipsRoute =
@@ -91,74 +133,32 @@ const AuthenticatedScholarshipsRoute =
     path: '/scholarships',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedRoadmapRoute = AuthenticatedRoadmapRouteImport.update({
-  id: '/roadmap',
-  path: '/roadmap',
+const AuthenticatedSopRoute = AuthenticatedSopRouteImport.update({
+  id: '/sop',
+  path: '/sop',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedResearchRoute = AuthenticatedResearchRouteImport.update({
-  id: '/research',
-  path: '/research',
+const AuthenticatedTestsRoute = AuthenticatedTestsRouteImport.update({
+  id: '/tests',
+  path: '/tests',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedRecommendationsRoute =
-  AuthenticatedRecommendationsRouteImport.update({
-    id: '/recommendations',
-    path: '/recommendations',
+const AuthenticatedUndergradRoute = AuthenticatedUndergradRouteImport.update({
+  id: '/undergrad',
+  path: '/undergrad',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedUniversitiesRoute =
+  AuthenticatedUniversitiesRouteImport.update({
+    id: '/universities',
+    path: '/universities',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedPublicationsRoute =
-  AuthenticatedPublicationsRouteImport.update({
-    id: '/publications',
-    path: '/publications',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const ModulesModuleIdRoute = ModulesModuleIdRouteImport.update({
+  id: '/modules/$moduleId',
+  path: '/modules/$moduleId',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedPhdRoute = AuthenticatedPhdRouteImport.update({
-  id: '/phd',
-  path: '/phd',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedPathRoute = AuthenticatedPathRouteImport.update({
-  id: '/path',
-  path: '/path',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedMastersRoute = AuthenticatedMastersRouteImport.update({
-  id: '/masters',
-  path: '/masters',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedEcaRoute = AuthenticatedEcaRouteImport.update({
-  id: '/eca',
-  path: '/eca',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedDocumentsRoute = AuthenticatedDocumentsRouteImport.update({
-  id: '/documents',
-  path: '/documents',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedCvRoute = AuthenticatedCvRouteImport.update({
-  id: '/cv',
-  path: '/cv',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedApplicationsRoute =
-  AuthenticatedApplicationsRouteImport.update({
-    id: '/applications',
-    path: '/applications',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedUniversitiesIdRoute =
   AuthenticatedUniversitiesIdRouteImport.update({
     id: '/$id',
@@ -339,25 +339,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -367,130 +353,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/modules/$moduleId': {
-      id: '/modules/$moduleId'
-      path: '/modules/$moduleId'
-      fullPath: '/modules/$moduleId'
-      preLoaderRoute: typeof ModulesModuleIdRouteImport
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/universities': {
-      id: '/_authenticated/universities'
-      path: '/universities'
-      fullPath: '/universities'
-      preLoaderRoute: typeof AuthenticatedUniversitiesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/undergrad': {
-      id: '/_authenticated/undergrad'
-      path: '/undergrad'
-      fullPath: '/undergrad'
-      preLoaderRoute: typeof AuthenticatedUndergradRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/tests': {
-      id: '/_authenticated/tests'
-      path: '/tests'
-      fullPath: '/tests'
-      preLoaderRoute: typeof AuthenticatedTestsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/sop': {
-      id: '/_authenticated/sop'
-      path: '/sop'
-      fullPath: '/sop'
-      preLoaderRoute: typeof AuthenticatedSopRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/scholarships': {
-      id: '/_authenticated/scholarships'
-      path: '/scholarships'
-      fullPath: '/scholarships'
-      preLoaderRoute: typeof AuthenticatedScholarshipsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/roadmap': {
-      id: '/_authenticated/roadmap'
-      path: '/roadmap'
-      fullPath: '/roadmap'
-      preLoaderRoute: typeof AuthenticatedRoadmapRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/research': {
-      id: '/_authenticated/research'
-      path: '/research'
-      fullPath: '/research'
-      preLoaderRoute: typeof AuthenticatedResearchRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/recommendations': {
-      id: '/_authenticated/recommendations'
-      path: '/recommendations'
-      fullPath: '/recommendations'
-      preLoaderRoute: typeof AuthenticatedRecommendationsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/publications': {
-      id: '/_authenticated/publications'
-      path: '/publications'
-      fullPath: '/publications'
-      preLoaderRoute: typeof AuthenticatedPublicationsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/profile': {
-      id: '/_authenticated/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof AuthenticatedProfileRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/phd': {
-      id: '/_authenticated/phd'
-      path: '/phd'
-      fullPath: '/phd'
-      preLoaderRoute: typeof AuthenticatedPhdRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/path': {
-      id: '/_authenticated/path'
-      path: '/path'
-      fullPath: '/path'
-      preLoaderRoute: typeof AuthenticatedPathRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/masters': {
-      id: '/_authenticated/masters'
-      path: '/masters'
-      fullPath: '/masters'
-      preLoaderRoute: typeof AuthenticatedMastersRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/eca': {
-      id: '/_authenticated/eca'
-      path: '/eca'
-      fullPath: '/eca'
-      preLoaderRoute: typeof AuthenticatedEcaRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/documents': {
-      id: '/_authenticated/documents'
-      path: '/documents'
-      fullPath: '/documents'
-      preLoaderRoute: typeof AuthenticatedDocumentsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/dashboard': {
-      id: '/_authenticated/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+    '/_authenticated/applications': {
+      id: '/_authenticated/applications'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof AuthenticatedApplicationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/cv': {
@@ -500,12 +388,124 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCvRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/applications': {
-      id: '/_authenticated/applications'
-      path: '/applications'
-      fullPath: '/applications'
-      preLoaderRoute: typeof AuthenticatedApplicationsRouteImport
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/documents': {
+      id: '/_authenticated/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof AuthenticatedDocumentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/eca': {
+      id: '/_authenticated/eca'
+      path: '/eca'
+      fullPath: '/eca'
+      preLoaderRoute: typeof AuthenticatedEcaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/masters': {
+      id: '/_authenticated/masters'
+      path: '/masters'
+      fullPath: '/masters'
+      preLoaderRoute: typeof AuthenticatedMastersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/path': {
+      id: '/_authenticated/path'
+      path: '/path'
+      fullPath: '/path'
+      preLoaderRoute: typeof AuthenticatedPathRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/phd': {
+      id: '/_authenticated/phd'
+      path: '/phd'
+      fullPath: '/phd'
+      preLoaderRoute: typeof AuthenticatedPhdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/publications': {
+      id: '/_authenticated/publications'
+      path: '/publications'
+      fullPath: '/publications'
+      preLoaderRoute: typeof AuthenticatedPublicationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/recommendations': {
+      id: '/_authenticated/recommendations'
+      path: '/recommendations'
+      fullPath: '/recommendations'
+      preLoaderRoute: typeof AuthenticatedRecommendationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/research': {
+      id: '/_authenticated/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof AuthenticatedResearchRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/roadmap': {
+      id: '/_authenticated/roadmap'
+      path: '/roadmap'
+      fullPath: '/roadmap'
+      preLoaderRoute: typeof AuthenticatedRoadmapRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/scholarships': {
+      id: '/_authenticated/scholarships'
+      path: '/scholarships'
+      fullPath: '/scholarships'
+      preLoaderRoute: typeof AuthenticatedScholarshipsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/sop': {
+      id: '/_authenticated/sop'
+      path: '/sop'
+      fullPath: '/sop'
+      preLoaderRoute: typeof AuthenticatedSopRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tests': {
+      id: '/_authenticated/tests'
+      path: '/tests'
+      fullPath: '/tests'
+      preLoaderRoute: typeof AuthenticatedTestsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/undergrad': {
+      id: '/_authenticated/undergrad'
+      path: '/undergrad'
+      fullPath: '/undergrad'
+      preLoaderRoute: typeof AuthenticatedUndergradRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/universities': {
+      id: '/_authenticated/universities'
+      path: '/universities'
+      fullPath: '/universities'
+      preLoaderRoute: typeof AuthenticatedUniversitiesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/modules/$moduleId': {
+      id: '/modules/$moduleId'
+      path: '/modules/$moduleId'
+      fullPath: '/modules/$moduleId'
+      preLoaderRoute: typeof ModulesModuleIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/universities/$id': {
       id: '/_authenticated/universities/$id'
