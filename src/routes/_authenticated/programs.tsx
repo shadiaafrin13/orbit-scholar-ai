@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, type SearchSchemaInput } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Search, Scale, X, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { atlasMeta } from "@/lib/route-meta";
 import { compareSelection, parseCompareIds } from "@/lib/discovery";
 
 export const Route = createFileRoute("/_authenticated/programs")({
-  validateSearch: (s: Record<string, unknown>) => ({ q: typeof s.q === "string" ? s.q : "", country: typeof s.country === "string" ? s.country : "", level: typeof s.level === "string" ? s.level : "", saved: s.saved === true || s.saved === "true", ids: parseCompareIds(s.ids).join(",") }),
+  validateSearch: (s: { q?: string; country?: string; level?: string; saved?: boolean | string; ids?: string } & SearchSchemaInput) => ({ q: typeof s.q === "string" ? s.q : "", country: typeof s.country === "string" ? s.country : "", level: typeof s.level === "string" ? s.level : "", saved: s.saved === true || s.saved === "true", ids: parseCompareIds(s.ids).join(",") }),
   loader: ({ context }) => context.queryClient.ensureQueryData(discoveryQuery(context.user.id)),
   head: () => ({ meta: atlasMeta("Global University & Program Hub", "Discover individual study programs, inspect source evidence, save candidates, and compare academic options.") }),
   component: Programs,

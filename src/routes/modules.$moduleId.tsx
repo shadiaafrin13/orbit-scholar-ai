@@ -242,7 +242,7 @@ export const Route = createFileRoute("/modules/$moduleId")({
   head: ({ loaderData }) => ({
     meta: atlasMeta(loaderData?.mod.title ?? "Atlas module", loaderData?.mod.tagline ?? "Explore Atlas study and research workspaces."),
   }),
-  errorComponent: ({ error }) => <p role="alert">{error.message}</p>,
+  errorComponent: ({ error }) => <p role="alert">{error instanceof Error ? error.message : "Module unavailable"}</p>,
   component: ModulePage,
   notFoundComponent: () => (
     <div className="mx-auto max-w-2xl px-6 py-24 text-center">
