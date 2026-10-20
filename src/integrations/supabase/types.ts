@@ -468,6 +468,59 @@ export type Database = {
         }
         Relationships: []
       }
+      discovery_programs: {
+        Row: {
+          country: string
+          created_at: string
+          degree_level: string
+          facts: Json
+          id: string
+          identity_checked_at: string | null
+          identity_verification: string
+          institution: string
+          official_url: string
+          subject: string | null
+          title: string
+          university_id: string | null
+        }
+        Insert: {
+          country: string
+          created_at?: string
+          degree_level: string
+          facts?: Json
+          id?: string
+          identity_checked_at?: string | null
+          identity_verification?: string
+          institution: string
+          official_url: string
+          subject?: string | null
+          title: string
+          university_id?: string | null
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          degree_level?: string
+          facts?: Json
+          id?: string
+          identity_checked_at?: string | null
+          identity_verification?: string
+          institution?: string
+          official_url?: string
+          subject?: string | null
+          title?: string
+          university_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discovery_programs_university_id_fkey"
+            columns: ["university_id"]
+            isOneToOne: false
+            referencedRelation: "universities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       documents: {
         Row: {
           ai_flags: Json | null
@@ -1459,6 +1512,35 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      saved_programs: {
+        Row: {
+          created_at: string
+          id: string
+          program_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          program_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          program_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_programs_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "discovery_programs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       scholarships: {
         Row: {

@@ -1,4 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { atlasModules } from "@/lib/modules";
+import { atlasMeta } from "@/lib/route-meta";
 import { ArrowLeft, CheckCircle2, Compass, Rocket, Sparkles } from "lucide-react";
 
 type ModuleDetail = {
@@ -11,7 +13,7 @@ type ModuleDetail = {
   aiCapabilities: string[];
 };
 
-const MODULES: ModuleDetail[] = [
+const LEGACY_MODULES: ModuleDetail[] = [
   {
     n: 1, slug: "auth", title: "Authentication & Roles",
     tagline: "One identity across every role in the academic journey.",
@@ -224,22 +226,23 @@ const MODULES: ModuleDetail[] = [
   },
 ];
 
+const MODULES: ModuleDetail[] = atlasModules.map((m) => ({
+  n: m.n, slug: m.slug, title: m.title, tagline: m.desc, overview: m.desc,
+  features: ["Student-controlled workspace", "Existing records and tools remain accessible"],
+  aiCapabilities: ["Planning guidance is not an official admission decision", "Unknown facts need confirmation"],
+}));
+
 export const Route = createFileRoute("/modules/$moduleId")({
   loader: ({ params }): { mod: ModuleDetail } => {
-    const mod = MODULES.find((m) => m.slug === params.moduleId || String(m.n) === params.moduleId);
+    const legacy = LEGACY_MODULES.find((m) => String(m.n) === params.moduleId);
+    const mod = MODULES.find((m) => m.slug === (legacy?.slug ?? params.moduleId)) ?? legacy ?? LEGACY_MODULES.find((m) => m.slug === params.moduleId);
     if (!mod) throw notFound();
     return { mod };
   },
   head: ({ loaderData }) => ({
-    meta: loaderData
-      ? [
-          { title: `${loaderData.mod.title} — Atlas` },
-          { name: "description", content: loaderData.mod.tagline },
-          { property: "og:title", content: `${loaderData.mod.title} — Atlas` },
-          { property: "og:description", content: loaderData.mod.tagline },
-        ]
-      : [],
+    meta: atlasMeta(loaderData?.mod.title ?? "Atlas module", loaderData?.mod.tagline ?? "Explore Atlas study and research workspaces."),
   }),
+  errorComponent: ({ error }) => <p role="alert">{error.message}</p>,
   component: ModulePage,
   notFoundComponent: () => (
     <div className="mx-auto max-w-2xl px-6 py-24 text-center">
@@ -313,11 +316,10 @@ function ModulePage() {
         <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-border p-8" style={{ background: "var(--gradient-cosmic)" }}>
           <div>
             <h3 className="text-xl font-semibold">Ready to try {mod.title}?</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Sign up to unlock this module and 29 more.</p>
+            <p className="mt-1 text-sm text-muted-foreground">Open your Atlas workspace.</p>
           </div>
           <Link
-            to="/auth"
-            search={{ mode: "signup" }}
+            to={atlasModules.find((m) => m.slug === mod.slug)?.to ?? "/dashboard"}
             className="inline-flex items-center gap-2 rounded-full bg-nebula px-6 py-3 text-sm font-semibold text-primary-foreground glow"
           >
             Get started <Rocket className="h-4 w-4" />
