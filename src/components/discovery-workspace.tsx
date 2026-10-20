@@ -30,9 +30,9 @@ export function DiscoveryShell({ children, title, subtitle }: { children: ReactN
   </div>;
 }
 
-export function DiscoveryError({ error }: { error: Error }) {
+export function DiscoveryError({ error }: { error: unknown }) {
   const router = useRouter();
-  return <div role="alert" className="mx-auto max-w-xl space-y-4 px-5 py-20"><h1 className="text-xl font-semibold">Discovery is unavailable</h1><p>{error.message}</p><Button onClick={() => router.invalidate()}>Try again</Button></div>;
+  return <div role="alert" className="mx-auto max-w-xl space-y-4 px-5 py-20"><h1 className="text-xl font-semibold">Discovery is unavailable</h1><p>{error instanceof Error ? error.message : "Please try again."}</p><Button onClick={() => router.invalidate()}>Try again</Button></div>;
 }
 
 export function SaveProgram({ programId, saved, userId }: { programId: string; saved: boolean; userId: string }) {

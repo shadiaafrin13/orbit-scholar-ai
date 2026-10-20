@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_authenticated/programs_/$programId")({
     if (!data.programs.some((p) => p.id === params.programId)) throw notFound();
     return { title: data.programs.find((p) => p.id === params.programId)?.title };
   },
-  head: ({ loaderData }) => ({ meta: atlasMeta(loaderData?.title ?? "Program details", "Review program identity, academic requirements, application cycles, and source evidence without treating unknown facts as confirmed.") }),
+  head: ({ loaderData }: { loaderData?: { title?: string } }) => ({ meta: atlasMeta(loaderData?.title ?? "Program details", "Review program identity, academic requirements, application cycles, and source evidence without treating unknown facts as confirmed.") }),
   component: ProgramDetail,
   errorComponent: DiscoveryError,
   notFoundComponent: () => <div className="p-10"><h1>Program not found</h1><Link to="/programs">Return to programs</Link></div>,

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, type SearchSchemaInput } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { factFields, parseCompareIds } from "@/lib/discovery";
 import { atlasMeta } from "@/lib/route-meta";
 
 export const Route = createFileRoute("/_authenticated/compare")({
-  validateSearch: (s: Record<string, unknown>) => ({ ids: parseCompareIds(s.ids).join(",") }),
+  validateSearch: (s: { ids?: string } & SearchSchemaInput) => ({ ids: parseCompareIds(s.ids).join(",") }),
   loader: ({ context }) => context.queryClient.ensureQueryData(discoveryQuery(context.user.id)),
   head: () => ({ meta: atlasMeta("Compare Programs", "Compare exact program candidates side by side, including sources and unverified academic, financial, and application facts.") }),
   component: Compare,
