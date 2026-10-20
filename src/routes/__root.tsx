@@ -76,13 +76,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Atlas is the AI copilot for study abroad, scholarships, research, publications, and careers — 30 modules powered by one intelligent student profile.",
+          "Atlas is the AI copilot for study abroad, scholarships, research, publications, and careers — connected workspaces powered by your student profile.",
       },
       { property: "og:title", content: "Atlas — AI Platform for Global Students" },
       {
         property: "og:description",
         content:
-          "Universities, scholarships, research, SOPs, CVs, and admission predictions — one AI mentor across your entire academic journey.",
+          "Universities, scholarships, research, SOPs, CVs, and application preparation — one AI mentor across your entire academic journey.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

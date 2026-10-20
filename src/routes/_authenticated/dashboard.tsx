@@ -7,11 +7,13 @@ import {
   BookOpen, LogOut, Map, Rocket, Sparkles, Trophy, UserRound, Users,
 } from "lucide-react";
 import { toast } from "sonner";
+import { atlasModules, supportingTools } from "@/lib/modules";
+import { atlasMeta } from "@/lib/route-meta";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Atlas" },
+      ...atlasMeta("Your Atlas Dashboard", "Your study goals, program discovery, preparation, documents, and academic tasks in one student workspace."),
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -71,25 +73,7 @@ function Dashboard() {
 
   const initials = (s?.name || user.email || "?").split(" ").map((x: string) => x[0]).slice(0, 2).join("").toUpperCase();
 
-  const modules = [
-    { to: "/profile" as const, icon: UserRound, n: "M02", title: "Student Profile", desc: "Identity, academics, tests, targets, achievements.", meta: s?.hasProfile ? "In progress" : "Start here" },
-    { to: "/path" as const, icon: Compass, n: "M03", title: "Path Selection", desc: "UG · Masters · PhD · Exchange — personalized roadmap.", meta: s?.pathDone ? "Completed" : "4 questions" },
-    { to: "/roadmap" as const, icon: Map, n: "M04", title: "AI Roadmap & Planner", desc: "Readiness report, priority engine, calendar, scenarios.", meta: s ? `${s.taskDone}/${s.taskTotal} done` : "" },
-    { to: "/undergrad" as const, icon: GraduationCap, n: "M06", title: "Undergraduate", desc: "SAT, IELTS, Common App — the UG toolkit.", meta: "Open" },
-    { to: "/masters" as const, icon: BookOpen, n: "M07", title: "Master's Admission", desc: "Programs, SOP, funding, professor outreach.", meta: "Open" },
-    { to: "/phd" as const, icon: FlaskConical, n: "M08", title: "PhD Admission", desc: "Proposals, advisors, fellowships, interviews.", meta: "Open" },
-    { to: "/universities" as const, icon: Globe, n: "M09", title: "Global Universities", desc: "35+ world universities to search and save.", meta: s ? `${s.saved} saved` : "" },
-    { to: "/scholarships" as const, icon: Award, n: "M10", title: "Scholarship Hub", desc: "30+ funded scholarships with deadlines & links.", meta: "Live" },
-    { to: "/research" as const, icon: FlaskConical, n: "M11", title: "Research & Innovation", desc: "Fellowships, RA/PhD programs, summer research.", meta: "New" },
-    { to: "/publications" as const, icon: BookMarked, n: "M12", title: "Publication Hub", desc: "Papers, DOIs, citations, co-authors.", meta: "Track" },
-    { to: "/sop" as const, icon: FileText, n: "M13", title: "SOP & Essay AI", desc: "Draft, save, and score every statement.", meta: "AI" },
-    { to: "/cv" as const, icon: ClipboardList, n: "M14", title: "CV & Resume Builder", desc: "Academic, Europass, ATS — with live scoring.", meta: "AI" },
-    { to: "/recommendations" as const, icon: Users, n: "M15", title: "Recommendation Letters", desc: "Manage recommenders, drafts, and reminders.", meta: "Manage" },
-    { to: "/eca" as const, icon: Trophy, n: "M16", title: "ECA Hub", desc: "Olympiads, MUN, hackathons, sports — scored.", meta: "New" },
-    { to: "/tests" as const, icon: ClipboardList, n: "M17", title: "Test Prep Hub", desc: "IELTS, TOEFL, SAT, GRE — targets & mock scoring.", meta: "AI" },
-    { to: "/documents" as const, icon: FileText, n: "M18", title: "Document Center", desc: "Private vault for transcripts, passports, certificates.", meta: "Secure" },
-    { to: "/applications" as const, icon: ClipboardList, n: "M19", title: "Application Command Center", desc: "Pipeline, checklists, quality checks, offers.", meta: "Live" },
-  ];
+  const modules = atlasModules;
 
   return (
     <div className="min-h-screen">
@@ -124,7 +108,7 @@ function Dashboard() {
           <span className="text-muted-foreground">Welcome back{s?.name ? `, ${s.name.split(" ")[0]}` : ""}</span>
         </div>
         <h1 className="mt-6 text-4xl font-bold sm:text-5xl">Your <span className="text-gradient">Atlas</span>.</h1>
-        <p className="mt-3 max-w-2xl text-muted-foreground">Modules 1–16 are live. Everything reads from your profile.</p>
+        <p className="mt-3 max-w-2xl text-muted-foreground">Your goals, your programs, your next steps.</p>
 
         {/* Snapshot */}
         <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -159,18 +143,16 @@ function Dashboard() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-nebula glow">
                   <c.icon className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <span className="font-mono text-xs text-muted-foreground">{c.n}</span>
+                <span className="font-mono text-xs text-muted-foreground">M{String(c.n).padStart(2, "0")}</span>
               </div>
               <h3 className="mt-4 text-lg font-semibold">{c.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
-              {c.meta && (
-                <div className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-primary">
-                  {c.meta} <Rocket className="h-3.5 w-3.5" />
-                </div>
-              )}
+
             </Link>
           ))}
         </div>
+        <h2 className="mt-10 text-xs font-semibold uppercase text-muted-foreground">Supporting tools</h2>
+        <div className="mt-4 flex flex-wrap gap-3">{supportingTools.map((t) => <Link key={t.to} to={t.to} className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-3 text-sm hover:bg-secondary"><t.icon className="h-4 w-4 text-primary" />{t.title}</Link>)}</div>
       </main>
     </div>
   );

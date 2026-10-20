@@ -15,14 +15,17 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedApplicationsRouteImport } from './routes/_authenticated/applications'
+import { Route as AuthenticatedCompareRouteImport } from './routes/_authenticated/compare'
 import { Route as AuthenticatedCvRouteImport } from './routes/_authenticated/cv'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
 import { Route as AuthenticatedEcaRouteImport } from './routes/_authenticated/eca'
+import { Route as AuthenticatedIntelligenceRouteImport } from './routes/_authenticated/intelligence'
 import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
 import { Route as AuthenticatedPathRouteImport } from './routes/_authenticated/path'
 import { Route as AuthenticatedPhdRouteImport } from './routes/_authenticated/phd'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedProgramsRouteImport } from './routes/_authenticated/programs'
 import { Route as AuthenticatedPublicationsRouteImport } from './routes/_authenticated/publications'
 import { Route as AuthenticatedRecommendationsRouteImport } from './routes/_authenticated/recommendations'
 import { Route as AuthenticatedResearchRouteImport } from './routes/_authenticated/research'
@@ -33,6 +36,7 @@ import { Route as AuthenticatedTestsRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedUndergradRouteImport } from './routes/_authenticated/undergrad'
 import { Route as AuthenticatedUniversitiesRouteImport } from './routes/_authenticated/universities'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
+import { Route as AuthenticatedProgramsProgramIdRouteImport } from './routes/_authenticated/programs_.$programId'
 import { Route as AuthenticatedUniversitiesIdRouteImport } from './routes/_authenticated/universities.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -65,6 +69,11 @@ const AuthenticatedApplicationsRoute =
     path: '/applications',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedCompareRoute = AuthenticatedCompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCvRoute = AuthenticatedCvRouteImport.update({
   id: '/cv',
   path: '/cv',
@@ -85,6 +94,12 @@ const AuthenticatedEcaRoute = AuthenticatedEcaRouteImport.update({
   path: '/eca',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedIntelligenceRoute =
+  AuthenticatedIntelligenceRouteImport.update({
+    id: '/intelligence',
+    path: '/intelligence',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedMastersRoute = AuthenticatedMastersRouteImport.update({
   id: '/masters',
   path: '/masters',
@@ -103,6 +118,11 @@ const AuthenticatedPhdRoute = AuthenticatedPhdRouteImport.update({
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProgramsRoute = AuthenticatedProgramsRouteImport.update({
+  id: '/programs',
+  path: '/programs',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPublicationsRoute =
@@ -159,6 +179,12 @@ const ModulesModuleIdRoute = ModulesModuleIdRouteImport.update({
   path: '/modules/$moduleId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedProgramsProgramIdRoute =
+  AuthenticatedProgramsProgramIdRouteImport.update({
+    id: '/programs_/$programId',
+    path: '/programs/$programId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedUniversitiesIdRoute =
   AuthenticatedUniversitiesIdRouteImport.update({
     id: '/$id',
@@ -172,14 +198,17 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/applications': typeof AuthenticatedApplicationsRoute
+  '/compare': typeof AuthenticatedCompareRoute
   '/cv': typeof AuthenticatedCvRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/documents': typeof AuthenticatedDocumentsRoute
   '/eca': typeof AuthenticatedEcaRoute
+  '/intelligence': typeof AuthenticatedIntelligenceRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/path': typeof AuthenticatedPathRoute
   '/phd': typeof AuthenticatedPhdRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/programs': typeof AuthenticatedProgramsRoute
   '/publications': typeof AuthenticatedPublicationsRoute
   '/recommendations': typeof AuthenticatedRecommendationsRoute
   '/research': typeof AuthenticatedResearchRoute
@@ -190,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/undergrad': typeof AuthenticatedUndergradRoute
   '/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/programs/$programId': typeof AuthenticatedProgramsProgramIdRoute
   '/universities/$id': typeof AuthenticatedUniversitiesIdRoute
 }
 export interface FileRoutesByTo {
@@ -198,14 +228,17 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/applications': typeof AuthenticatedApplicationsRoute
+  '/compare': typeof AuthenticatedCompareRoute
   '/cv': typeof AuthenticatedCvRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/documents': typeof AuthenticatedDocumentsRoute
   '/eca': typeof AuthenticatedEcaRoute
+  '/intelligence': typeof AuthenticatedIntelligenceRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/path': typeof AuthenticatedPathRoute
   '/phd': typeof AuthenticatedPhdRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/programs': typeof AuthenticatedProgramsRoute
   '/publications': typeof AuthenticatedPublicationsRoute
   '/recommendations': typeof AuthenticatedRecommendationsRoute
   '/research': typeof AuthenticatedResearchRoute
@@ -216,6 +249,7 @@ export interface FileRoutesByTo {
   '/undergrad': typeof AuthenticatedUndergradRoute
   '/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/programs/$programId': typeof AuthenticatedProgramsProgramIdRoute
   '/universities/$id': typeof AuthenticatedUniversitiesIdRoute
 }
 export interface FileRoutesById {
@@ -226,14 +260,17 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/applications': typeof AuthenticatedApplicationsRoute
+  '/_authenticated/compare': typeof AuthenticatedCompareRoute
   '/_authenticated/cv': typeof AuthenticatedCvRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
   '/_authenticated/eca': typeof AuthenticatedEcaRoute
+  '/_authenticated/intelligence': typeof AuthenticatedIntelligenceRoute
   '/_authenticated/masters': typeof AuthenticatedMastersRoute
   '/_authenticated/path': typeof AuthenticatedPathRoute
   '/_authenticated/phd': typeof AuthenticatedPhdRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/programs': typeof AuthenticatedProgramsRoute
   '/_authenticated/publications': typeof AuthenticatedPublicationsRoute
   '/_authenticated/recommendations': typeof AuthenticatedRecommendationsRoute
   '/_authenticated/research': typeof AuthenticatedResearchRoute
@@ -244,6 +281,7 @@ export interface FileRoutesById {
   '/_authenticated/undergrad': typeof AuthenticatedUndergradRoute
   '/_authenticated/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/_authenticated/programs_/$programId': typeof AuthenticatedProgramsProgramIdRoute
   '/_authenticated/universities/$id': typeof AuthenticatedUniversitiesIdRoute
 }
 export interface FileRouteTypes {
@@ -254,14 +292,17 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sitemap.xml'
     | '/applications'
+    | '/compare'
     | '/cv'
     | '/dashboard'
     | '/documents'
     | '/eca'
+    | '/intelligence'
     | '/masters'
     | '/path'
     | '/phd'
     | '/profile'
+    | '/programs'
     | '/publications'
     | '/recommendations'
     | '/research'
@@ -272,6 +313,7 @@ export interface FileRouteTypes {
     | '/undergrad'
     | '/universities'
     | '/modules/$moduleId'
+    | '/programs/$programId'
     | '/universities/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -280,14 +322,17 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sitemap.xml'
     | '/applications'
+    | '/compare'
     | '/cv'
     | '/dashboard'
     | '/documents'
     | '/eca'
+    | '/intelligence'
     | '/masters'
     | '/path'
     | '/phd'
     | '/profile'
+    | '/programs'
     | '/publications'
     | '/recommendations'
     | '/research'
@@ -298,6 +343,7 @@ export interface FileRouteTypes {
     | '/undergrad'
     | '/universities'
     | '/modules/$moduleId'
+    | '/programs/$programId'
     | '/universities/$id'
   id:
     | '__root__'
@@ -307,14 +353,17 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sitemap.xml'
     | '/_authenticated/applications'
+    | '/_authenticated/compare'
     | '/_authenticated/cv'
     | '/_authenticated/dashboard'
     | '/_authenticated/documents'
     | '/_authenticated/eca'
+    | '/_authenticated/intelligence'
     | '/_authenticated/masters'
     | '/_authenticated/path'
     | '/_authenticated/phd'
     | '/_authenticated/profile'
+    | '/_authenticated/programs'
     | '/_authenticated/publications'
     | '/_authenticated/recommendations'
     | '/_authenticated/research'
@@ -325,6 +374,7 @@ export interface FileRouteTypes {
     | '/_authenticated/undergrad'
     | '/_authenticated/universities'
     | '/modules/$moduleId'
+    | '/_authenticated/programs_/$programId'
     | '/_authenticated/universities/$id'
   fileRoutesById: FileRoutesById
 }
@@ -381,6 +431,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedApplicationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/compare': {
+      id: '/_authenticated/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof AuthenticatedCompareRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/cv': {
       id: '/_authenticated/cv'
       path: '/cv'
@@ -409,6 +466,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEcaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/intelligence': {
+      id: '/_authenticated/intelligence'
+      path: '/intelligence'
+      fullPath: '/intelligence'
+      preLoaderRoute: typeof AuthenticatedIntelligenceRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/masters': {
       id: '/_authenticated/masters'
       path: '/masters'
@@ -435,6 +499,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/programs': {
+      id: '/_authenticated/programs'
+      path: '/programs'
+      fullPath: '/programs'
+      preLoaderRoute: typeof AuthenticatedProgramsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/publications': {
@@ -507,6 +578,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesModuleIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/programs_/$programId': {
+      id: '/_authenticated/programs_/$programId'
+      path: '/programs/$programId'
+      fullPath: '/programs/$programId'
+      preLoaderRoute: typeof AuthenticatedProgramsProgramIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/universities/$id': {
       id: '/_authenticated/universities/$id'
       path: '/$id'
@@ -533,14 +611,17 @@ const AuthenticatedUniversitiesRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedApplicationsRoute: typeof AuthenticatedApplicationsRoute
+  AuthenticatedCompareRoute: typeof AuthenticatedCompareRoute
   AuthenticatedCvRoute: typeof AuthenticatedCvRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
   AuthenticatedEcaRoute: typeof AuthenticatedEcaRoute
+  AuthenticatedIntelligenceRoute: typeof AuthenticatedIntelligenceRoute
   AuthenticatedMastersRoute: typeof AuthenticatedMastersRoute
   AuthenticatedPathRoute: typeof AuthenticatedPathRoute
   AuthenticatedPhdRoute: typeof AuthenticatedPhdRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedProgramsRoute: typeof AuthenticatedProgramsRoute
   AuthenticatedPublicationsRoute: typeof AuthenticatedPublicationsRoute
   AuthenticatedRecommendationsRoute: typeof AuthenticatedRecommendationsRoute
   AuthenticatedResearchRoute: typeof AuthenticatedResearchRoute
@@ -550,18 +631,22 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedTestsRoute: typeof AuthenticatedTestsRoute
   AuthenticatedUndergradRoute: typeof AuthenticatedUndergradRoute
   AuthenticatedUniversitiesRoute: typeof AuthenticatedUniversitiesRouteWithChildren
+  AuthenticatedProgramsProgramIdRoute: typeof AuthenticatedProgramsProgramIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedApplicationsRoute: AuthenticatedApplicationsRoute,
+  AuthenticatedCompareRoute: AuthenticatedCompareRoute,
   AuthenticatedCvRoute: AuthenticatedCvRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
   AuthenticatedEcaRoute: AuthenticatedEcaRoute,
+  AuthenticatedIntelligenceRoute: AuthenticatedIntelligenceRoute,
   AuthenticatedMastersRoute: AuthenticatedMastersRoute,
   AuthenticatedPathRoute: AuthenticatedPathRoute,
   AuthenticatedPhdRoute: AuthenticatedPhdRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedProgramsRoute: AuthenticatedProgramsRoute,
   AuthenticatedPublicationsRoute: AuthenticatedPublicationsRoute,
   AuthenticatedRecommendationsRoute: AuthenticatedRecommendationsRoute,
   AuthenticatedResearchRoute: AuthenticatedResearchRoute,
@@ -571,6 +656,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedTestsRoute: AuthenticatedTestsRoute,
   AuthenticatedUndergradRoute: AuthenticatedUndergradRoute,
   AuthenticatedUniversitiesRoute: AuthenticatedUniversitiesRouteWithChildren,
+  AuthenticatedProgramsProgramIdRoute: AuthenticatedProgramsProgramIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

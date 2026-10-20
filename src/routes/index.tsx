@@ -6,56 +6,25 @@ import {
   Send, Calendar, Newspaper, Brain, Building2, Languages, Presentation,
   Network,
 } from "lucide-react";
-import type { ComponentType } from "react";
+import { atlasModules } from "@/lib/modules";
+import { atlasMeta } from "@/lib/route-meta";
 
 export const Route = createFileRoute("/")({
+  head: () => ({ meta: atlasMeta("Atlas — Study Abroad, Programs & Research", "Discover program candidates, prepare authentic applications, and organize funding, documents, and research with Atlas.") }),
   component: Landing,
 });
 
-type Module = { n: number; title: string; desc: string; icon: ComponentType<{ className?: string }> };
-
-const modules: Module[] = [
-  { n: 1, title: "Authentication & Roles", desc: "Students, parents, counselors, professors, universities — one identity.", icon: Shield },
-  { n: 2, title: "AI Student Profile", desc: "Academics, tests, ECAs, publications — scored by AI.", icon: User },
-  { n: 3, title: "Path Selection", desc: "UG, Master's, PhD, Postdoc, Exchange, Research — personalized roadmaps.", icon: Compass },
-  { n: 4, title: "AI Dashboard", desc: "Daily tasks, deadlines, recommendations, and your AI mentor.", icon: BarChart3 },
-  { n: 5, title: "Academic Roadmap", desc: "Year, semester, GPA, and habit planners in one place.", icon: Map },
-  { n: 6, title: "Undergraduate Abroad", desc: "SAT, ACT, IELTS, Common App, UC — the full UG toolkit.", icon: GraduationCap },
-  { n: 7, title: "Master's Admission", desc: "Programs, SOP, CV, funding, and professor outreach.", icon: BookOpen },
-  { n: 8, title: "PhD Admission", desc: "Research proposals, professor finder, fellowships, interview prep.", icon: FlaskConical },
-  { n: 9, title: "Global Universities", desc: "28+ countries. Rankings, fees, requirements, AI admission odds.", icon: Globe },
-  { n: 10, title: "Scholarship Hub", desc: "Fulbright, Chevening, DAAD, MEXT — matched to your profile.", icon: Award },
-  { n: 11, title: "Research & Innovation", desc: "Labs, RA/TA roles, journals, conferences, grants.", icon: Brain },
-  { n: 12, title: "Publication Hub", desc: "Tracker, DOI, ORCID & Scholar sync, citation counts.", icon: FileText },
-  { n: 13, title: "SOP & Essay AI", desc: "SOPs, personal statements, motivation letters — reviewed by AI.", icon: Sparkles },
-  { n: 14, title: "CV & Resume Builder", desc: "Academic CV, Europass, ATS-ready — with AI review.", icon: FileText },
-  { n: 15, title: "Recommendation Letters", desc: "Request, remind, and draft with AI assistance.", icon: Send },
-  { n: 16, title: "ECA Hub", desc: "Olympiads, MUN, hackathons, sports — tracked with impact scores.", icon: Trophy },
-  { n: 17, title: "Student Portfolio", desc: "Projects, awards, GitHub, LinkedIn, ORCID — shareable.", icon: Presentation },
-  { n: 18, title: "Internships & Careers", desc: "Remote jobs, grad programs, salary insights, AI interview coach.", icon: Briefcase },
-  { n: 19, title: "Exchange Programs", desc: "Erasmus+, Global UGRAD, Campus Asia, summer schools.", icon: Plane },
-  { n: 20, title: "Test Prep", desc: "IELTS, TOEFL, SAT, GRE, GMAT, JLPT — AI speaking & writing.", icon: Languages },
-  { n: 21, title: "Visa & Immigration", desc: "Country guides, financials, interview prep, arrival.", icon: Plane },
-  { n: 22, title: "Financial Planning", desc: "Tuition, living cost, scholarships, loans, currency.", icon: Wallet },
-  { n: 23, title: "Community", desc: "Country groups, alumni, mentors, study partners, Q&A.", icon: Users },
-  { n: 24, title: "Events Hub", desc: "Webinars, university fairs, conferences, career fairs.", icon: Calendar },
-  { n: 25, title: "News & Updates", desc: "Scholarships, rankings, visa updates, funding calls.", icon: Newspaper },
-  { n: 26, title: "AI Mentor", desc: "Ask anything. Get matched. Get admitted.", icon: MessageSquare },
-  { n: 27, title: "Notification Center", desc: "Deadlines, scholarships, professor openings — never miss one.", icon: Bell },
-  { n: 28, title: "AI Scores & Analytics", desc: "Admission, scholarship, research match, portfolio — all quantified.", icon: BarChart3 },
-  { n: 29, title: "Admin Panel", desc: "Manage users, universities, scholarships, content, and AI prompts.", icon: Building2 },
-  { n: 30, title: "APIs & Integrations", desc: "Scholar, ORCID, GitHub, LinkedIn, Calendar, Stripe, and more.", icon: Network },
-];
+const modules = atlasModules;
 
 const stats = [
-  { k: "30", v: "Integrated modules" },
-  { k: "28+", v: "Countries covered" },
-  { k: "15+", v: "AI systems" },
+  { k: "13", v: "Connected workspaces" },
+  { k: "Global", v: "Study destinations" },
+  { k: "You", v: "Final decision maker" },
   { k: "1", v: "Unified profile" },
 ];
 
 const pillars = [
-  { icon: Rocket, title: "Admission Intelligence", body: "AI predicts your admission odds across universities and scholarships based on live requirements." },
+  { icon: Rocket, title: "Admission Intelligence", body: "Explore program candidates and distinguish official requirements from planning estimates." },
   { icon: Brain, title: "Research Copilot", body: "Match professors, journals, and conferences. Generate topics, review abstracts, close research gaps." },
   { icon: Zap, title: "One Profile, Every Path", body: "From high school to postdoc. Every module reads from — and improves — your Atlas profile." },
 ];
@@ -76,12 +45,12 @@ function Landing() {
             <span className="text-muted-foreground">The world's most comprehensive AI academic platform</span>
           </div>
           <h1 className="text-5xl font-bold leading-[1.05] sm:text-7xl">
-            Your entire academic future,{" "}
+            Atlas.{" "}
             <span className="text-gradient">orchestrated by AI.</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
             Atlas unifies study abroad, scholarships, research, publications, and career development
-            into one intelligent profile — with 30 modules and an AI mentor that knows your journey.
+            into one intelligent profile — with 13 connected workspaces and an AI mentor that knows your journey.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             <Link
@@ -95,7 +64,7 @@ function Landing() {
               href="#modules"
               className="inline-flex items-center gap-2 rounded-full border border-border glass px-7 py-3.5 text-sm font-medium hover:bg-secondary"
             >
-              Explore 30 modules
+              Explore Atlas
             </a>
           </div>
 
@@ -132,7 +101,7 @@ function Landing() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-14 text-center">
             <p className="text-sm uppercase tracking-widest text-accent">The platform</p>
-            <h2 className="mt-2 text-4xl font-bold sm:text-5xl">30 modules. One Atlas.</h2>
+            <h2 className="mt-2 text-4xl font-bold sm:text-5xl">13 workspaces. One Atlas.</h2>
             <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
               Every module talks to every other. Your SOP knows your CV. Your dashboard knows your deadlines.
               Your AI mentor knows you.
@@ -144,7 +113,7 @@ function Landing() {
               <Link
                 key={m.n}
                 to="/modules/$moduleId"
-                params={{ moduleId: String(m.n) }}
+                params={{ moduleId: m.slug }}
                 className="group relative block overflow-hidden rounded-2xl border border-border glass p-6 transition hover:border-primary/50 hover:shadow-[var(--shadow-glow)]"
               >
                 <div className="mb-4 flex items-center justify-between">
