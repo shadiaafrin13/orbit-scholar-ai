@@ -107,17 +107,23 @@ function ResearchPage() {
   const [confs, setConfs] = useState<Conf[]>([]);
   const [grants, setGrants] = useState<Grant[]>([]);
   const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [litItems, setLitItems] = useState<LitItem[]>([]);
+  const [revComments, setRevComments] = useState<ReviewerComment[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const [o, p, j, c, g, m] = await Promise.all([
+      const [o, p, j, c, g, m, rp, li, rc] = await Promise.all([
         supabase.from("research_opportunities").select("*").order("deadline", { ascending: true, nullsFirst: false }),
         supabase.from("professors").select("*").order("h_index", { ascending: false, nullsFirst: false }),
         supabase.from("journals").select("*").order("impact_factor", { ascending: false, nullsFirst: false }),
         supabase.from("conferences").select("*").order("paper_deadline", { ascending: true, nullsFirst: false }),
         supabase.from("research_grants").select("*").order("deadline", { ascending: true, nullsFirst: false }),
         supabase.from("manuscripts").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("research_projects").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("literature_items").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("reviewer_comments").select("*").eq("user_id", user.id).order("comment_number", { ascending: true }),
       ]);
       setOpps((o.data as Opp[]) ?? []);
       setProfs((p.data as Prof[]) ?? []);
@@ -125,6 +131,9 @@ function ResearchPage() {
       setConfs((c.data as Conf[]) ?? []);
       setGrants((g.data as Grant[]) ?? []);
       setManuscripts((m.data as Manuscript[]) ?? []);
+      setProjects((rp.data as Project[]) ?? []);
+      setLitItems((li.data as LitItem[]) ?? []);
+      setRevComments((rc.data as ReviewerComment[]) ?? []);
       setLoading(false);
     })();
   }, [user.id]);
@@ -187,6 +196,9 @@ function ResearchPage() {
             {tab === "assistant" && <Assistant />}
             {tab === "review" && <ReviewWriting />}
             {tab === "publications" && <Tracker items={manuscripts} setItems={setManuscripts} userId={user.id} />}
+            {tab === "projects" && <Projects items={projects} setItems={setProjects} userId={user.id} />}
+            {tab === "literature" && <Literature items={litItems} setItems={setLitItems} projects={projects} userId={user.id} />}
+            {tab === "responses" && <Responses items={revComments} setItems={setRevComments} manuscripts={manuscripts} userId={user.id} />}
             {tab === "collaboration" && <Collaboration />}
             {tab === "innovation" && <Innovation />}
           </div>
