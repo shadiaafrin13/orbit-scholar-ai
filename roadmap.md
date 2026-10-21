@@ -5,6 +5,7 @@
 - [ ] Add sourced program catalog, details, saved programs, and comparison with explicit unknown facts.
 - [ ] Verify signed-in discovery and persistence, navigation ordering, and catalog uncertainty rules.
 - [ ] Research Hub gap fill: persistent project workspace, literature library, reviewer-response matrix (owner-scoped tables + tabs).
+- [ ] Global Universities Directory upgrade per uploaded spec (audit coverage first).
 
 ## Subsequent milestones (not part of this delivery)
 - Country profiles and expanded reviewed program/cycle coverage.
