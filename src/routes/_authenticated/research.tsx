@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import {
   ArrowLeft, FlaskConical, Loader2, Search, ExternalLink, Users, BookOpen, CalendarDays,
   Banknote, Sparkles, FileCheck2, Library, Network, Lightbulb, Mail, Trash2, Plus,
+  FolderKanban, BookMarked, MessagesSquare,
 } from "lucide-react";
 import {
   researchOpportunityMatcher, researchProfessorMatcher, researchJournalRecommender,
@@ -60,6 +61,19 @@ type Manuscript = {
   submitted_at: string | null; decision_at: string | null; revision_round: number | null;
   doi: string | null; reviewer_notes: string | null;
 };
+type Project = {
+  id: string; title: string; research_question: string | null; objectives: string | null;
+  methodology: string | null; dataset: string | null; stage: string; notes: string | null;
+};
+type LitItem = {
+  id: string; project_id: string | null; title: string; authors: string | null; year: number | null;
+  venue: string | null; topic: string | null; method: string | null; key_finding: string | null;
+  limitation: string | null; gap: string | null; notes: string | null;
+};
+type ReviewerComment = {
+  id: string; manuscript_id: string | null; comment_number: number; reviewer_comment: string;
+  author_response: string | null; manuscript_change: string | null; status: string;
+};
 
 const TABS = [
   { id: "opportunities", label: "Opportunities", icon: FlaskConical },
@@ -70,6 +84,9 @@ const TABS = [
   { id: "assistant", label: "AI Assistant", icon: Sparkles },
   { id: "review", label: "Review & Writing", icon: FileCheck2 },
   { id: "publications", label: "Publication Tracker", icon: Library },
+  { id: "projects", label: "Project Workspace", icon: FolderKanban },
+  { id: "literature", label: "Literature Library", icon: BookMarked },
+  { id: "responses", label: "Reviewer Responses", icon: MessagesSquare },
   { id: "collaboration", label: "Collaboration", icon: Network },
   { id: "innovation", label: "Innovation", icon: Lightbulb },
 ] as const;
