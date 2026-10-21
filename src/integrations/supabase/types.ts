@@ -767,6 +767,65 @@ export type Database = {
         }
         Relationships: []
       }
+      literature_items: {
+        Row: {
+          authors: string | null
+          created_at: string
+          gap: string | null
+          id: string
+          key_finding: string | null
+          limitation: string | null
+          method: string | null
+          notes: string | null
+          project_id: string | null
+          title: string
+          topic: string | null
+          user_id: string
+          venue: string | null
+          year: number | null
+        }
+        Insert: {
+          authors?: string | null
+          created_at?: string
+          gap?: string | null
+          id?: string
+          key_finding?: string | null
+          limitation?: string | null
+          method?: string | null
+          notes?: string | null
+          project_id?: string | null
+          title: string
+          topic?: string | null
+          user_id: string
+          venue?: string | null
+          year?: number | null
+        }
+        Update: {
+          authors?: string | null
+          created_at?: string
+          gap?: string | null
+          id?: string
+          key_finding?: string | null
+          limitation?: string | null
+          method?: string | null
+          notes?: string | null
+          project_id?: string | null
+          title?: string
+          topic?: string | null
+          user_id?: string
+          venue?: string | null
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "literature_items_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "research_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       manuscripts: {
         Row: {
           created_at: string
@@ -1488,6 +1547,95 @@ export type Database = {
           type?: string | null
         }
         Relationships: []
+      }
+      research_projects: {
+        Row: {
+          created_at: string
+          dataset: string | null
+          id: string
+          methodology: string | null
+          notes: string | null
+          objectives: string | null
+          research_question: string | null
+          stage: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          dataset?: string | null
+          id?: string
+          methodology?: string | null
+          notes?: string | null
+          objectives?: string | null
+          research_question?: string | null
+          stage?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          dataset?: string | null
+          id?: string
+          methodology?: string | null
+          notes?: string | null
+          objectives?: string | null
+          research_question?: string | null
+          stage?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reviewer_comments: {
+        Row: {
+          author_response: string | null
+          comment_number: number
+          created_at: string
+          id: string
+          manuscript_change: string | null
+          manuscript_id: string | null
+          reviewer_comment: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          author_response?: string | null
+          comment_number?: number
+          created_at?: string
+          id?: string
+          manuscript_change?: string | null
+          manuscript_id?: string | null
+          reviewer_comment: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          author_response?: string | null
+          comment_number?: number
+          created_at?: string
+          id?: string
+          manuscript_change?: string | null
+          manuscript_id?: string | null
+          reviewer_comment?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviewer_comments_manuscript_id_fkey"
+            columns: ["manuscript_id"]
+            isOneToOne: false
+            referencedRelation: "manuscripts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       saved_items: {
         Row: {
