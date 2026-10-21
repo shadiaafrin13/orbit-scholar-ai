@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import {
   ArrowLeft, FlaskConical, Loader2, Search, ExternalLink, Users, BookOpen, CalendarDays,
   Banknote, Sparkles, FileCheck2, Library, Network, Lightbulb, Mail, Trash2, Plus,
+  FolderKanban, BookMarked, MessagesSquare,
 } from "lucide-react";
 import {
   researchOpportunityMatcher, researchProfessorMatcher, researchJournalRecommender,
@@ -60,6 +61,19 @@ type Manuscript = {
   submitted_at: string | null; decision_at: string | null; revision_round: number | null;
   doi: string | null; reviewer_notes: string | null;
 };
+type Project = {
+  id: string; title: string; research_question: string | null; objectives: string | null;
+  methodology: string | null; dataset: string | null; stage: string; notes: string | null;
+};
+type LitItem = {
+  id: string; project_id: string | null; title: string; authors: string | null; year: number | null;
+  venue: string | null; topic: string | null; method: string | null; key_finding: string | null;
+  limitation: string | null; gap: string | null; notes: string | null;
+};
+type ReviewerComment = {
+  id: string; manuscript_id: string | null; comment_number: number; reviewer_comment: string;
+  author_response: string | null; manuscript_change: string | null; status: string;
+};
 
 const TABS = [
   { id: "opportunities", label: "Opportunities", icon: FlaskConical },
@@ -70,6 +84,9 @@ const TABS = [
   { id: "assistant", label: "AI Assistant", icon: Sparkles },
   { id: "review", label: "Review & Writing", icon: FileCheck2 },
   { id: "publications", label: "Publication Tracker", icon: Library },
+  { id: "projects", label: "Project Workspace", icon: FolderKanban },
+  { id: "literature", label: "Literature Library", icon: BookMarked },
+  { id: "responses", label: "Reviewer Responses", icon: MessagesSquare },
   { id: "collaboration", label: "Collaboration", icon: Network },
   { id: "innovation", label: "Innovation", icon: Lightbulb },
 ] as const;
@@ -90,17 +107,23 @@ function ResearchPage() {
   const [confs, setConfs] = useState<Conf[]>([]);
   const [grants, setGrants] = useState<Grant[]>([]);
   const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [litItems, setLitItems] = useState<LitItem[]>([]);
+  const [revComments, setRevComments] = useState<ReviewerComment[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const [o, p, j, c, g, m] = await Promise.all([
+      const [o, p, j, c, g, m, rp, li, rc] = await Promise.all([
         supabase.from("research_opportunities").select("*").order("deadline", { ascending: true, nullsFirst: false }),
         supabase.from("professors").select("*").order("h_index", { ascending: false, nullsFirst: false }),
         supabase.from("journals").select("*").order("impact_factor", { ascending: false, nullsFirst: false }),
         supabase.from("conferences").select("*").order("paper_deadline", { ascending: true, nullsFirst: false }),
         supabase.from("research_grants").select("*").order("deadline", { ascending: true, nullsFirst: false }),
         supabase.from("manuscripts").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("research_projects").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("literature_items").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("reviewer_comments").select("*").eq("user_id", user.id).order("comment_number", { ascending: true }),
       ]);
       setOpps((o.data as Opp[]) ?? []);
       setProfs((p.data as Prof[]) ?? []);
@@ -108,6 +131,9 @@ function ResearchPage() {
       setConfs((c.data as Conf[]) ?? []);
       setGrants((g.data as Grant[]) ?? []);
       setManuscripts((m.data as Manuscript[]) ?? []);
+      setProjects((rp.data as Project[]) ?? []);
+      setLitItems((li.data as LitItem[]) ?? []);
+      setRevComments((rc.data as ReviewerComment[]) ?? []);
       setLoading(false);
     })();
   }, [user.id]);
@@ -170,6 +196,9 @@ function ResearchPage() {
             {tab === "assistant" && <Assistant />}
             {tab === "review" && <ReviewWriting />}
             {tab === "publications" && <Tracker items={manuscripts} setItems={setManuscripts} userId={user.id} />}
+            {tab === "projects" && <Projects items={projects} setItems={setProjects} userId={user.id} />}
+            {tab === "literature" && <Literature items={litItems} setItems={setLitItems} projects={projects} userId={user.id} />}
+            {tab === "responses" && <Responses items={revComments} setItems={setRevComments} manuscripts={manuscripts} userId={user.id} />}
             {tab === "collaboration" && <Collaboration />}
             {tab === "innovation" && <Innovation />}
           </div>
@@ -1149,6 +1178,228 @@ function ResourceGrid({ title, items }: { title: string; items: [string, string,
           </a>
         ))}
       </div>
+    </div>
+  );
+}
+
+/* ---------------- Research project workspace (spec §9) ---------------- */
+const PROJECT_STAGES = ["idea", "proposal", "data", "analysis", "paper", "submission"];
+function Projects({ items, setItems, userId }: { items: Project[]; setItems: (p: Project[]) => void; userId: string }) {
+  const [form, setForm] = useState({ title: "", research_question: "", objectives: "", methodology: "", dataset: "", stage: "idea" });
+
+  async function add(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form.title.trim()) return;
+    const { data, error } = await supabase.from("research_projects").insert({ user_id: userId, ...form }).select().single();
+    if (error) return toast.error(error.message);
+    setItems([data as Project, ...items]);
+    setForm({ title: "", research_question: "", objectives: "", methodology: "", dataset: "", stage: "idea" });
+    toast.success("Project added");
+  }
+  async function update(id: string, patch: Partial<Project>) {
+    const { error } = await supabase.from("research_projects").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setItems(items.map((p) => (p.id === id ? { ...p, ...patch } : p)));
+  }
+  async function remove(id: string) {
+    const { error } = await supabase.from("research_projects").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    setItems(items.filter((p) => p.id !== id));
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        {PROJECT_STAGES.map((s) => <Stat key={s} label={s[0].toUpperCase() + s.slice(1)} value={String(items.filter((p) => p.stage === s).length)} />)}
+      </div>
+      <form onSubmit={add} className="glass rounded-2xl p-5 grid gap-3 sm:grid-cols-2">
+        <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Project title" className={`sm:col-span-2 ${inputCls}`} />
+        <textarea value={form.research_question} onChange={(e) => setForm({ ...form, research_question: e.target.value })} rows={2} placeholder="Research question" className={inputCls} />
+        <textarea value={form.objectives} onChange={(e) => setForm({ ...form, objectives: e.target.value })} rows={2} placeholder="Objectives" className={inputCls} />
+        <textarea value={form.methodology} onChange={(e) => setForm({ ...form, methodology: e.target.value })} rows={2} placeholder="Methodology" className={inputCls} />
+        <textarea value={form.dataset} onChange={(e) => setForm({ ...form, dataset: e.target.value })} rows={2} placeholder="Dataset / data sources" className={inputCls} />
+        <button className={`sm:col-span-2 ${btnCls}`}><Plus className="h-4 w-4" /> Add project</button>
+      </form>
+      <ul className="space-y-3">
+        {items.map((p) => (
+          <li key={p.id} className="glass rounded-2xl p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1">
+                <h3 className="font-medium">{p.title}</h3>
+                {p.research_question && <p className="mt-1 text-xs text-muted-foreground">{p.research_question}</p>}
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  {PROJECT_STAGES.map((s) => (
+                    <button key={s} onClick={() => update(p.id, { stage: s })}
+                      className={`rounded-full px-3 py-1 text-xs ${p.stage === s ? "bg-nebula text-primary-foreground" : "border border-border text-muted-foreground"}`}>{s}</button>
+                  ))}
+                </div>
+                <textarea value={p.notes ?? ""} onChange={(e) => update(p.id, { notes: e.target.value })} rows={2}
+                  placeholder="Findings, draft status, collaborators, supervisor, timeline notes" className={`mt-3 w-full text-xs ${inputCls}`} />
+              </div>
+              <button onClick={() => remove(p.id)} className="rounded-full border border-border p-2 text-muted-foreground hover:text-destructive">
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </li>
+        ))}
+        {items.length === 0 && <li className="text-sm text-muted-foreground">No research projects yet — add your first idea above.</li>}
+      </ul>
+    </div>
+  );
+}
+
+/* ---------------- Literature review workspace (spec §7) ---------------- */
+function Literature({ items, setItems, projects, userId }: { items: LitItem[]; setItems: (l: LitItem[]) => void; projects: Project[]; userId: string }) {
+  const [q, setQ] = useState("");
+  const [form, setForm] = useState({ title: "", authors: "", year: "", venue: "", topic: "", method: "", key_finding: "", limitation: "", gap: "", project_id: "" });
+
+  async function add(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form.title.trim()) return;
+    const payload = {
+      user_id: userId, title: form.title, authors: form.authors || null, year: form.year ? Number(form.year) : null,
+      venue: form.venue || null, topic: form.topic || null, method: form.method || null,
+      key_finding: form.key_finding || null, limitation: form.limitation || null, gap: form.gap || null,
+      project_id: form.project_id || null,
+    };
+    const { data, error } = await supabase.from("literature_items").insert(payload).select().single();
+    if (error) return toast.error(error.message);
+    setItems([data as LitItem, ...items]);
+    setForm({ title: "", authors: "", year: "", venue: "", topic: "", method: "", key_finding: "", limitation: "", gap: "", project_id: "" });
+    toast.success("Paper added to your library");
+  }
+  async function remove(id: string) {
+    const { error } = await supabase.from("literature_items").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    setItems(items.filter((l) => l.id !== id));
+  }
+
+  const filtered = items.filter((l) => !q || [l.title, l.authors, l.topic, l.method].join(" ").toLowerCase().includes(q.toLowerCase()));
+  const projectName = (id: string | null) => projects.find((p) => p.id === id)?.title;
+
+  return (
+    <div className="space-y-6">
+      <p className="text-xs text-muted-foreground">
+        Papers you add here are your own records. AI-generated outlines in the Assistant are suggestions, not verified literature — always confirm sources before citing.
+      </p>
+      <form onSubmit={add} className="glass rounded-2xl p-5 grid gap-3 sm:grid-cols-3">
+        <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Paper title" className={`sm:col-span-2 ${inputCls}`} />
+        <input value={form.authors} onChange={(e) => setForm({ ...form, authors: e.target.value })} placeholder="Authors" className={inputCls} />
+        <input value={form.year} onChange={(e) => setForm({ ...form, year: e.target.value })} type="number" placeholder="Year" className={inputCls} />
+        <input value={form.venue} onChange={(e) => setForm({ ...form, venue: e.target.value })} placeholder="Venue (journal / conference)" className={inputCls} />
+        <input value={form.topic} onChange={(e) => setForm({ ...form, topic: e.target.value })} placeholder="Topic / theme" className={inputCls} />
+        <input value={form.method} onChange={(e) => setForm({ ...form, method: e.target.value })} placeholder="Methodology used" className={inputCls} />
+        <select value={form.project_id} onChange={(e) => setForm({ ...form, project_id: e.target.value })} className={inputCls}>
+          <option value="">No linked project</option>
+          {projects.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}
+        </select>
+        <textarea value={form.key_finding} onChange={(e) => setForm({ ...form, key_finding: e.target.value })} rows={2} placeholder="Key finding" className={inputCls} />
+        <textarea value={form.limitation} onChange={(e) => setForm({ ...form, limitation: e.target.value })} rows={2} placeholder="Limitation" className={inputCls} />
+        <textarea value={form.gap} onChange={(e) => setForm({ ...form, gap: e.target.value })} rows={2} placeholder="Research gap it reveals" className={inputCls} />
+        <button className={`sm:col-span-3 ${btnCls}`}><Plus className="h-4 w-4" /> Add paper</button>
+      </form>
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search your library by title, author, topic, method" className={`w-full pl-10 ${inputCls}`} />
+      </div>
+      <ul className="space-y-3">
+        {filtered.map((l) => (
+          <li key={l.id} className="glass rounded-2xl p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1">
+                <h3 className="font-medium">{l.title}</h3>
+                <p className="text-xs text-muted-foreground">{[l.authors, l.year, l.venue, projectName(l.project_id)].filter(Boolean).join(" · ")}</p>
+                <div className="mt-3 grid gap-2 sm:grid-cols-3 text-xs">
+                  {l.key_finding && <div className="rounded-xl border border-border p-2"><p className="font-semibold">Finding</p>{l.key_finding}</div>}
+                  {l.limitation && <div className="rounded-xl border border-border p-2"><p className="font-semibold">Limitation</p>{l.limitation}</div>}
+                  {l.gap && <div className="rounded-xl border border-border p-2"><p className="font-semibold">Gap</p>{l.gap}</div>}
+                </div>
+              </div>
+              <button onClick={() => remove(l.id)} className="rounded-full border border-border p-2 text-muted-foreground hover:text-destructive">
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </li>
+        ))}
+        {filtered.length === 0 && <li className="text-sm text-muted-foreground">No papers in your library yet.</li>}
+      </ul>
+    </div>
+  );
+}
+
+/* ---------------- Reviewer response manager (spec §17) ---------------- */
+const RESPONSE_STATUSES = ["pending", "partially addressed", "addressed"];
+function Responses({ items, setItems, manuscripts, userId }: { items: ReviewerComment[]; setItems: (r: ReviewerComment[]) => void; manuscripts: Manuscript[]; userId: string }) {
+  const [form, setForm] = useState({ manuscript_id: "", comment_number: "1", reviewer_comment: "" });
+
+  async function add(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form.reviewer_comment.trim()) return;
+    const payload = {
+      user_id: userId, manuscript_id: form.manuscript_id || null,
+      comment_number: Number(form.comment_number) || 1, reviewer_comment: form.reviewer_comment,
+    };
+    const { data, error } = await supabase.from("reviewer_comments").insert(payload).select().single();
+    if (error) return toast.error(error.message);
+    setItems([...items, data as ReviewerComment]);
+    setForm({ ...form, reviewer_comment: "" });
+    toast.success("Reviewer comment logged");
+  }
+  async function update(id: string, patch: Partial<ReviewerComment>) {
+    const { error } = await supabase.from("reviewer_comments").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setItems(items.map((r) => (r.id === id ? { ...r, ...patch } : r)));
+  }
+  async function remove(id: string) {
+    const { error } = await supabase.from("reviewer_comments").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    setItems(items.filter((r) => r.id !== id));
+  }
+
+  const manuscriptTitle = (id: string | null) => manuscripts.find((m) => m.id === id)?.title ?? "General";
+
+  return (
+    <div className="space-y-6">
+      <p className="text-xs text-muted-foreground">
+        Response matrix: reviewer comment → your response → manuscript change → status. Draft rebuttals with the AI writer in Review &amp; Writing, then record the final wording here — you own the academic work.
+      </p>
+      <form onSubmit={add} className="glass rounded-2xl p-5 grid gap-3 sm:grid-cols-4">
+        <select value={form.manuscript_id} onChange={(e) => setForm({ ...form, manuscript_id: e.target.value })} className={`sm:col-span-2 ${inputCls}`}>
+          <option value="">General (no manuscript)</option>
+          {manuscripts.map((m) => <option key={m.id} value={m.id}>{m.title}</option>)}
+        </select>
+        <input value={form.comment_number} onChange={(e) => setForm({ ...form, comment_number: e.target.value })} type="number" min={1} placeholder="Comment #" className={inputCls} />
+        <textarea required value={form.reviewer_comment} onChange={(e) => setForm({ ...form, reviewer_comment: e.target.value })} rows={2} placeholder="Reviewer comment" className={`sm:col-span-4 ${inputCls}`} />
+        <button className={`sm:col-span-4 ${btnCls}`}><Plus className="h-4 w-4" /> Log comment</button>
+      </form>
+      <ul className="space-y-3">
+        {items.map((r) => (
+          <li key={r.id} className="glass rounded-2xl p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1">
+                <p className="text-xs text-muted-foreground">{manuscriptTitle(r.manuscript_id)} · Comment #{r.comment_number}</p>
+                <p className="mt-1 text-sm font-medium">{r.reviewer_comment}</p>
+                <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                  <textarea value={r.author_response ?? ""} onChange={(e) => update(r.id, { author_response: e.target.value })} rows={2}
+                    placeholder="Your response to the reviewer" className={`text-xs ${inputCls}`} />
+                  <textarea value={r.manuscript_change ?? ""} onChange={(e) => update(r.id, { manuscript_change: e.target.value })} rows={2}
+                    placeholder="Change made in the manuscript" className={`text-xs ${inputCls}`} />
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {RESPONSE_STATUSES.map((s) => (
+                    <button key={s} onClick={() => update(r.id, { status: s })}
+                      className={`rounded-full px-3 py-1 text-xs ${r.status === s ? "bg-nebula text-primary-foreground" : "border border-border text-muted-foreground"}`}>{s}</button>
+                  ))}
+                </div>
+              </div>
+              <button onClick={() => remove(r.id)} className="rounded-full border border-border p-2 text-muted-foreground hover:text-destructive">
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </li>
+        ))}
+        {items.length === 0 && <li className="text-sm text-muted-foreground">No reviewer comments logged yet.</li>}
+      </ul>
     </div>
   );
 }
