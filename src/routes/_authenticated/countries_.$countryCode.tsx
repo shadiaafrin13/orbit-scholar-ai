@@ -7,7 +7,7 @@ import { countryDirectoryQuery } from "@/lib/discovery-query";
 import { slugify } from "@/lib/country";
 import { atlasMeta } from "@/lib/route-meta";
 
-export const Route = createFileRoute("/_authenticated/countries/$countryCode")({
+export const Route = createFileRoute("/_authenticated/countries_/$countryCode")({
   loader: ({ context }) => context.queryClient.ensureQueryData(countryDirectoryQuery(context.user.id)),
   head: () => ({
     meta: [
