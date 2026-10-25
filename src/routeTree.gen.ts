@@ -39,7 +39,7 @@ import { Route as AuthenticatedUniversitiesRouteImport } from './routes/_authent
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
 import { Route as AuthenticatedCountriesCountryCodeRouteImport } from './routes/_authenticated/countries_.$countryCode'
 import { Route as AuthenticatedProgramsProgramIdRouteImport } from './routes/_authenticated/programs_.$programId'
-import { Route as AuthenticatedUniversitiesIdRouteImport } from './routes/_authenticated/universities.$id'
+import { Route as AuthenticatedUniversitiesIdRouteImport } from './routes/_authenticated/universities_.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -200,9 +200,9 @@ const AuthenticatedProgramsProgramIdRoute =
   } as any)
 const AuthenticatedUniversitiesIdRoute =
   AuthenticatedUniversitiesIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => AuthenticatedUniversitiesRoute,
+    id: '/universities_/$id',
+    path: '/universities/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -231,7 +231,7 @@ export interface FileRoutesByFullPath {
   '/sop': typeof AuthenticatedSopRoute
   '/tests': typeof AuthenticatedTestsRoute
   '/undergrad': typeof AuthenticatedUndergradRoute
-  '/universities': typeof AuthenticatedUniversitiesRouteWithChildren
+  '/universities': typeof AuthenticatedUniversitiesRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/countries/$countryCode': typeof AuthenticatedCountriesCountryCodeRoute
   '/programs/$programId': typeof AuthenticatedProgramsProgramIdRoute
@@ -263,7 +263,7 @@ export interface FileRoutesByTo {
   '/sop': typeof AuthenticatedSopRoute
   '/tests': typeof AuthenticatedTestsRoute
   '/undergrad': typeof AuthenticatedUndergradRoute
-  '/universities': typeof AuthenticatedUniversitiesRouteWithChildren
+  '/universities': typeof AuthenticatedUniversitiesRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/countries/$countryCode': typeof AuthenticatedCountriesCountryCodeRoute
   '/programs/$programId': typeof AuthenticatedProgramsProgramIdRoute
@@ -297,11 +297,11 @@ export interface FileRoutesById {
   '/_authenticated/sop': typeof AuthenticatedSopRoute
   '/_authenticated/tests': typeof AuthenticatedTestsRoute
   '/_authenticated/undergrad': typeof AuthenticatedUndergradRoute
-  '/_authenticated/universities': typeof AuthenticatedUniversitiesRouteWithChildren
+  '/_authenticated/universities': typeof AuthenticatedUniversitiesRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/_authenticated/countries_/$countryCode': typeof AuthenticatedCountriesCountryCodeRoute
   '/_authenticated/programs_/$programId': typeof AuthenticatedProgramsProgramIdRoute
-  '/_authenticated/universities/$id': typeof AuthenticatedUniversitiesIdRoute
+  '/_authenticated/universities_/$id': typeof AuthenticatedUniversitiesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -400,7 +400,7 @@ export interface FileRouteTypes {
     | '/modules/$moduleId'
     | '/_authenticated/countries_/$countryCode'
     | '/_authenticated/programs_/$programId'
-    | '/_authenticated/universities/$id'
+    | '/_authenticated/universities_/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -624,29 +624,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProgramsProgramIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/universities/$id': {
-      id: '/_authenticated/universities/$id'
-      path: '/$id'
+    '/_authenticated/universities_/$id': {
+      id: '/_authenticated/universities_/$id'
+      path: '/universities/$id'
       fullPath: '/universities/$id'
       preLoaderRoute: typeof AuthenticatedUniversitiesIdRouteImport
-      parentRoute: typeof AuthenticatedUniversitiesRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
-
-interface AuthenticatedUniversitiesRouteChildren {
-  AuthenticatedUniversitiesIdRoute: typeof AuthenticatedUniversitiesIdRoute
-}
-
-const AuthenticatedUniversitiesRouteChildren: AuthenticatedUniversitiesRouteChildren =
-  {
-    AuthenticatedUniversitiesIdRoute: AuthenticatedUniversitiesIdRoute,
-  }
-
-const AuthenticatedUniversitiesRouteWithChildren =
-  AuthenticatedUniversitiesRoute._addFileChildren(
-    AuthenticatedUniversitiesRouteChildren,
-  )
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedApplicationsRoute: typeof AuthenticatedApplicationsRoute
@@ -670,9 +656,10 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSopRoute: typeof AuthenticatedSopRoute
   AuthenticatedTestsRoute: typeof AuthenticatedTestsRoute
   AuthenticatedUndergradRoute: typeof AuthenticatedUndergradRoute
-  AuthenticatedUniversitiesRoute: typeof AuthenticatedUniversitiesRouteWithChildren
+  AuthenticatedUniversitiesRoute: typeof AuthenticatedUniversitiesRoute
   AuthenticatedCountriesCountryCodeRoute: typeof AuthenticatedCountriesCountryCodeRoute
   AuthenticatedProgramsProgramIdRoute: typeof AuthenticatedProgramsProgramIdRoute
+  AuthenticatedUniversitiesIdRoute: typeof AuthenticatedUniversitiesIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -697,10 +684,11 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSopRoute: AuthenticatedSopRoute,
   AuthenticatedTestsRoute: AuthenticatedTestsRoute,
   AuthenticatedUndergradRoute: AuthenticatedUndergradRoute,
-  AuthenticatedUniversitiesRoute: AuthenticatedUniversitiesRouteWithChildren,
+  AuthenticatedUniversitiesRoute: AuthenticatedUniversitiesRoute,
   AuthenticatedCountriesCountryCodeRoute:
     AuthenticatedCountriesCountryCodeRoute,
   AuthenticatedProgramsProgramIdRoute: AuthenticatedProgramsProgramIdRoute,
+  AuthenticatedUniversitiesIdRoute: AuthenticatedUniversitiesIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
