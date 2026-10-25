@@ -26,12 +26,19 @@ export type CountryInstitution = {
 export const loadCountryDirectory = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data, error } = await context.supabase
-      .from("universities")
-      .select("id,name,country,city,continent,campus_type,levels,language,world_rank,tuition_min_usd,tuition_max_usd,website")
-      .order("world_rank", { nullsFirst: false });
-    if (error) throw new Error("The university directory could not be loaded. Please try again.");
-    return { institutions: (data ?? []) as unknown as CountryInstitution[] };
+    const [institutions, programs] = await Promise.all([
+      context.supabase
+        .from("universities")
+        .select("id,name,country,city,continent,campus_type,levels,language,world_rank,tuition_min_usd,tuition_max_usd,website")
+        .order("world_rank", { nullsFirst: false }),
+      context.supabase.from("discovery_programs").select("university_id"),
+    ]);
+    if (institutions.error) throw new Error("The university directory could not be loaded. Please try again.");
+    const programCounts: Record<string, number> = {};
+    for (const row of programs.data ?? []) {
+      if (typeof row.university_id === "string") programCounts[row.university_id] = (programCounts[row.university_id] ?? 0) + 1;
+    }
+    return { institutions: (institutions.data ?? []) as unknown as CountryInstitution[], programCounts };
   });
 
 export const saveDiscoveryProgram = createServerFn({ method: "POST" })
