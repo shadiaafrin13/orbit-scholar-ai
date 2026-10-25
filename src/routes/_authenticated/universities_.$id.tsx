@@ -9,7 +9,7 @@ import {
   Landmark, Loader2, MapPin, Scale, Sparkles, Trophy, Users,
 } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/universities/$id")({
+export const Route = createFileRoute("/_authenticated/universities_/$id")({
   head: ({ loaderData }: { loaderData?: { name?: string } }) => ({
     meta: [
       { title: loaderData?.name ? `${loaderData.name} — Atlas` : "University — Atlas" },
