@@ -1,11 +1,11 @@
 # Atlas discovery-first upgrade
 
 ## Current milestone
-- [ ] Centralize the 13-module order across home, dashboard, and module pages; preserve supporting tools.
-- [ ] Add sourced program catalog, details, saved programs, and comparison with explicit unknown facts.
-- [ ] Verify signed-in discovery and persistence, navigation ordering, and catalog uncertainty rules.
-- [ ] Research Hub gap fill: persistent project workspace, literature library, reviewer-response matrix (owner-scoped tables + tabs).
-- [ ] Global Universities Directory upgrade per uploaded spec (audit coverage first).
+- [x] Centralize the 13-module order across home, dashboard, and module pages; preserve supporting tools.
+- [x] Add sourced program catalog, details, saved programs, and comparison with explicit unknown facts.
+- [x] Verify signed-in discovery and persistence, navigation ordering, and catalog uncertainty rules.
+- [x] Research Hub gap fill: persistent project workspace, literature library, reviewer-response matrix (owner-scoped tables + tabs).
+- [ ] Global Universities Directory upgrade per uploaded spec — Levels 1–2 (countries index + per-country institutions) shipped and verified; full uploaded-spec audit and any remaining levels still open.
 
 ## Subsequent milestones (not part of this delivery)
 - Country profiles and expanded reviewed program/cycle coverage.
