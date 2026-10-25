@@ -12,3 +12,4 @@
 - Use `src/lib/modules.ts` as the canonical primary-module registry; render home, dashboard, and module pages from it to prevent numbering drift.
 - Keep discovery catalog records separate from institution summaries; missing program facts remain null with provenance, never inferred from university averages.
 - Load protected discovery data through authenticated server functions and TanStack Query; persist program bookmarks in owner-scoped tables and comparison selections in the URL.
+- Detail routes use trailing-underscore naming (`universities_.$id.tsx`, `countries_.$countryCode.tsx`, `programs_.$programId.tsx`) with matching route strings, so they render standalone instead of nesting under the sibling list page that has no `<Outlet />`.
