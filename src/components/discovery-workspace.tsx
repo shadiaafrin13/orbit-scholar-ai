@@ -2,7 +2,7 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, type ReactNode } from "react";
-import { ArrowLeft, Bookmark, BookmarkCheck, ExternalLink, Globe, Loader2, Scale } from "lucide-react";
+import { ArrowLeft, Bookmark, BookmarkCheck, ExternalLink, Globe, Loader2, Map as MapIcon, Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { saveDiscoveryProgram } from "@/lib/discovery.functions";
 import { discoveryQuery } from "@/lib/discovery-query";
