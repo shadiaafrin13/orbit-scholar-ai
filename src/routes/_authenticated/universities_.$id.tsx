@@ -28,8 +28,8 @@ type IndexedProgram = {
 };
 
 export const Route = createFileRoute("/_authenticated/universities_/$id")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    tab: (TABS.some(([key]) => key === search.tab) ? search.tab : "overview") as TabKey,
+  validateSearch: (search: Record<string, unknown>): { tab?: TabKey } => ({
+    tab: TABS.some(([key]) => key === search.tab) ? (search.tab as TabKey) : undefined,
   }),
   head: ({ loaderData }: { loaderData?: { university?: { name?: string } } }) => ({
     meta: [
