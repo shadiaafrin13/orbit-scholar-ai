@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { ArrowUpRight, Map } from "lucide-react";
+import { ArrowUpRight, Map as MapIcon } from "lucide-react";
 import { DiscoveryShell, DiscoveryError } from "@/components/discovery-workspace";
 import { countryDirectoryQuery } from "@/lib/discovery-query";
 import { slugify } from "@/lib/country";
