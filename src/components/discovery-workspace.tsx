@@ -16,6 +16,7 @@ export function DiscoveryShell({ children, title, subtitle }: { children: ReactN
         <Button asChild variant="ghost" size="sm"><Link to="/dashboard"><ArrowLeft />Atlas</Link></Button>
         <nav aria-label="Discovery" className="flex flex-wrap gap-1">
           <Button asChild variant="ghost" size="sm"><Link to="/programs"><Globe />Programs</Link></Button>
+          <Button asChild variant="ghost" size="sm"><Link to="/countries"><Map />Countries</Link></Button>
           <Button asChild variant="ghost" size="sm"><Link to="/universities">Universities</Link></Button>
           <Button asChild variant="ghost" size="sm"><Link to="/compare"><Scale />Compare</Link></Button>
         </nav>

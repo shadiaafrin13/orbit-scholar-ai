@@ -16,6 +16,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedApplicationsRouteImport } from './routes/_authenticated/applications'
 import { Route as AuthenticatedCompareRouteImport } from './routes/_authenticated/compare'
+import { Route as AuthenticatedCountriesRouteImport } from './routes/_authenticated/countries'
 import { Route as AuthenticatedCvRouteImport } from './routes/_authenticated/cv'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
@@ -36,6 +37,7 @@ import { Route as AuthenticatedTestsRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedUndergradRouteImport } from './routes/_authenticated/undergrad'
 import { Route as AuthenticatedUniversitiesRouteImport } from './routes/_authenticated/universities'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
+import { Route as AuthenticatedCountriesCountryCodeRouteImport } from './routes/_authenticated/countries.$countryCode'
 import { Route as AuthenticatedProgramsProgramIdRouteImport } from './routes/_authenticated/programs_.$programId'
 import { Route as AuthenticatedUniversitiesIdRouteImport } from './routes/_authenticated/universities.$id'
 
@@ -72,6 +74,11 @@ const AuthenticatedApplicationsRoute =
 const AuthenticatedCompareRoute = AuthenticatedCompareRouteImport.update({
   id: '/compare',
   path: '/compare',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCountriesRoute = AuthenticatedCountriesRouteImport.update({
+  id: '/countries',
+  path: '/countries',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCvRoute = AuthenticatedCvRouteImport.update({
@@ -179,6 +186,12 @@ const ModulesModuleIdRoute = ModulesModuleIdRouteImport.update({
   path: '/modules/$moduleId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCountriesCountryCodeRoute =
+  AuthenticatedCountriesCountryCodeRouteImport.update({
+    id: '/$countryCode',
+    path: '/$countryCode',
+    getParentRoute: () => AuthenticatedCountriesRoute,
+  } as any)
 const AuthenticatedProgramsProgramIdRoute =
   AuthenticatedProgramsProgramIdRouteImport.update({
     id: '/programs_/$programId',
@@ -199,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/applications': typeof AuthenticatedApplicationsRoute
   '/compare': typeof AuthenticatedCompareRoute
+  '/countries': typeof AuthenticatedCountriesRouteWithChildren
   '/cv': typeof AuthenticatedCvRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/documents': typeof AuthenticatedDocumentsRoute
@@ -219,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/undergrad': typeof AuthenticatedUndergradRoute
   '/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/countries/$countryCode': typeof AuthenticatedCountriesCountryCodeRoute
   '/programs/$programId': typeof AuthenticatedProgramsProgramIdRoute
   '/universities/$id': typeof AuthenticatedUniversitiesIdRoute
 }
@@ -229,6 +244,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/applications': typeof AuthenticatedApplicationsRoute
   '/compare': typeof AuthenticatedCompareRoute
+  '/countries': typeof AuthenticatedCountriesRouteWithChildren
   '/cv': typeof AuthenticatedCvRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/documents': typeof AuthenticatedDocumentsRoute
@@ -249,6 +265,7 @@ export interface FileRoutesByTo {
   '/undergrad': typeof AuthenticatedUndergradRoute
   '/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/countries/$countryCode': typeof AuthenticatedCountriesCountryCodeRoute
   '/programs/$programId': typeof AuthenticatedProgramsProgramIdRoute
   '/universities/$id': typeof AuthenticatedUniversitiesIdRoute
 }
@@ -261,6 +278,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/applications': typeof AuthenticatedApplicationsRoute
   '/_authenticated/compare': typeof AuthenticatedCompareRoute
+  '/_authenticated/countries': typeof AuthenticatedCountriesRouteWithChildren
   '/_authenticated/cv': typeof AuthenticatedCvRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
@@ -281,6 +299,7 @@ export interface FileRoutesById {
   '/_authenticated/undergrad': typeof AuthenticatedUndergradRoute
   '/_authenticated/universities': typeof AuthenticatedUniversitiesRouteWithChildren
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/_authenticated/countries/$countryCode': typeof AuthenticatedCountriesCountryCodeRoute
   '/_authenticated/programs_/$programId': typeof AuthenticatedProgramsProgramIdRoute
   '/_authenticated/universities/$id': typeof AuthenticatedUniversitiesIdRoute
 }
@@ -293,6 +312,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/applications'
     | '/compare'
+    | '/countries'
     | '/cv'
     | '/dashboard'
     | '/documents'
@@ -313,6 +333,7 @@ export interface FileRouteTypes {
     | '/undergrad'
     | '/universities'
     | '/modules/$moduleId'
+    | '/countries/$countryCode'
     | '/programs/$programId'
     | '/universities/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -323,6 +344,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/applications'
     | '/compare'
+    | '/countries'
     | '/cv'
     | '/dashboard'
     | '/documents'
@@ -343,6 +365,7 @@ export interface FileRouteTypes {
     | '/undergrad'
     | '/universities'
     | '/modules/$moduleId'
+    | '/countries/$countryCode'
     | '/programs/$programId'
     | '/universities/$id'
   id:
@@ -354,6 +377,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/_authenticated/applications'
     | '/_authenticated/compare'
+    | '/_authenticated/countries'
     | '/_authenticated/cv'
     | '/_authenticated/dashboard'
     | '/_authenticated/documents'
@@ -374,6 +398,7 @@ export interface FileRouteTypes {
     | '/_authenticated/undergrad'
     | '/_authenticated/universities'
     | '/modules/$moduleId'
+    | '/_authenticated/countries/$countryCode'
     | '/_authenticated/programs_/$programId'
     | '/_authenticated/universities/$id'
   fileRoutesById: FileRoutesById
@@ -436,6 +461,13 @@ declare module '@tanstack/react-router' {
       path: '/compare'
       fullPath: '/compare'
       preLoaderRoute: typeof AuthenticatedCompareRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/countries': {
+      id: '/_authenticated/countries'
+      path: '/countries'
+      fullPath: '/countries'
+      preLoaderRoute: typeof AuthenticatedCountriesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/cv': {
@@ -578,6 +610,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesModuleIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/countries/$countryCode': {
+      id: '/_authenticated/countries/$countryCode'
+      path: '/$countryCode'
+      fullPath: '/countries/$countryCode'
+      preLoaderRoute: typeof AuthenticatedCountriesCountryCodeRouteImport
+      parentRoute: typeof AuthenticatedCountriesRoute
+    }
     '/_authenticated/programs_/$programId': {
       id: '/_authenticated/programs_/$programId'
       path: '/programs/$programId'
@@ -594,6 +633,21 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedCountriesRouteChildren {
+  AuthenticatedCountriesCountryCodeRoute: typeof AuthenticatedCountriesCountryCodeRoute
+}
+
+const AuthenticatedCountriesRouteChildren: AuthenticatedCountriesRouteChildren =
+  {
+    AuthenticatedCountriesCountryCodeRoute:
+      AuthenticatedCountriesCountryCodeRoute,
+  }
+
+const AuthenticatedCountriesRouteWithChildren =
+  AuthenticatedCountriesRoute._addFileChildren(
+    AuthenticatedCountriesRouteChildren,
+  )
 
 interface AuthenticatedUniversitiesRouteChildren {
   AuthenticatedUniversitiesIdRoute: typeof AuthenticatedUniversitiesIdRoute
@@ -612,6 +666,7 @@ const AuthenticatedUniversitiesRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedApplicationsRoute: typeof AuthenticatedApplicationsRoute
   AuthenticatedCompareRoute: typeof AuthenticatedCompareRoute
+  AuthenticatedCountriesRoute: typeof AuthenticatedCountriesRouteWithChildren
   AuthenticatedCvRoute: typeof AuthenticatedCvRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
@@ -637,6 +692,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedApplicationsRoute: AuthenticatedApplicationsRoute,
   AuthenticatedCompareRoute: AuthenticatedCompareRoute,
+  AuthenticatedCountriesRoute: AuthenticatedCountriesRouteWithChildren,
   AuthenticatedCvRoute: AuthenticatedCvRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,

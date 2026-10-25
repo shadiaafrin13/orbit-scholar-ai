@@ -3,6 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowUpRight, Map } from "lucide-react";
 import { DiscoveryShell, DiscoveryError } from "@/components/discovery-workspace";
 import { countryDirectoryQuery } from "@/lib/discovery-query";
+import { slugify } from "@/lib/country";
 import { atlasMeta } from "@/lib/route-meta";
 
 export const Route = createFileRoute("/_authenticated/countries")({
@@ -52,8 +53,4 @@ function Countries() {
     </div>
     {!countries.length && <div className="py-16 text-center"><h2 className="text-lg font-semibold">No countries yet</h2><p className="mt-2 text-sm text-muted-foreground">The institution directory is empty right now.</p></div>}
   </DiscoveryShell>;
-}
-
-export function slugify(country: string): string {
-  return country.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
