@@ -41,7 +41,7 @@ function Countries() {
         <Link key={country} to="/countries/$countryCode" params={{ countryCode: slugify(country) }}
           className="flex flex-col rounded-lg border border-border bg-card p-5 transition hover:border-primary/50">
           <div className="flex items-start justify-between">
-            <Map className="h-5 w-5 text-primary" />
+            <MapIcon className="h-5 w-5 text-primary" />
             <span className="text-xs font-mono text-muted-foreground">{info.count} {info.count === 1 ? "institution" : "institutions"}</span>
           </div>
           <h2 className="mt-4 text-lg font-semibold hover:text-primary">{country}</h2>
