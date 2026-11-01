@@ -5,7 +5,7 @@
 - [x] Add sourced program catalog, details, saved programs, and comparison with explicit unknown facts.
 - [x] Verify signed-in discovery and persistence, navigation ordering, and catalog uncertainty rules.
 - [x] Research Hub gap fill: persistent project workspace, literature library, reviewer-response matrix (owner-scoped tables + tabs).
-- [ ] Global Universities Directory upgrade per uploaded spec — Levels 1–2 (countries index + per-country institutions) shipped and verified; full uploaded-spec audit and any remaining levels still open.
+- [x] Global Universities Directory upgrade per uploaded spec — Levels 1–3 shipped and verified: countries index, per-country institutions, and tabbed university profile (overview, faculties, programs, tuition, admissions, funding, research, campus; overview defaults when no tab is set).
 
 ## Subsequent milestones (not part of this delivery)
 - Country profiles and expanded reviewed program/cycle coverage.
