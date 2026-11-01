@@ -59,7 +59,7 @@ type Prediction = { chance: number; band: string; summary: string; strengths: st
 function UniDetail() {
   const data = Route.useLoaderData();
   const u = data.university;
-  const { tab } = Route.useSearch();
+  const tab = Route.useSearch().tab ?? "overview";
   const { user } = Route.useRouteContext();
   const [saved, setSaved] = useState(false);
   const [pred, setPred] = useState<Prediction | null>(null);
