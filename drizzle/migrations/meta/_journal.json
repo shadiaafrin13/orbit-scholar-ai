@@ -15,6 +15,13 @@
       "when": 1792556914998,
       "tag": "0001_research_workspaces",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794033764544,
+      "tag": "0002_country_education_profiles",
+      "breakpoints": true
     }
   ]
 }

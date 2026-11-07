@@ -378,6 +378,27 @@ export type Database = {
         }
         Relationships: []
       }
+      country_education_profiles: {
+        Row: {
+          country: string
+          created_at: string
+          facts: Json
+          updated_at: string
+        }
+        Insert: {
+          country: string
+          created_at?: string
+          facts?: Json
+          updated_at?: string
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          facts?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       courses: {
         Row: {
           attendance_pct: number | null
