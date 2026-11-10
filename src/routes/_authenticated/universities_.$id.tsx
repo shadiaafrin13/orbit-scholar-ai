@@ -38,16 +38,17 @@ export const Route = createFileRoute("/_authenticated/universities_/$id")({
     ],
   }),
   loader: async ({ params }) => {
-    const [uniRes, progRes] = await Promise.all([
-      supabase.from("universities").select("*").eq("id", params.id).maybeSingle(),
-      supabase
-        .from("discovery_programs")
-        .select("id,title,institution,country,degree_level,subject,official_url,identity_verification")
-        .eq("university_id", params.id)
-        .order("title"),
-    ]);
+    const uniRes = await supabase.from("universities").select("*").eq("id", params.id).maybeSingle();
     if (uniRes.error || !uniRes.data) throw notFound();
-    return { university: uniRes.data, programs: (progRes.data ?? []) as IndexedProgram[] };
+    const [linkedPrograms, namedPrograms] = await Promise.all([
+      supabase.from("discovery_programs").select("id,title,institution,country,degree_level,subject,official_url,identity_verification")
+        .eq("university_id", params.id).order("title"),
+      supabase.from("discovery_programs").select("id,title,institution,country,degree_level,subject,official_url,identity_verification")
+        .eq("institution", uniRes.data.name).eq("country", uniRes.data.country).order("title"),
+    ]);
+    const programsById = new Map<string, IndexedProgram>();
+    for (const program of [...(linkedPrograms.data ?? []), ...(namedPrograms.data ?? [])] as IndexedProgram[]) programsById.set(program.id, program);
+    return { university: uniRes.data, programs: [...programsById.values()].sort((a, b) => a.title.localeCompare(b.title)) };
   },
   errorComponent: ({ error }) => <div className="p-10 text-sm text-red-500">Failed to load: {error instanceof Error ? error.message : String(error)}</div>,
   notFoundComponent: () => <div className="p-10 text-sm text-muted-foreground">University not found.</div>,

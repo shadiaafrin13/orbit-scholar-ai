@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import type { DiscoveryProgram } from "./discovery";
+import { canonicalCountryName, readCountryEducationFacts, type CountryEducationFacts } from "./country";
 
 export const loadDiscovery = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -22,23 +23,34 @@ export type CountryInstitution = {
   website: string | null;
 };
 
+export type CountryProfileSummary = { country: string; facts: CountryEducationFacts };
+
 /** Level 1–2 of the global directory: institution summaries grouped by country in the UI. */
 export const loadCountryDirectory = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const [institutions, programs] = await Promise.all([
+    const [institutions, programs, profiles] = await Promise.all([
       context.supabase
         .from("universities")
         .select("id,name,country,city,continent,campus_type,levels,language,world_rank,tuition_min_usd,tuition_max_usd,website")
         .order("world_rank", { nullsFirst: false }),
-      context.supabase.from("discovery_programs").select("university_id"),
+      context.supabase.from("discovery_programs").select("university_id,institution,country"),
+      context.supabase.from("country_education_profiles").select("country,facts").order("country"),
     ]);
     if (institutions.error) throw new Error("The university directory could not be loaded. Please try again.");
+    if (profiles.error) throw new Error("Country education guides could not be loaded. Please try again.");
+    const institutionKey = (name: string, country: string) => `${canonicalCountryName(country).toLowerCase()}|${name.trim().toLowerCase().replace(/\s+/g, " ")}`;
     const programCounts: Record<string, number> = {};
     for (const row of programs.data ?? []) {
-      if (typeof row.university_id === "string") programCounts[row.university_id] = (programCounts[row.university_id] ?? 0) + 1;
+      if (typeof row.institution !== "string" || typeof row.country !== "string") continue;
+      const key = institutionKey(row.institution, row.country);
+      programCounts[key] = (programCounts[key] ?? 0) + 1;
     }
-    return { institutions: (institutions.data ?? []) as unknown as CountryInstitution[], programCounts };
+    return {
+      institutions: (institutions.data ?? []) as unknown as CountryInstitution[],
+      programCounts,
+      countryProfiles: (profiles.data ?? []).map((row) => ({ country: canonicalCountryName(row.country), facts: readCountryEducationFacts(row.facts) })) as CountryProfileSummary[],
+    };
   });
 
 export const saveDiscoveryProgram = createServerFn({ method: "POST" })

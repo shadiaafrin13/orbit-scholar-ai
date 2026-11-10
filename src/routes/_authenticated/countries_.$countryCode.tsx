@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DiscoveryShell, DiscoveryError } from "@/components/discovery-workspace";
 import { countryDirectoryQuery } from "@/lib/discovery-query";
-import { slugify } from "@/lib/country";
+import { canonicalCountryName, countrySlugMatches, slugify } from "@/lib/country";
+import { CountryEducationProfile } from "@/components/country-education-profile";
 import { atlasMeta } from "@/lib/route-meta";
 
 export const Route = createFileRoute("/_authenticated/countries_/$countryCode")({
@@ -31,23 +32,25 @@ function CountryPage() {
   const [campusType, setCampusType] = useState("");
   const [level, setLevel] = useState("");
 
-  const country = data.institutions.find((i) => slugify(i.country) === countryCode)?.country;
+  const matchingProfile = data.countryProfiles.find((profile) => countrySlugMatches(profile.country, countryCode));
+  const country = data.institutions.find((i) => countrySlugMatches(i.country, countryCode))?.country ?? matchingProfile?.country;
+  const canonicalCountry = country ? canonicalCountryName(country) : "";
   const cityOptions = useMemo(
-    () => [...new Set(data.institutions.filter((i) => slugify(i.country) === countryCode).map((i) => i.city).filter((c): c is string => !!c))].sort(),
-    [data.institutions, countryCode],
+    () => [...new Set(data.institutions.filter((i) => canonicalCountryName(i.country) === canonicalCountry).map((i) => i.city).filter((c): c is string => !!c))].sort(),
+    [data.institutions, canonicalCountry],
   );
   const typeOptions = useMemo(
-    () => [...new Set(data.institutions.filter((i) => slugify(i.country) === countryCode).map((i) => i.campus_type).filter((t): t is string => !!t))].sort(),
-    [data.institutions, countryCode],
+    () => [...new Set(data.institutions.filter((i) => canonicalCountryName(i.country) === canonicalCountry).map((i) => i.campus_type).filter((t): t is string => !!t))].sort(),
+    [data.institutions, canonicalCountry],
   );
   const levelOptions = useMemo(() => {
     const all = new Set<string>();
-    for (const i of data.institutions) if (slugify(i.country) === countryCode) for (const l of i.levels ?? []) all.add(l);
+    for (const i of data.institutions) if (canonicalCountryName(i.country) === canonicalCountry) for (const l of i.levels ?? []) all.add(l);
     return [...all].sort();
-  }, [data.institutions, countryCode]);
+  }, [data.institutions, canonicalCountry]);
 
   const filtered = data.institutions.filter((i) => {
-    if (slugify(i.country) !== countryCode) return false;
+    if (canonicalCountryName(i.country) !== canonicalCountry) return false;
     if (city && i.city !== city) return false;
     if (campusType && i.campus_type !== campusType) return false;
     if (level && !(i.levels ?? []).includes(level)) return false;
@@ -56,16 +59,19 @@ function CountryPage() {
   });
 
   if (!country) {
-    return <DiscoveryShell title="Country not found" subtitle="No institution directory records match this country page.">
+    return <DiscoveryShell title="Country not found" subtitle="No institution directory or reviewed country guide matches this page.">
       <Button asChild variant="outline" className="mt-6"><Link to="/countries"><ArrowLeft />All countries</Link></Button>
     </DiscoveryShell>;
   }
 
-  return <DiscoveryShell title={country} subtitle="Level 2 of the university directory: institution summaries. Rankings and tuition ranges are directory context — open an institution or program for source evidence before deciding anything.">
+  const totalInCountry = data.institutions.filter((i) => canonicalCountryName(i.country) === canonicalCountry).length;
+  const profileResult = { country: canonicalCountry, profile: matchingProfile?.facts ?? null, error: false };
+  return <DiscoveryShell title={canonicalCountry} subtitle="Institution summaries and country education guidance are shown separately; rankings and tuition ranges are directory context, not program-level evidence.">
+    <CountryEducationProfile result={profileResult} />
     <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-y border-border py-5">
-      <p className="text-sm text-muted-foreground">{filtered.length === data.institutions.filter((i) => slugify(i.country) === countryCode).length
+      <p className="text-sm text-muted-foreground">{filtered.length === totalInCountry
         ? `${filtered.length} ${filtered.length === 1 ? "institution" : "institutions"}`
-        : `${filtered.length} of ${data.institutions.filter((i) => slugify(i.country) === countryCode).length} institutions`}</p>
+        : `${filtered.length} of ${totalInCountry} institutions`}</p>
       <Button asChild variant="outline" size="sm"><Link to="/countries"><ArrowLeft />All countries</Link></Button>
     </div>
 
@@ -99,7 +105,8 @@ function CountryPage() {
 
     <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {filtered.map((inst) => {
-        const programCount = data.programCounts?.[inst.id] ?? 0;
+        const programKey = `${canonicalCountryName(inst.country).toLowerCase()}|${inst.name.trim().toLowerCase().replace(/\s+/g, " ")}`;
+        const programCount = data.programCounts?.[programKey] ?? 0;
         return (
         <article key={inst.id} className="flex flex-col rounded-lg border border-border bg-card p-5">
           <p className="text-xs text-muted-foreground">{[inst.city, inst.campus_type].filter(Boolean).join(" · ") || country}</p>

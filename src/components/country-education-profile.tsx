@@ -1,5 +1,5 @@
 import { ExternalLink } from "lucide-react";
-import { countryFactGroups, countryFactLabel, countryFactText, type CountryEducationFacts } from "@/lib/country";
+import { countryFactGroups, countryFactLabel, countryFactText, type CountryEducationFact, type CountryEducationFacts } from "@/lib/country";
 
 type CountryEducationProfileResult = {
   country: string;
@@ -27,9 +27,12 @@ export function CountryEducationProfile({ result }: { result: CountryEducationPr
     </section>;
   }
 
-  const knownKeys = new Set(countryFactGroups.flatMap((group) => group.fields.map(([key]) => key)));
+  const knownKeys = new Set<string>(countryFactGroups.flatMap((group) => group.fields.map(([key]) => key)));
   const extraFacts = Object.entries(result.profile).filter(([key]) => !knownKeys.has(key));
-  const groups = [...countryFactGroups.map((group) => ({ ...group, facts: group.fields.map(([key, label]) => ({ key, label, fact: result.profile?.[key] })) }))];
+  const groups: { title: string; facts: { key: string; label: string; fact?: CountryEducationFact }[] }[] = countryFactGroups.map((group) => ({
+    title: group.title,
+    facts: group.fields.map(([key, label]) => ({ key, label, fact: result.profile?.[key] })),
+  }));
   if (extraFacts.length) {
     groups.push({ title: "Additional guidance", facts: extraFacts.map(([key, fact]) => ({ key, label: countryFactLabel(key), fact })) });
   }
